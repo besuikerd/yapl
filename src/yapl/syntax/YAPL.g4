@@ -38,7 +38,7 @@ RETURN    : 'return';
 
 program: statement*;
 
-statement:
+statement: 
   (declaration | assignment) SEMICOLON
 ;
 
