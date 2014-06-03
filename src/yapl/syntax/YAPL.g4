@@ -35,11 +35,17 @@ PROGRAM   : 'program';
 VAR       : 'var';
 CONST     : 'const';
 RETURN    : 'return';
+IF        : 'if';
+THEN      : 'then';
+ELSE      : 'else';
+WHILE     : 'while';
+DO        : 'do';
+END       : 'end';
 
 program: statement*;
 
 statement: 
-  (declaration | assignment) SEMICOLON
+  (declaration | expression) SEMICOLON
 ;
 
 declaration: 
@@ -47,18 +53,25 @@ declaration:
  |  CONST id EQ expression
 ;
 
-assignment:
-  id EQ expression
-;
-
 expression:
-    LCURLY statement* ret RCURLY
-  | orExpr
+	exprconstruct (EQ expression)?
 ;
 
+exprconstruct :
+	  LCURLY statement* ret RCURLY
+	| orExpr
+//  	| WHILE expression DO (expression SEMICOLON)* END
+;
 
 ret:
   RETURN expression SEMICOLON
+;
+
+operand:
+  id (LPAREN expression (COMMA expression)* RPAREN)?
+  | number
+  | LPAREN expression RPAREN
+//  | IF expression THEN expression (ELSE expression)? END
 ;
 
 
@@ -86,12 +99,6 @@ orExpr:
   andExpr (LOR andExpr)*
 ;
 
-operand:
-    id (LPAREN expression (COMMA expression)* RPAREN)?
-  | number
-  | LPAREN expression RPAREN
-;
-
 id:
   IDENTIFIER
 ;
@@ -103,8 +110,6 @@ number:
 typeDenoter: 
   IDENTIFIER
 ;
-
-
 
 IDENTIFIER: 
   LETTER LETTER*
