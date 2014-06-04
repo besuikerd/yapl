@@ -85,7 +85,7 @@ public class YAPLParser extends Parser {
 			setState(35);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LCURLY) | (1L << LPAREN) | (1L << LNOT) | (1L << PLUS) | (1L << MINUS) | (1L << VAR) | (1L << CONST) | (1L << IF) | (1L << IDENTIFIER) | (1L << NUMBER))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LCURLY) | (1L << LPAREN) | (1L << LNOT) | (1L << PLUS) | (1L << MINUS) | (1L << VAR) | (1L << CONST) | (1L << IDENTIFIER) | (1L << NUMBER))) != 0)) {
 				{
 				{
 				setState(32); statement();
@@ -146,7 +146,6 @@ public class YAPLParser extends Parser {
 			case LNOT:
 			case PLUS:
 			case MINUS:
-			case IF:
 			case IDENTIFIER:
 			case NUMBER:
 				{
@@ -323,7 +322,7 @@ public class YAPLParser extends Parser {
 				setState(65);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LCURLY) | (1L << LPAREN) | (1L << LNOT) | (1L << PLUS) | (1L << MINUS) | (1L << VAR) | (1L << CONST) | (1L << IF) | (1L << IDENTIFIER) | (1L << NUMBER))) != 0)) {
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LCURLY) | (1L << LPAREN) | (1L << LNOT) | (1L << PLUS) | (1L << MINUS) | (1L << VAR) | (1L << CONST) | (1L << IDENTIFIER) | (1L << NUMBER))) != 0)) {
 					{
 					{
 					setState(62); statement();
@@ -341,7 +340,6 @@ public class YAPLParser extends Parser {
 			case LNOT:
 			case PLUS:
 			case MINUS:
-			case IF:
 			case IDENTIFIER:
 			case NUMBER:
 				enterOuterAlt(_localctx, 2);
@@ -407,18 +405,14 @@ public class YAPLParser extends Parser {
 		public NumberContext number() {
 			return getRuleContext(NumberContext.class,0);
 		}
-		public TerminalNode ELSE() { return getToken(YAPLParser.ELSE, 0); }
-		public TerminalNode IF() { return getToken(YAPLParser.IF, 0); }
 		public TerminalNode LPAREN() { return getToken(YAPLParser.LPAREN, 0); }
 		public List<TerminalNode> COMMA() { return getTokens(YAPLParser.COMMA); }
-		public TerminalNode THEN() { return getToken(YAPLParser.THEN, 0); }
 		public IdContext id() {
 			return getRuleContext(IdContext.class,0);
 		}
 		public ExpressionContext expression(int i) {
 			return getRuleContext(ExpressionContext.class,i);
 		}
-		public TerminalNode END() { return getToken(YAPLParser.END, 0); }
 		public TerminalNode RPAREN() { return getToken(YAPLParser.RPAREN, 0); }
 		public List<ExpressionContext> expression() {
 			return getRuleContexts(ExpressionContext.class);
@@ -442,9 +436,9 @@ public class YAPLParser extends Parser {
 		enterRule(_localctx, 12, RULE_operand);
 		int _la;
 		try {
-			setState(108);
-			switch ( getInterpreter().adaptivePredict(_input,9,_ctx) ) {
-			case 1:
+			setState(97);
+			switch (_input.LA(1)) {
+			case IDENTIFIER:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(78); id();
@@ -474,49 +468,22 @@ public class YAPLParser extends Parser {
 
 				}
 				break;
-
-			case 2:
+			case NUMBER:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(92); number();
 				}
 				break;
-
-			case 3:
+			case LPAREN:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(93); number();
+				setState(93); match(LPAREN);
+				setState(94); expression();
+				setState(95); match(RPAREN);
 				}
 				break;
-
-			case 4:
-				enterOuterAlt(_localctx, 4);
-				{
-				setState(94); match(LPAREN);
-				setState(95); expression();
-				setState(96); match(RPAREN);
-				}
-				break;
-
-			case 5:
-				enterOuterAlt(_localctx, 5);
-				{
-				setState(98); match(IF);
-				setState(99); expression();
-				setState(100); match(THEN);
-				setState(101); expression();
-				setState(104);
-				_la = _input.LA(1);
-				if (_la==ELSE) {
-					{
-					setState(102); match(ELSE);
-					setState(103); expression();
-					}
-				}
-
-				setState(106); match(END);
-				}
-				break;
+			default:
+				throw new NoViableAltException(this);
 			}
 		}
 		catch (RecognitionException re) {
@@ -531,6 +498,7 @@ public class YAPLParser extends Parser {
 	}
 
 	public static class PrimaryExprContext extends ParserRuleContext {
+		public Token op;
 		public TerminalNode LNOT() { return getToken(YAPLParser.LNOT, 0); }
 		public TerminalNode PLUS() { return getToken(YAPLParser.PLUS, 0); }
 		public TerminalNode MINUS() { return getToken(YAPLParser.MINUS, 0); }
@@ -555,20 +523,21 @@ public class YAPLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(111);
+			setState(100);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LNOT) | (1L << PLUS) | (1L << MINUS))) != 0)) {
 				{
-				setState(110);
+				setState(99);
+				((PrimaryExprContext)_localctx).op = _input.LT(1);
 				_la = _input.LA(1);
 				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LNOT) | (1L << PLUS) | (1L << MINUS))) != 0)) ) {
-				_errHandler.recoverInline(this);
+					((PrimaryExprContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 				}
 				consume();
 				}
 			}
 
-			setState(113); operand();
+			setState(102); operand();
 			}
 		}
 		catch (RecognitionException re) {
@@ -583,24 +552,16 @@ public class YAPLParser extends Parser {
 	}
 
 	public static class MultDivModExprContext extends ParserRuleContext {
-		public TerminalNode MULT(int i) {
-			return getToken(YAPLParser.MULT, i);
+		public Token op;
+		public PrimaryExprContext primaryExpr() {
+			return getRuleContext(PrimaryExprContext.class,0);
 		}
-		public List<PrimaryExprContext> primaryExpr() {
-			return getRuleContexts(PrimaryExprContext.class);
+		public TerminalNode MULT() { return getToken(YAPLParser.MULT, 0); }
+		public TerminalNode MOD() { return getToken(YAPLParser.MOD, 0); }
+		public MultDivModExprContext multDivModExpr() {
+			return getRuleContext(MultDivModExprContext.class,0);
 		}
-		public List<TerminalNode> MULT() { return getTokens(YAPLParser.MULT); }
-		public PrimaryExprContext primaryExpr(int i) {
-			return getRuleContext(PrimaryExprContext.class,i);
-		}
-		public List<TerminalNode> MOD() { return getTokens(YAPLParser.MOD); }
-		public List<TerminalNode> DIV() { return getTokens(YAPLParser.DIV); }
-		public TerminalNode DIV(int i) {
-			return getToken(YAPLParser.DIV, i);
-		}
-		public TerminalNode MOD(int i) {
-			return getToken(YAPLParser.MOD, i);
-		}
+		public TerminalNode DIV() { return getToken(YAPLParser.DIV, 0); }
 		public MultDivModExprContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -619,26 +580,22 @@ public class YAPLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(115); primaryExpr();
-			setState(120);
-			_errHandler.sync(this);
+			setState(104); primaryExpr();
+			setState(107);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << MULT) | (1L << DIV) | (1L << MOD))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << MULT) | (1L << DIV) | (1L << MOD))) != 0)) {
 				{
-				{
-				setState(116);
+				setState(105);
+				((MultDivModExprContext)_localctx).op = _input.LT(1);
 				_la = _input.LA(1);
 				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << MULT) | (1L << DIV) | (1L << MOD))) != 0)) ) {
-				_errHandler.recoverInline(this);
+					((MultDivModExprContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 				}
 				consume();
-				setState(117); primaryExpr();
+				setState(106); multDivModExpr();
 				}
-				}
-				setState(122);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
 			}
+
 			}
 		}
 		catch (RecognitionException re) {
@@ -653,19 +610,14 @@ public class YAPLParser extends Parser {
 	}
 
 	public static class PlusMinusExprContext extends ParserRuleContext {
-		public TerminalNode MINUS(int i) {
-			return getToken(YAPLParser.MINUS, i);
+		public Token op;
+		public PlusMinusExprContext plusMinusExpr() {
+			return getRuleContext(PlusMinusExprContext.class,0);
 		}
-		public List<TerminalNode> PLUS() { return getTokens(YAPLParser.PLUS); }
-		public List<TerminalNode> MINUS() { return getTokens(YAPLParser.MINUS); }
-		public TerminalNode PLUS(int i) {
-			return getToken(YAPLParser.PLUS, i);
-		}
-		public List<MultDivModExprContext> multDivModExpr() {
-			return getRuleContexts(MultDivModExprContext.class);
-		}
-		public MultDivModExprContext multDivModExpr(int i) {
-			return getRuleContext(MultDivModExprContext.class,i);
+		public TerminalNode PLUS() { return getToken(YAPLParser.PLUS, 0); }
+		public TerminalNode MINUS() { return getToken(YAPLParser.MINUS, 0); }
+		public MultDivModExprContext multDivModExpr() {
+			return getRuleContext(MultDivModExprContext.class,0);
 		}
 		public PlusMinusExprContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -685,26 +637,22 @@ public class YAPLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(123); multDivModExpr();
-			setState(128);
-			_errHandler.sync(this);
+			setState(109); multDivModExpr();
+			setState(112);
 			_la = _input.LA(1);
-			while (_la==PLUS || _la==MINUS) {
+			if (_la==PLUS || _la==MINUS) {
 				{
-				{
-				setState(124);
+				setState(110);
+				((PlusMinusExprContext)_localctx).op = _input.LT(1);
 				_la = _input.LA(1);
 				if ( !(_la==PLUS || _la==MINUS) ) {
-				_errHandler.recoverInline(this);
+					((PlusMinusExprContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 				}
 				consume();
-				setState(125); multDivModExpr();
+				setState(111); plusMinusExpr();
 				}
-				}
-				setState(130);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
 			}
+
 			}
 		}
 		catch (RecognitionException re) {
@@ -719,36 +667,19 @@ public class YAPLParser extends Parser {
 	}
 
 	public static class CompareExprContext extends ParserRuleContext {
-		public List<PlusMinusExprContext> plusMinusExpr() {
-			return getRuleContexts(PlusMinusExprContext.class);
+		public Token op;
+		public TerminalNode LNEQ() { return getToken(YAPLParser.LNEQ, 0); }
+		public PlusMinusExprContext plusMinusExpr() {
+			return getRuleContext(PlusMinusExprContext.class,0);
 		}
-		public List<TerminalNode> GTE() { return getTokens(YAPLParser.GTE); }
-		public List<TerminalNode> LT() { return getTokens(YAPLParser.LT); }
-		public TerminalNode LNEQ(int i) {
-			return getToken(YAPLParser.LNEQ, i);
+		public TerminalNode LEQ() { return getToken(YAPLParser.LEQ, 0); }
+		public TerminalNode GTE() { return getToken(YAPLParser.GTE, 0); }
+		public TerminalNode LT() { return getToken(YAPLParser.LT, 0); }
+		public TerminalNode GT() { return getToken(YAPLParser.GT, 0); }
+		public CompareExprContext compareExpr() {
+			return getRuleContext(CompareExprContext.class,0);
 		}
-		public List<TerminalNode> GT() { return getTokens(YAPLParser.GT); }
-		public List<TerminalNode> LTE() { return getTokens(YAPLParser.LTE); }
-		public TerminalNode GTE(int i) {
-			return getToken(YAPLParser.GTE, i);
-		}
-		public List<TerminalNode> LNEQ() { return getTokens(YAPLParser.LNEQ); }
-		public PlusMinusExprContext plusMinusExpr(int i) {
-			return getRuleContext(PlusMinusExprContext.class,i);
-		}
-		public TerminalNode LTE(int i) {
-			return getToken(YAPLParser.LTE, i);
-		}
-		public List<TerminalNode> LEQ() { return getTokens(YAPLParser.LEQ); }
-		public TerminalNode LEQ(int i) {
-			return getToken(YAPLParser.LEQ, i);
-		}
-		public TerminalNode GT(int i) {
-			return getToken(YAPLParser.GT, i);
-		}
-		public TerminalNode LT(int i) {
-			return getToken(YAPLParser.LT, i);
-		}
+		public TerminalNode LTE() { return getToken(YAPLParser.LTE, 0); }
 		public CompareExprContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -767,26 +698,22 @@ public class YAPLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(131); plusMinusExpr();
-			setState(136);
-			_errHandler.sync(this);
+			setState(114); plusMinusExpr();
+			setState(117);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LEQ) | (1L << LNEQ) | (1L << GT) | (1L << GTE) | (1L << LT) | (1L << LTE))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LEQ) | (1L << LNEQ) | (1L << GT) | (1L << GTE) | (1L << LT) | (1L << LTE))) != 0)) {
 				{
-				{
-				setState(132);
+				setState(115);
+				((CompareExprContext)_localctx).op = _input.LT(1);
 				_la = _input.LA(1);
 				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LEQ) | (1L << LNEQ) | (1L << GT) | (1L << GTE) | (1L << LT) | (1L << LTE))) != 0)) ) {
-				_errHandler.recoverInline(this);
+					((CompareExprContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 				}
 				consume();
-				setState(133); plusMinusExpr();
+				setState(116); compareExpr();
 				}
-				}
-				setState(138);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
 			}
+
 			}
 		}
 		catch (RecognitionException re) {
@@ -801,16 +728,13 @@ public class YAPLParser extends Parser {
 	}
 
 	public static class AndExprContext extends ParserRuleContext {
-		public TerminalNode LAND(int i) {
-			return getToken(YAPLParser.LAND, i);
+		public AndExprContext andExpr() {
+			return getRuleContext(AndExprContext.class,0);
 		}
-		public List<CompareExprContext> compareExpr() {
-			return getRuleContexts(CompareExprContext.class);
+		public CompareExprContext compareExpr() {
+			return getRuleContext(CompareExprContext.class,0);
 		}
-		public List<TerminalNode> LAND() { return getTokens(YAPLParser.LAND); }
-		public CompareExprContext compareExpr(int i) {
-			return getRuleContext(CompareExprContext.class,i);
-		}
+		public TerminalNode LAND() { return getToken(YAPLParser.LAND, 0); }
 		public AndExprContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -829,21 +753,16 @@ public class YAPLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(139); compareExpr();
-			setState(144);
-			_errHandler.sync(this);
+			setState(119); compareExpr();
+			setState(122);
 			_la = _input.LA(1);
-			while (_la==LAND) {
+			if (_la==LAND) {
 				{
-				{
-				setState(140); match(LAND);
-				setState(141); compareExpr();
+				setState(120); match(LAND);
+				setState(121); andExpr();
 				}
-				}
-				setState(146);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
 			}
+
 			}
 		}
 		catch (RecognitionException re) {
@@ -858,15 +777,12 @@ public class YAPLParser extends Parser {
 	}
 
 	public static class OrExprContext extends ParserRuleContext {
-		public List<TerminalNode> LOR() { return getTokens(YAPLParser.LOR); }
-		public List<AndExprContext> andExpr() {
-			return getRuleContexts(AndExprContext.class);
+		public TerminalNode LOR() { return getToken(YAPLParser.LOR, 0); }
+		public OrExprContext orExpr() {
+			return getRuleContext(OrExprContext.class,0);
 		}
-		public AndExprContext andExpr(int i) {
-			return getRuleContext(AndExprContext.class,i);
-		}
-		public TerminalNode LOR(int i) {
-			return getToken(YAPLParser.LOR, i);
+		public AndExprContext andExpr() {
+			return getRuleContext(AndExprContext.class,0);
 		}
 		public OrExprContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -886,21 +802,16 @@ public class YAPLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(147); andExpr();
-			setState(152);
-			_errHandler.sync(this);
+			setState(124); andExpr();
+			setState(127);
 			_la = _input.LA(1);
-			while (_la==LOR) {
+			if (_la==LOR) {
 				{
-				{
-				setState(148); match(LOR);
-				setState(149); andExpr();
+				setState(125); match(LOR);
+				setState(126); orExpr();
 				}
-				}
-				setState(154);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
 			}
+
 			}
 		}
 		catch (RecognitionException re) {
@@ -933,7 +844,7 @@ public class YAPLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(155); match(IDENTIFIER);
+			setState(129); match(IDENTIFIER);
 			}
 		}
 		catch (RecognitionException re) {
@@ -948,6 +859,7 @@ public class YAPLParser extends Parser {
 	}
 
 	public static class NumberContext extends ParserRuleContext {
+		public int value = 0;;
 		public TerminalNode NUMBER() { return getToken(YAPLParser.NUMBER, 0); }
 		public NumberContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -966,7 +878,7 @@ public class YAPLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(157); match(NUMBER);
+			setState(131); match(NUMBER);
 			}
 		}
 		catch (RecognitionException re) {
@@ -999,7 +911,7 @@ public class YAPLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(159); match(IDENTIFIER);
+			setState(133); match(IDENTIFIER);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1014,51 +926,40 @@ public class YAPLParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\'\u00a4\4\2\t\2\4"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\'\u008a\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\3\2\7\2$\n"+
 		"\2\f\2\16\2\'\13\2\3\3\3\3\5\3+\n\3\3\3\3\3\3\4\3\4\3\4\3\4\3\4\3\4\3"+
 		"\4\3\4\3\4\3\4\5\49\n\4\3\5\3\5\3\5\5\5>\n\5\3\6\3\6\7\6B\n\6\f\6\16\6"+
 		"E\13\6\3\6\3\6\3\6\3\6\5\6K\n\6\3\7\3\7\3\7\3\7\3\b\3\b\3\b\3\b\3\b\7"+
-		"\bV\n\b\f\b\16\bY\13\b\3\b\3\b\5\b]\n\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3"+
-		"\b\3\b\3\b\3\b\3\b\5\bk\n\b\3\b\3\b\5\bo\n\b\3\t\5\tr\n\t\3\t\3\t\3\n"+
-		"\3\n\3\n\7\ny\n\n\f\n\16\n|\13\n\3\13\3\13\3\13\7\13\u0081\n\13\f\13\16"+
-		"\13\u0084\13\13\3\f\3\f\3\f\7\f\u0089\n\f\f\f\16\f\u008c\13\f\3\r\3\r"+
-		"\3\r\7\r\u0091\n\r\f\r\16\r\u0094\13\r\3\16\3\16\3\16\7\16\u0099\n\16"+
-		"\f\16\16\16\u009c\13\16\3\17\3\17\3\20\3\20\3\21\3\21\3\21\2\2\22\2\4"+
-		"\6\b\n\f\16\20\22\24\26\30\32\34\36 \2\6\4\2\20\20\25\26\3\2\27\31\3\2"+
-		"\25\26\4\2\16\17\21\24\u00a6\2%\3\2\2\2\4*\3\2\2\2\68\3\2\2\2\b:\3\2\2"+
-		"\2\nJ\3\2\2\2\fL\3\2\2\2\16n\3\2\2\2\20q\3\2\2\2\22u\3\2\2\2\24}\3\2\2"+
-		"\2\26\u0085\3\2\2\2\30\u008d\3\2\2\2\32\u0095\3\2\2\2\34\u009d\3\2\2\2"+
-		"\36\u009f\3\2\2\2 \u00a1\3\2\2\2\"$\5\4\3\2#\"\3\2\2\2$\'\3\2\2\2%#\3"+
-		"\2\2\2%&\3\2\2\2&\3\3\2\2\2\'%\3\2\2\2(+\5\6\4\2)+\5\b\5\2*(\3\2\2\2*"+
-		")\3\2\2\2+,\3\2\2\2,-\7\3\2\2-\5\3\2\2\2./\7\33\2\2/\60\5\34\17\2\60\61"+
-		"\7\4\2\2\61\62\5 \21\2\629\3\2\2\2\63\64\7\34\2\2\64\65\5\34\17\2\65\66"+
-		"\7\5\2\2\66\67\5\b\5\2\679\3\2\2\28.\3\2\2\28\63\3\2\2\29\7\3\2\2\2:="+
-		"\5\n\6\2;<\7\5\2\2<>\5\b\5\2=;\3\2\2\2=>\3\2\2\2>\t\3\2\2\2?C\7\6\2\2"+
-		"@B\5\4\3\2A@\3\2\2\2BE\3\2\2\2CA\3\2\2\2CD\3\2\2\2DF\3\2\2\2EC\3\2\2\2"+
-		"FG\5\f\7\2GH\7\7\2\2HK\3\2\2\2IK\5\32\16\2J?\3\2\2\2JI\3\2\2\2K\13\3\2"+
-		"\2\2LM\7\35\2\2MN\5\b\5\2NO\7\3\2\2O\r\3\2\2\2P\\\5\34\17\2QR\7\b\2\2"+
-		"RW\5\b\5\2ST\7\13\2\2TV\5\b\5\2US\3\2\2\2VY\3\2\2\2WU\3\2\2\2WX\3\2\2"+
-		"\2XZ\3\2\2\2YW\3\2\2\2Z[\7\t\2\2[]\3\2\2\2\\Q\3\2\2\2\\]\3\2\2\2]o\3\2"+
-		"\2\2^o\5\36\20\2_o\5\36\20\2`a\7\b\2\2ab\5\b\5\2bc\7\t\2\2co\3\2\2\2d"+
-		"e\7\36\2\2ef\5\b\5\2fg\7\37\2\2gj\5\b\5\2hi\7 \2\2ik\5\b\5\2jh\3\2\2\2"+
-		"jk\3\2\2\2kl\3\2\2\2lm\7#\2\2mo\3\2\2\2nP\3\2\2\2n^\3\2\2\2n_\3\2\2\2"+
-		"n`\3\2\2\2nd\3\2\2\2o\17\3\2\2\2pr\t\2\2\2qp\3\2\2\2qr\3\2\2\2rs\3\2\2"+
-		"\2st\5\16\b\2t\21\3\2\2\2uz\5\20\t\2vw\t\3\2\2wy\5\20\t\2xv\3\2\2\2y|"+
-		"\3\2\2\2zx\3\2\2\2z{\3\2\2\2{\23\3\2\2\2|z\3\2\2\2}\u0082\5\22\n\2~\177"+
-		"\t\4\2\2\177\u0081\5\22\n\2\u0080~\3\2\2\2\u0081\u0084\3\2\2\2\u0082\u0080"+
-		"\3\2\2\2\u0082\u0083\3\2\2\2\u0083\25\3\2\2\2\u0084\u0082\3\2\2\2\u0085"+
-		"\u008a\5\24\13\2\u0086\u0087\t\5\2\2\u0087\u0089\5\24\13\2\u0088\u0086"+
-		"\3\2\2\2\u0089\u008c\3\2\2\2\u008a\u0088\3\2\2\2\u008a\u008b\3\2\2\2\u008b"+
-		"\27\3\2\2\2\u008c\u008a\3\2\2\2\u008d\u0092\5\26\f\2\u008e\u008f\7\r\2"+
-		"\2\u008f\u0091\5\26\f\2\u0090\u008e\3\2\2\2\u0091\u0094\3\2\2\2\u0092"+
-		"\u0090\3\2\2\2\u0092\u0093\3\2\2\2\u0093\31\3\2\2\2\u0094\u0092\3\2\2"+
-		"\2\u0095\u009a\5\30\r\2\u0096\u0097\7\f\2\2\u0097\u0099\5\30\r\2\u0098"+
-		"\u0096\3\2\2\2\u0099\u009c\3\2\2\2\u009a\u0098\3\2\2\2\u009a\u009b\3\2"+
-		"\2\2\u009b\33\3\2\2\2\u009c\u009a\3\2\2\2\u009d\u009e\7$\2\2\u009e\35"+
-		"\3\2\2\2\u009f\u00a0\7%\2\2\u00a0\37\3\2\2\2\u00a1\u00a2\7$\2\2\u00a2"+
-		"!\3\2\2\2\22%*8=CJW\\jnqz\u0082\u008a\u0092\u009a";
+		"\bV\n\b\f\b\16\bY\13\b\3\b\3\b\5\b]\n\b\3\b\3\b\3\b\3\b\3\b\5\bd\n\b\3"+
+		"\t\5\tg\n\t\3\t\3\t\3\n\3\n\3\n\5\nn\n\n\3\13\3\13\3\13\5\13s\n\13\3\f"+
+		"\3\f\3\f\5\fx\n\f\3\r\3\r\3\r\5\r}\n\r\3\16\3\16\3\16\5\16\u0082\n\16"+
+		"\3\17\3\17\3\20\3\20\3\21\3\21\3\21\2\2\22\2\4\6\b\n\f\16\20\22\24\26"+
+		"\30\32\34\36 \2\6\4\2\20\20\25\26\3\2\27\31\3\2\25\26\4\2\16\17\21\24"+
+		"\u0089\2%\3\2\2\2\4*\3\2\2\2\68\3\2\2\2\b:\3\2\2\2\nJ\3\2\2\2\fL\3\2\2"+
+		"\2\16c\3\2\2\2\20f\3\2\2\2\22j\3\2\2\2\24o\3\2\2\2\26t\3\2\2\2\30y\3\2"+
+		"\2\2\32~\3\2\2\2\34\u0083\3\2\2\2\36\u0085\3\2\2\2 \u0087\3\2\2\2\"$\5"+
+		"\4\3\2#\"\3\2\2\2$\'\3\2\2\2%#\3\2\2\2%&\3\2\2\2&\3\3\2\2\2\'%\3\2\2\2"+
+		"(+\5\6\4\2)+\5\b\5\2*(\3\2\2\2*)\3\2\2\2+,\3\2\2\2,-\7\3\2\2-\5\3\2\2"+
+		"\2./\7\33\2\2/\60\5\34\17\2\60\61\7\4\2\2\61\62\5 \21\2\629\3\2\2\2\63"+
+		"\64\7\34\2\2\64\65\5\34\17\2\65\66\7\5\2\2\66\67\5\b\5\2\679\3\2\2\28"+
+		".\3\2\2\28\63\3\2\2\29\7\3\2\2\2:=\5\n\6\2;<\7\5\2\2<>\5\b\5\2=;\3\2\2"+
+		"\2=>\3\2\2\2>\t\3\2\2\2?C\7\6\2\2@B\5\4\3\2A@\3\2\2\2BE\3\2\2\2CA\3\2"+
+		"\2\2CD\3\2\2\2DF\3\2\2\2EC\3\2\2\2FG\5\f\7\2GH\7\7\2\2HK\3\2\2\2IK\5\32"+
+		"\16\2J?\3\2\2\2JI\3\2\2\2K\13\3\2\2\2LM\7\35\2\2MN\5\b\5\2NO\7\3\2\2O"+
+		"\r\3\2\2\2P\\\5\34\17\2QR\7\b\2\2RW\5\b\5\2ST\7\13\2\2TV\5\b\5\2US\3\2"+
+		"\2\2VY\3\2\2\2WU\3\2\2\2WX\3\2\2\2XZ\3\2\2\2YW\3\2\2\2Z[\7\t\2\2[]\3\2"+
+		"\2\2\\Q\3\2\2\2\\]\3\2\2\2]d\3\2\2\2^d\5\36\20\2_`\7\b\2\2`a\5\b\5\2a"+
+		"b\7\t\2\2bd\3\2\2\2cP\3\2\2\2c^\3\2\2\2c_\3\2\2\2d\17\3\2\2\2eg\t\2\2"+
+		"\2fe\3\2\2\2fg\3\2\2\2gh\3\2\2\2hi\5\16\b\2i\21\3\2\2\2jm\5\20\t\2kl\t"+
+		"\3\2\2ln\5\22\n\2mk\3\2\2\2mn\3\2\2\2n\23\3\2\2\2or\5\22\n\2pq\t\4\2\2"+
+		"qs\5\24\13\2rp\3\2\2\2rs\3\2\2\2s\25\3\2\2\2tw\5\24\13\2uv\t\5\2\2vx\5"+
+		"\26\f\2wu\3\2\2\2wx\3\2\2\2x\27\3\2\2\2y|\5\26\f\2z{\7\r\2\2{}\5\30\r"+
+		"\2|z\3\2\2\2|}\3\2\2\2}\31\3\2\2\2~\u0081\5\30\r\2\177\u0080\7\f\2\2\u0080"+
+		"\u0082\5\32\16\2\u0081\177\3\2\2\2\u0081\u0082\3\2\2\2\u0082\33\3\2\2"+
+		"\2\u0083\u0084\7$\2\2\u0084\35\3\2\2\2\u0085\u0086\7%\2\2\u0086\37\3\2"+
+		"\2\2\u0087\u0088\7$\2\2\u0088!\3\2\2\2\21%*8=CJW\\cfmrw|\u0081";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
