@@ -76,34 +76,37 @@ operand:
 
 
 primaryExpr:
-  (PLUS | MINUS | LNOT)? operand
+  op=(PLUS | MINUS | LNOT)? operand
 ;
 
 multDivModExpr:
-  primaryExpr ((MULT | DIV | MOD) primaryExpr)*
+  primaryExpr (op=(MULT | DIV | MOD) multDivModExpr)?
 ;
 
 plusMinusExpr:
-  multDivModExpr ((PLUS | MINUS) multDivModExpr)*
+  multDivModExpr (op=(PLUS | MINUS) plusMinusExpr)?
 ;
 
 compareExpr:
-  plusMinusExpr ((GT | GTE | LT | LTE | LEQ | LNEQ) plusMinusExpr)*
+  plusMinusExpr (op=(GT | GTE | LT | LTE | LEQ | LNEQ) compareExpr)?
 ;
 
 andExpr:
-  compareExpr (LAND compareExpr)*
+  compareExpr (LAND andExpr)?
 ;
 
 orExpr:
-  andExpr (LOR andExpr)*
+  andExpr (LOR orExpr)?
+  
 ;
 
 id:
   IDENTIFIER
 ;
 
-number:
+
+number locals[int value = 0;]
+:
   NUMBER
 ;
 
