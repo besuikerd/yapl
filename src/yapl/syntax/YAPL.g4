@@ -42,65 +42,79 @@ WHILE     : 'while';
 DO        : 'do';
 END       : 'end';
 
-program: statement*;
+program
+: 
+	statement*
+;
 
-statement: 
+statement
+: 
   (declaration | expression) SEMICOLON
 ;
 
-declaration: 
-    VAR id COLON typeDenoter
- |  CONST id EQ expression
+declaration
+: 
+    VAR id COLON typeDenoter								#declVar
+ |  CONST id EQ expression									#declConst
 ;
 
 expression:
 	exprconstruct (EQ expression)?
 ;
 
-exprconstruct :
-	  LCURLY statement* ret RCURLY
-	| orExpr
-//  	| WHILE expression DO (expression SEMICOLON)* END
+exprconstruct
+:
+	  LCURLY statement* ret RCURLY							#exprBlock
+	| orExpr												#exprOr
+//  	| WHILE expression DO (expression SEMICOLON)* END		#exprWhile
 ;
 
-ret:
+ret
+:
   RETURN expression SEMICOLON
 ;
 
-operand:
-  id (LPAREN expression (COMMA expression)* RPAREN)?
-  | number
-  | LPAREN expression RPAREN
-//  | IF expression THEN expression (ELSE expression)? END
+operand
+:
+  id (LPAREN expression (COMMA expression)* RPAREN)? 		#opIdOrFunc
+  | number													#opNumber
+  | LPAREN expression RPAREN 								#opParenExpr
+//  | IF expression THEN expression (ELSE expression)? END 	#opIfThenElse
 ;
 
 
-primaryExpr:
+primaryExpr
+:
   op=(PLUS | MINUS | LNOT)? operand
 ;
 
-multDivModExpr:
+multDivModExpr
+:
   primaryExpr (op=(MULT | DIV | MOD) multDivModExpr)?
 ;
 
-plusMinusExpr:
+plusMinusExpr
+:
   multDivModExpr (op=(PLUS | MINUS) plusMinusExpr)?
 ;
 
-compareExpr:
+compareExpr
+:
   plusMinusExpr (op=(GT | GTE | LT | LTE | LEQ | LNEQ) compareExpr)?
 ;
 
-andExpr:
+andExpr
+:
   compareExpr (LAND andExpr)?
 ;
 
-orExpr:
+orExpr
+:
   andExpr (LOR orExpr)?
-  
 ;
 
-id:
+id
+:
   IDENTIFIER
 ;
 

@@ -1,19 +1,21 @@
 package yapl.tool;
 
 import java.io.IOException;
+import java.util.stream.Stream;
 
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.TokenSource;
-import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.ANTLRFileStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.pattern.ParseTreePatternMatcher;
-import org.antlr.v4.tool.DOTGenerator;
-import org.antlr.v4.tool.Grammar;
-import org.antlr.v4.tool.LexerGrammar;
 
+import yapl.context.IdEntry;
+import yapl.context.SymbolTable;
 import yapl.context.YAPLChecker;
 import yapl.context.YAPLPrinter;
+import yapl.reporter.ErrorReporter;
+import yapl.reporter.ErrorType;
+import yapl.reporter.ErrorReporter.ErrorReporterTypeDelegate;
+import yapl.reporter.Severity;
 import yapl.syntax.YAPLLexer;
 import yapl.syntax.YAPLParser;
 
@@ -54,11 +56,14 @@ public class Tool {
 			YAPLParser parser = new YAPLParser(stream);
 			ParseTree tree = parser.program();
 			
+			ErrorReporter reporter = new ErrorReporter().withConsumer((x) -> System.out.println(x));
+			
 			if(context.isTextual()){
 				System.out.println(tree.toStringTree(parser));
 			}
-			tree.accept(new YAPLChecker());
+			tree.accept(new YAPLChecker(new SymbolTable<IdEntry>(), reporter));
 			tree.accept(new YAPLPrinter());
+//			reporter.stream().forEach((error) -> System.out.printf(String.format("%%-%ds| %%s\n", ErrorType.LONGEST_NAME + Severity.LONGEST_NAME + 2), String.format("%s(%s)", error.getSeverity(), error.getType()), error.getMessage()));
 		}
 		
 	}

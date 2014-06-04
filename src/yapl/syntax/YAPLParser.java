@@ -170,12 +170,34 @@ public class YAPLParser extends Parser {
 	}
 
 	public static class DeclarationContext extends ParserRuleContext {
+		public DeclarationContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_declaration; }
+	 
+		public DeclarationContext() { }
+		public void copyFrom(DeclarationContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class DeclVarContext extends DeclarationContext {
 		public TypeDenoterContext typeDenoter() {
 			return getRuleContext(TypeDenoterContext.class,0);
 		}
-		public TerminalNode CONST() { return getToken(YAPLParser.CONST, 0); }
 		public TerminalNode VAR() { return getToken(YAPLParser.VAR, 0); }
 		public TerminalNode COLON() { return getToken(YAPLParser.COLON, 0); }
+		public IdContext id() {
+			return getRuleContext(IdContext.class,0);
+		}
+		public DeclVarContext(DeclarationContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof YAPLVisitor ) return ((YAPLVisitor<? extends T>)visitor).visitDeclVar(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class DeclConstContext extends DeclarationContext {
+		public TerminalNode CONST() { return getToken(YAPLParser.CONST, 0); }
 		public IdContext id() {
 			return getRuleContext(IdContext.class,0);
 		}
@@ -183,13 +205,10 @@ public class YAPLParser extends Parser {
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
-		public DeclarationContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_declaration; }
+		public DeclConstContext(DeclarationContext ctx) { copyFrom(ctx); }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof YAPLVisitor ) return ((YAPLVisitor<? extends T>)visitor).visitDeclaration(this);
+			if ( visitor instanceof YAPLVisitor ) return ((YAPLVisitor<? extends T>)visitor).visitDeclConst(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -201,6 +220,7 @@ public class YAPLParser extends Parser {
 			setState(54);
 			switch (_input.LA(1)) {
 			case VAR:
+				_localctx = new DeclVarContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(44); match(VAR);
@@ -210,6 +230,7 @@ public class YAPLParser extends Parser {
 				}
 				break;
 			case CONST:
+				_localctx = new DeclConstContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(49); match(CONST);
@@ -283,9 +304,28 @@ public class YAPLParser extends Parser {
 	}
 
 	public static class ExprconstructContext extends ParserRuleContext {
+		public ExprconstructContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_exprconstruct; }
+	 
+		public ExprconstructContext() { }
+		public void copyFrom(ExprconstructContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class ExprOrContext extends ExprconstructContext {
 		public OrExprContext orExpr() {
 			return getRuleContext(OrExprContext.class,0);
 		}
+		public ExprOrContext(ExprconstructContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof YAPLVisitor ) return ((YAPLVisitor<? extends T>)visitor).visitExprOr(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class ExprBlockContext extends ExprconstructContext {
 		public RetContext ret() {
 			return getRuleContext(RetContext.class,0);
 		}
@@ -297,13 +337,10 @@ public class YAPLParser extends Parser {
 		public List<StatementContext> statement() {
 			return getRuleContexts(StatementContext.class);
 		}
-		public ExprconstructContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_exprconstruct; }
+		public ExprBlockContext(ExprconstructContext ctx) { copyFrom(ctx); }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof YAPLVisitor ) return ((YAPLVisitor<? extends T>)visitor).visitExprconstruct(this);
+			if ( visitor instanceof YAPLVisitor ) return ((YAPLVisitor<? extends T>)visitor).visitExprBlock(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -316,6 +353,7 @@ public class YAPLParser extends Parser {
 			setState(72);
 			switch (_input.LA(1)) {
 			case LCURLY:
+				_localctx = new ExprBlockContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(61); match(LCURLY);
@@ -342,6 +380,7 @@ public class YAPLParser extends Parser {
 			case MINUS:
 			case IDENTIFIER:
 			case NUMBER:
+				_localctx = new ExprOrContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(71); orExpr();
@@ -402,9 +441,41 @@ public class YAPLParser extends Parser {
 	}
 
 	public static class OperandContext extends ParserRuleContext {
+		public OperandContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_operand; }
+	 
+		public OperandContext() { }
+		public void copyFrom(OperandContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class OpNumberContext extends OperandContext {
 		public NumberContext number() {
 			return getRuleContext(NumberContext.class,0);
 		}
+		public OpNumberContext(OperandContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof YAPLVisitor ) return ((YAPLVisitor<? extends T>)visitor).visitOpNumber(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class OpParenExprContext extends OperandContext {
+		public TerminalNode LPAREN() { return getToken(YAPLParser.LPAREN, 0); }
+		public TerminalNode RPAREN() { return getToken(YAPLParser.RPAREN, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public OpParenExprContext(OperandContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof YAPLVisitor ) return ((YAPLVisitor<? extends T>)visitor).visitOpParenExpr(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class OpIdOrFuncContext extends OperandContext {
 		public TerminalNode LPAREN() { return getToken(YAPLParser.LPAREN, 0); }
 		public List<TerminalNode> COMMA() { return getTokens(YAPLParser.COMMA); }
 		public IdContext id() {
@@ -420,13 +491,10 @@ public class YAPLParser extends Parser {
 		public TerminalNode COMMA(int i) {
 			return getToken(YAPLParser.COMMA, i);
 		}
-		public OperandContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_operand; }
+		public OpIdOrFuncContext(OperandContext ctx) { copyFrom(ctx); }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof YAPLVisitor ) return ((YAPLVisitor<? extends T>)visitor).visitOperand(this);
+			if ( visitor instanceof YAPLVisitor ) return ((YAPLVisitor<? extends T>)visitor).visitOpIdOrFunc(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -439,6 +507,7 @@ public class YAPLParser extends Parser {
 			setState(97);
 			switch (_input.LA(1)) {
 			case IDENTIFIER:
+				_localctx = new OpIdOrFuncContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(78); id();
@@ -469,12 +538,14 @@ public class YAPLParser extends Parser {
 				}
 				break;
 			case NUMBER:
+				_localctx = new OpNumberContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(92); number();
 				}
 				break;
 			case LPAREN:
+				_localctx = new OpParenExprContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(93); match(LPAREN);

@@ -1,2 +1,7 @@
 const x = y = z = 5;
 print(x + y + z);
+
+print({
+	var x : Integer;
+	return read(x) + 1;
+});
