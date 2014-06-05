@@ -1,0 +1,6 @@
+var i: int;
+const c = 4;
+
+i = 7;
+
+print(if i==c then c else i);

@@ -1,5 +1,33 @@
 \setlength{\grammarparsep}{10pt plus 1pt minus 1pt} % increase separation between rules
 \setlength{\grammarindent}{12em} % increase separation between LHS/RHS 
+\section{Example program}
+
+\paragraph{•}
+A YAPL program could look something like this.
+\lstset{
+	morekeywords = {var, const, int, print, if, then, else}
+}
+\lstinputlisting{code/trivial.yapl}
+
+This is a trivial program and does nothing interesting. 
+\section{Terminal symbols}
+The terminal symbols of YAPL include:\\\\
+\begin{tabular}{lllllllll}
+var	&	const	&	return	&	if	&	then		&	else		&	while	&	do	&	end \\
+;	&	: 	& 	= 	& 	\{ 	& 	\} 	& 	( 	& 	) 	& 	@ 	& 	, 	\\ 
+| 	& 	\	&	\& 	& 	== 	& 	!= 	& 	! 	& 	> 	& 	>=	& 	< 	\\
+<=	&	+ 	& 	- 	& 	* 	& 	/ 	& 	\% 	\\
+\end{tabular}
+
+\section{Nonterminal symbols}
+The nonterminal symbols of YAPL include:\\\\
+\begin{tabular}{llll}
+yapl			&	statement		&			&		\\
+declaration	&					&			&		\\
+expression	&	exprconstruct	&	orExpr	&		\\
+
+\end{tabular}
+
 \begin{grammar}
 
 <program>			::= <statement>*
