@@ -5,7 +5,7 @@ import java.util.*;
 public class SymbolTable<Entry extends IdEntry> {
 
     private Map<String, Stack<Entry>> declarations;
-    private Set<String> scopedDeclarations;
+    private Stack<Set<String>> scopedDeclarations;
     private int currentLevel;
 
 
@@ -15,7 +15,7 @@ public class SymbolTable<Entry extends IdEntry> {
      */
     public SymbolTable() {
         this.declarations = new HashMap<String, Stack<Entry>>();
-        this.scopedDeclarations = new HashSet<String>();
+        this.scopedDeclarations = new Stack<Set<String>>();
         this.currentLevel = -1;
     }
 
@@ -25,6 +25,7 @@ public class SymbolTable<Entry extends IdEntry> {
      */
     public void openScope()  {
         currentLevel++;
+        scopedDeclarations.push(new HashSet<String>());
     }
 
     /**
@@ -34,18 +35,8 @@ public class SymbolTable<Entry extends IdEntry> {
      * @ensures  this.currentLevel() == old.currentLevel()-1;
      */
     public void closeScope() {
-        Set<String> toRemove = new HashSet<String>();
-        for(String s : scopedDeclarations) {
-            Stack<Entry> stack = declarations.get(s);
-            if(stack.peek().getLevel() == currentLevel()) {
-                stack.pop();
-            }
-            if(stack.isEmpty()) {
-                declarations.remove(s);
-                toRemove.add(s);
-            }
-        }
-        scopedDeclarations.removeAll(toRemove);
+        Set<String> toRemove = scopedDeclarations.pop();
+        toRemove.forEach((decl) -> declarations.get(decl).pop());
         currentLevel--;
     }
 
@@ -66,14 +57,17 @@ public class SymbolTable<Entry extends IdEntry> {
      */
     public void enter(String id, Entry entry)
             throws SymbolTableException {
+    	if(currentLevel() < 0){
+    		throw new InvalidScopeLevelException(currentLevel());
+    	}
         Stack<Entry> stack = declarations.get(id);
         if(stack == null) {
             stack = new Stack<Entry>();
             declarations.put(id, stack);
         } else if(stack.peek().getLevel() == currentLevel()) {
-            throw new SymbolTableException(String.format("%s already defined in level %d", id, currentLevel()));
+            throw new DuplicateIdDefinitionException(id);
         }
-        scopedDeclarations.add(id);
+        scopedDeclarations.peek().add(id);
         entry.setLevel(currentLevel());
         stack.push(entry);
     }

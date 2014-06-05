@@ -1,7 +1,9 @@
-const x = y = z = 5;
-print(x + y + z);
+var x : Integer;
+x = 5;
 
-print({
-	var x : Integer;
-	return read(x) + 1;
-});
+{
+	var y :Integer;
+	const x = 41;
+	
+	return y;
+};

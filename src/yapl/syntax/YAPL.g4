@@ -4,6 +4,10 @@ options {
   language = Java;
 }
 
+@header{
+	import yapl.typing.Type;
+}
+
 SEMICOLON : ';';
 COLON     : ':';
 EQ        : '=';
@@ -28,9 +32,6 @@ MULT      : '*';
 DIV       : '/';
 MOD       : '%';
 
-//virtual keywords
-PROGRAM   : 'program';
-
 //keywords
 VAR       : 'var';
 CONST     : 'const';
@@ -42,7 +43,9 @@ WHILE     : 'while';
 DO        : 'do';
 END       : 'end';
 
-program
+
+
+yapl
 : 
 	statement*
 ;
@@ -52,10 +55,10 @@ statement
   (declaration | expression) SEMICOLON
 ;
 
-declaration
+declaration locals[Type type]
 : 
-    VAR id COLON typeDenoter								#declVar
- |  CONST id EQ expression									#declConst
+    VAR id COLON typeDenoter									#declVar
+ |  CONST id EQ expression										#declConst
 ;
 
 expression:
@@ -64,22 +67,17 @@ expression:
 
 exprconstruct
 :
-	  LCURLY statement* ret RCURLY							#exprBlock
-	| orExpr												#exprOr
-//  	| WHILE expression DO (expression SEMICOLON)* END		#exprWhile
-;
-
-ret
-:
-  RETURN expression SEMICOLON
+	  LCURLY statement* RETURN expression SEMICOLON RCURLY		#exprBlock
+	| orExpr													#exprOr
+//  	| WHILE expression DO (expression SEMICOLON)* END			#exprWhile
 ;
 
 operand
 :
-  id (LPAREN expression (COMMA expression)* RPAREN)? 		#opIdOrFunc
-  | number													#opNumber
-  | LPAREN expression RPAREN 								#opParenExpr
-//  | IF expression THEN expression (ELSE expression)? END 	#opIfThenElse
+  id (LPAREN (expression (COMMA expression)*)? RPAREN)? 		#opIdOrFunc
+  | number														#opNumber
+  | LPAREN expression RPAREN 									#opParenExpr
+//  | IF expression THEN expression (ELSE expression)? END 		#opIfThenElse
 ;
 
 
@@ -105,21 +103,21 @@ compareExpr
 
 andExpr
 :
-  compareExpr (LAND andExpr)?
+  compareExpr (op=LAND andExpr)?
 ;
 
 orExpr
 :
-  andExpr (LOR orExpr)?
+  andExpr (op=LOR orExpr)?
 ;
 
-id
+id locals[DeclarationContext ctx]
 :
   IDENTIFIER
 ;
 
 
-number locals[int value = 0;]
+number locals[int value = 0]
 :
   NUMBER
 ;

@@ -1,5 +1,8 @@
 // Generated from YAPL.g4 by ANTLR 4.2.2
 package yapl.syntax;
+
+	import yapl.typing.Type;
+
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -11,13 +14,6 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  * operations with no return type.
  */
 public interface YAPLVisitor<T> extends ParseTreeVisitor<T> {
-	/**
-	 * Visit a parse tree produced by {@link YAPLParser#ret}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRet(@NotNull YAPLParser.RetContext ctx);
-
 	/**
 	 * Visit a parse tree produced by {@link YAPLParser#expression}.
 	 * @param ctx the parse tree
@@ -52,13 +48,6 @@ public interface YAPLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitOrExpr(@NotNull YAPLParser.OrExprContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link YAPLParser#program}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitProgram(@NotNull YAPLParser.ProgramContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link YAPLParser#opNumber}.
@@ -129,6 +118,13 @@ public interface YAPLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitId(@NotNull YAPLParser.IdContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link YAPLParser#yapl}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitYapl(@NotNull YAPLParser.YaplContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link YAPLParser#exprBlock}.
