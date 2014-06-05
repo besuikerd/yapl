@@ -1,5 +1,8 @@
 // Generated from YAPL.g4 by ANTLR 4.2.2
 package yapl.syntax;
+
+	import yapl.typing.Type;
+
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -12,14 +15,6 @@ import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
  * operations with no return type.
  */
 public class YAPLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements YAPLVisitor<T> {
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitRet(@NotNull YAPLParser.RetContext ctx) { return visitChildren(ctx); }
-
 	/**
 	 * {@inheritDoc}
 	 *
@@ -59,14 +54,6 @@ public class YAPLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Y
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitOrExpr(@NotNull YAPLParser.OrExprContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitProgram(@NotNull YAPLParser.ProgramContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -147,6 +134,14 @@ public class YAPLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Y
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitId(@NotNull YAPLParser.IdContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitYapl(@NotNull YAPLParser.YaplContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
