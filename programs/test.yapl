@@ -1,9 +1,20 @@
 var x : Integer;
-x = 5;
+var y : Integer;
+const z = 5;
+
+x = x + y + z;
 
 {
-	var y :Integer;
-	const x = 41;
+	var x : KratjePils;
+	var women : Boolean;
 	
-	return y;
+	women = if true then {
+		return false;
+	} else {
+		return true;
+	};
+	
+	var y : Integer;
+	var z : Integer;
+	return 0;
 };

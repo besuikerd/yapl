@@ -3,24 +3,20 @@ package yapl.context;
 import yapl.syntax.YAPLParser.DeclarationContext;
 
 public class IdEntry {
-	private int level;
+	private String spelling;
 	private DeclarationContext ctx;
+	private int level;
+	private boolean used;
 
-	public IdEntry(int level, DeclarationContext ctx){
-		this.level = level;
+	public IdEntry(String spelling, DeclarationContext ctx, int level){
+		this.spelling = spelling;
 		this.ctx = ctx;
+		this.level = level;
+		this.used = false;
 	}
 	
-	public IdEntry(int level) {
-		this(level, null);
-	}
-	
-	public IdEntry(DeclarationContext ctx){
-		this(-1, ctx);
-	}
-	
-	public IdEntry() {
-		this(-1);
+	public IdEntry(String spelling, DeclarationContext ctx){
+		this(spelling, ctx, -1);
 	}
 	
 	public int getLevel() {
@@ -33,5 +29,17 @@ public class IdEntry {
 	
 	public DeclarationContext getDeclarationContext() {
 		return ctx;
+	}
+	
+	public boolean isUsed() {
+		return used;
+	}
+	
+	public String getSpelling() {
+		return spelling;
+	}
+	
+	public void setUsed(boolean used) {
+		this.used = used;
 	}
 }

@@ -43,6 +43,13 @@ public interface YAPLVisitor<T> extends ParseTreeVisitor<T> {
 	T visitPlusMinusExpr(@NotNull YAPLParser.PlusMinusExprContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link YAPLParser#opIfThenElse}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOpIfThenElse(@NotNull YAPLParser.OpIfThenElseContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link YAPLParser#orExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -62,13 +69,6 @@ public interface YAPLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitOpParenExpr(@NotNull YAPLParser.OpParenExprContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link YAPLParser#exprOr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExprOr(@NotNull YAPLParser.ExprOrContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link YAPLParser#number}.
@@ -92,6 +92,13 @@ public interface YAPLVisitor<T> extends ParseTreeVisitor<T> {
 	T visitDeclConst(@NotNull YAPLParser.DeclConstContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link YAPLParser#opTrue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOpTrue(@NotNull YAPLParser.OpTrueContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link YAPLParser#primaryExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -99,11 +106,25 @@ public interface YAPLVisitor<T> extends ParseTreeVisitor<T> {
 	T visitPrimaryExpr(@NotNull YAPLParser.PrimaryExprContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link YAPLParser#opExprBlock}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOpExprBlock(@NotNull YAPLParser.OpExprBlockContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link YAPLParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitStatement(@NotNull YAPLParser.StatementContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link YAPLParser#opFalse}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOpFalse(@NotNull YAPLParser.OpFalseContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link YAPLParser#multDivModExpr}.
@@ -127,11 +148,11 @@ public interface YAPLVisitor<T> extends ParseTreeVisitor<T> {
 	T visitYapl(@NotNull YAPLParser.YaplContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link YAPLParser#exprBlock}.
+	 * Visit a parse tree produced by {@link YAPLParser#opWhile}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExprBlock(@NotNull YAPLParser.ExprBlockContext ctx);
+	T visitOpWhile(@NotNull YAPLParser.OpWhileContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link YAPLParser#compareExpr}.

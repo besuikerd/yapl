@@ -42,6 +42,8 @@ ELSE      : 'else';
 WHILE     : 'while';
 DO        : 'do';
 END       : 'end';
+TRUE	  : 'true';
+FALSE     : 'false';
 
 
 
@@ -62,14 +64,7 @@ declaration locals[Type type]
 ;
 
 expression:
-	exprconstruct (EQ expression)?
-;
-
-exprconstruct
-:
-	  LCURLY statement* RETURN expression SEMICOLON RCURLY		#exprBlock
-	| orExpr													#exprOr
-//  	| WHILE expression DO (expression SEMICOLON)* END			#exprWhile
+	orExpr (EQ expression)?
 ;
 
 operand
@@ -77,9 +72,12 @@ operand
   id (LPAREN (expression (COMMA expression)*)? RPAREN)? 		#opIdOrFunc
   | number														#opNumber
   | LPAREN expression RPAREN 									#opParenExpr
-//  | IF expression THEN expression (ELSE expression)? END 		#opIfThenElse
+  | TRUE														#opTrue
+  | FALSE														#opFalse
+  | IF expression THEN expression (ELSE expression)?	 		#opIfThenElse
+  | LCURLY statement* RETURN expression SEMICOLON RCURLY		#opExprBlock
+  | WHILE expression DO (expression SEMICOLON)* END				#opWhile
 ;
-
 
 primaryExpr
 :

@@ -1,6 +1,7 @@
 package yapl.context;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SymbolTable<Entry extends IdEntry> {
 
@@ -33,11 +34,13 @@ public class SymbolTable<Entry extends IdEntry> {
      * the current scope will be removed from the SymbolTable.
      * @requires old.currentLevel() > -1;
      * @ensures  this.currentLevel() == old.currentLevel()-1;
+     * @return entries that are removed from the current scope
      */
-    public void closeScope() {
+    public Set<Entry> closeScope() {
         Set<String> toRemove = scopedDeclarations.pop();
-        toRemove.forEach((decl) -> declarations.get(decl).pop());
+        Set<Entry> removed = toRemove.stream().map((decl) -> declarations.get(decl).pop()).collect(Collectors.toSet());
         currentLevel--;
+        return removed;
     }
 
     /** Returns the current scope level. */
@@ -80,6 +83,10 @@ public class SymbolTable<Entry extends IdEntry> {
      */
     public Entry retrieve(String id) {
         Stack<Entry> stack = declarations.get(id);
-        return stack != null ? stack.peek() : null;
+        Entry e = stack != null ? stack.peek() : null;
+        if(e != null && !e.isUsed()){
+        	e.setUsed(true);
+        }
+        return e;
     }
 }

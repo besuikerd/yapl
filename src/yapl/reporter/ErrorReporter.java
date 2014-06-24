@@ -7,7 +7,12 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.omg.CORBA.RepositoryIdHelper;
+
+import yapl.context.IdEntry;
+import yapl.typing.Type;
 
 /**
  * This class keeps a record of errors that are reported.
@@ -89,8 +94,8 @@ public class ErrorReporter {
 	 * @return
 	 * @see ErrorReporter#type(ErrorType)
 	 */
-	public ErrorReporterTypeDelegate context(){
-		return type(ErrorType.CONTEXT);
+	public ErrorReporterContextTypeDelegate context(){
+		return new ErrorReporterContextTypeDelegate();
 	}
 	
 	/**
@@ -130,8 +135,8 @@ public class ErrorReporter {
 		 * @param severity Severity of the error
 		 * @param message error message
 		 */
-		public void severity(Token token, Severity severity, String message){
-			addError(new CompilerError(message, severity, type, token.getLine(), token.getCharPositionInLine()));
+		public void severity(int line, int charPos, Severity severity, String message){
+			addError(new CompilerError(message, severity, type, line, charPos));
 		}
 		
 		/**
@@ -140,11 +145,27 @@ public class ErrorReporter {
 		 * @see ErrorReporterTypeDelegate#severity(Severity, String)
 		 */
 		public void warning(Token token, String message){
-			severity(token, Severity.WARNING, message);
+			warning(token.getLine(), token.getCharPositionInLine(), message);
 		}
 		
 		public void warning(Token token, String format, Object... args){
 			warning(token, String.format(format, args));
+		}
+		
+		public void warning(int line, int charPos, String format, Object... args){
+			warning(line, charPos, String.format(format, args));
+		}
+		
+		public void warning(int line, int charPos, String message){
+			severity(line, charPos, Severity.WARNING, message);
+		}
+		
+		public void warning(ParserRuleContext ctx, String message){
+			warning(ctx.start, message);
+		}
+		
+		public void warning(ParserRuleContext ctx, String format, Object... args){
+			warning(ctx.start, format, args);
 		}
 		
 		/**
@@ -153,11 +174,49 @@ public class ErrorReporter {
 		 * @see ErrorReporterTypeDelegate#severity(Severity, String)
 		 */
 		public void error(Token token, String message){
-			severity(token, Severity.ERROR, message);
+			error(token.getLine(), token.getCharPositionInLine(), message);
 		}
 		
 		public void error(Token token, String format, Object... args){
 			error(token, String.format(format, args));
 		}
-	} 
+		
+		public void error(int line, int charPos, String format, Object... args){
+			error(line, charPos, String.format(format, args));
+		}
+		
+		public void error(int line, int charPos, String message){
+			severity(line, charPos, Severity.ERROR, message);
+		}
+		
+		public void error(ParserRuleContext ctx, String message){
+			error(ctx.start, message);
+		}
+		
+		public void error(ParserRuleContext ctx, String format, Object... args){
+			error(ctx.start, format, args);
+		}
+	}
+	
+	public class ErrorReporterContextTypeDelegate extends ErrorReporterTypeDelegate{
+		public ErrorReporterContextTypeDelegate(){
+			super(ErrorType.CONTEXT);
+		}
+		
+		public void warnUnusedVariable(IdEntry entry){
+			warning(entry.getDeclarationContext().start, "variable %s is not used", entry.getSpelling());
+		}
+		
+		public void errorBinaryOpType(ParserRuleContext ctx, Object op, Type t1, Type t2){
+			error(ctx.start, "cannot apply (%s), expected type: %s, got: %s", op, t1, t2);
+		}
+		
+		public void errorLHSNotIdentifier(ParserRuleContext ctx){
+			error(ctx, "Left hand side of assign expression must be an identifier");
+		}
+		
+		public void errorInvalidAssignmentType(ParserRuleContext ctx, Type t1, Type t2){
+			error(ctx, "invalid assignment type, expected type: %s, got: %s", t1, t2);
+		}
+	}
 }

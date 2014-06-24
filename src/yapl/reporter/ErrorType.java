@@ -3,8 +3,19 @@ package yapl.reporter;
 import java.util.Arrays;
 
 public enum ErrorType {
+	/**
+	 * an error that occurred during syntactic analysis
+	 */
 	SYNTAX,
+	
+	/**
+	 * an error that occurred during contextual analysis
+	 */
 	CONTEXT,
+	
+	/**
+	 * an error that occurred during a semantic walk through the parse tree
+	 */
 	SEMANTIC
 	;
 

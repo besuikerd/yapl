@@ -1,20 +1,37 @@
 package yapl.typing;
 
+import java.util.HashMap;
+import java.util.Map;
+
+
 public class Type {
 	
-	public static final Type INT = new Type(TypeKind.INTEGER);
-	public static final Type BOOLEAN = new Type(TypeKind.BOOLEAN);
-	public static final Type ERROR = new Type(TypeKind.ERROR);
-	public static final Type VOID = new Type(TypeKind.VOID);
+	public static final Type INT = new Type(TypeKind.INTEGER, "Integer");
+	public static final Type BOOLEAN = new Type(TypeKind.BOOLEAN, "Boolean");
+	public static final Type ERROR = new Type(TypeKind.ERROR, "");
+	public static final Type VOID = new Type(TypeKind.VOID, "");
+	
+	
+	@SuppressWarnings("serial") //can be ignored since it is an anonymous type abstracted away by the Map interface
+	public static final Map<String, Type> TYPEMAP = new HashMap<String, Type>(){{
+		put(INT.getSpelling(), INT);
+		put(BOOLEAN.getSpelling(), BOOLEAN);
+	}};
 	
 	protected TypeKind kind;
+	protected String spelling;
 	
-	public Type(TypeKind kind) {
+	public Type(TypeKind kind, String spelling) {
 		this.kind = kind;
+		this.spelling = spelling;
 	}
 
 	public TypeKind getKind() {
 		return kind;
+	}
+	
+	public String getSpelling() {
+		return spelling;
 	}
 	
 	public boolean matchesType(Type other){
