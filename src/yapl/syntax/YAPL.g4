@@ -6,6 +6,7 @@ options {
 
 @header{
 	import yapl.typing.Type;
+	import yapl.context.IdEntry;
 }
 
 SEMICOLON : ';';
@@ -54,10 +55,11 @@ yapl
 
 statement
 : 
-  (declaration | expression) SEMICOLON
+    declaration SEMICOLON 										#statementDeclaration 
+  | expression SEMICOLON 										#statementExpression
 ;
 
-declaration locals[Type type]
+declaration
 : 
     VAR id COLON typeDenoter									#declVar
  |  CONST id EQ expression										#declConst
@@ -70,11 +72,11 @@ expression:
 operand
 :
   id (LPAREN (expression (COMMA expression)*)? RPAREN)? 		#opIdOrFunc
-  | number														#opNumber
+  | number					 									#opNumber
   | LPAREN expression RPAREN 									#opParenExpr
   | TRUE														#opTrue
   | FALSE														#opFalse
-  | IF expression THEN expression (ELSE expression)?	 		#opIfThenElse
+  | IF expression THEN expression ELSE expression END	 		#opIfThenElse
   | LCURLY statement* RETURN expression SEMICOLON RCURLY		#opExprBlock
   | WHILE expression DO (expression SEMICOLON)* END				#opWhile
 ;
@@ -109,7 +111,7 @@ orExpr
   andExpr (op=LOR orExpr)?
 ;
 
-id locals[DeclarationContext ctx]
+id locals[IdEntry entry]
 :
   IDENTIFIER
 ;

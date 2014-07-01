@@ -14,6 +14,7 @@ import yapl.syntax.YAPLParser.MultDivModExprContext;
 import yapl.syntax.YAPLParser.NumberContext;
 import yapl.syntax.YAPLParser.OpExprBlockContext;
 import yapl.syntax.YAPLParser.OpIdOrFuncContext;
+import yapl.syntax.YAPLParser.OpNumberContext;
 import yapl.syntax.YAPLParser.OrExprContext;
 import yapl.syntax.YAPLParser.PlusMinusExprContext;
 import yapl.syntax.YAPLParser.PrimaryExprContext;
@@ -46,9 +47,7 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 	
 	@Override
 	public Void visitDeclVar(DeclVarContext ctx) {
-		IdEntry entry = new IdEntry(ctx.id().getText(), ctx);
-		ctx.type = ctx.typeDenoter().accept(typeVisitor);
-		
+		IdEntry entry = new IdEntry(ctx.id().getText(), ctx, ctx.typeDenoter().accept(typeVisitor));
 		try {
 			symbolTable.enter(ctx.id().getText(), entry);
 		} catch(SymbolTableException e){
@@ -60,14 +59,12 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 	
 	@Override
 	public Void visitDeclConst(DeclConstContext ctx) {
-		IdEntry entry = new IdEntry(ctx.id().getText(), ctx);
-		ctx.type = ctx.expression().accept(typeVisitor);
+		IdEntry entry = new IdEntry(ctx.id().getText(), ctx, ctx.expression().accept(typeVisitor));
 		try{
 			symbolTable.enter(ctx.id().getText(), entry);
 		} catch(SymbolTableException e){
 			reporter.context().error(ctx.id().start, e.getMessage());
 		}
-		
 		return ctx.expression().accept(this);
 	}
 	
@@ -117,7 +114,7 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 		if(entry == null){
 			reporter.context().error(ctx.start, "unknown variable: %s", ctx.getText());
 		} else{
-			ctx.ctx = entry.getDeclarationContext();
+			ctx.entry = entry;
 		}
 		return null;
 	}

@@ -1,25 +1,27 @@
 package yapl.tool;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.BitSet;
 
-import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.TokenStream;
-import org.antlr.v4.runtime.atn.ATNConfigSet;
-import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroupFile;
+import org.stringtemplate.v4.misc.ErrorBuffer;
 
+import yapl.codegen.TemplateNotFoundException;
+import yapl.codegen.YAPLJVMCodeGenerator;
 import yapl.context.IdEntry;
 import yapl.context.SymbolTable;
 import yapl.context.YAPLChecker;
 import yapl.context.YAPLTypeVisitor;
 import yapl.reporter.ErrorReporter;
+import yapl.reporter.ErrorType;
+import yapl.reporter.Severity;
 import yapl.syntax.YAPLLexer;
 import yapl.syntax.YAPLParser;
 
@@ -31,7 +33,6 @@ public class Tool {
 			ArgumentParser parser = new ArgumentParser(args);
 			ctx = parser.parse(ctx);
 			Tool tool = new Tool(ctx);
-			
 			try{
 				tool.run(parser.remainder());
 			} catch(IOException e){
@@ -70,12 +71,76 @@ public class Tool {
 			
 			ParseTree tree = parser.yapl();
 			
-			
-			
-			
 			if(context.isTextual()) System.out.println(tree.toStringTree(parser));
 			
-			tree.accept(new YAPLChecker(new SymbolTable<IdEntry>(), new YAPLTypeVisitor(reporter), reporter));
+			
+
+			if(reporter.getErrorCount(ErrorType.SYNTAX, Severity.ERROR) == 0){ //no syntax errors
+				System.out.println("Syntactic analysis successful");
+				tree.accept(new YAPLChecker(new SymbolTable<IdEntry>(), new YAPLTypeVisitor(reporter), reporter));
+				if(reporter.getErrorCount(ErrorType.CONTEXT, Severity.ERROR) == 0){ //no contextual errors
+					System.out.println("Contextual analysis successful");
+					
+					ST jvm = null;
+					try{
+						jvm = tree.accept(new YAPLJVMCodeGenerator(new STGroupFile("st/jvm.stg"), context));
+					} catch(TemplateNotFoundException e){
+						reporter.codegen().error(0, 0, e.getMessage());
+					}
+					if(jvm != null){
+						boolean assemblyWrittenSuccessfully = false;
+						File outFile = new File(context.getOutfile() + ".j");
+						try{
+							ErrorBuffer errorBuffer = new ErrorBuffer();
+							if(!outFile.getParentFile().exists()){
+								outFile.getParentFile().mkdir();
+							}
+							jvm.write(outFile, errorBuffer);
+							if(!errorBuffer.errors.isEmpty()){
+								errorBuffer.errors.forEach((error) -> reporter.codegen().error(0, 0, error.toString()));
+							} else{
+								assemblyWrittenSuccessfully = true;
+							}
+						} catch(IOException e){
+							reporter.codegen().error(0, 0, e.getMessage());
+						}
+						if(assemblyWrittenSuccessfully){
+							System.out.println("successfully wrote jasmin assembly file to " + outFile.getAbsolutePath());
+							if(context.isAssemble()){
+								JasminHelper jasmin = new JasminHelper();
+								boolean successfullyAssembled = false;
+								String classFile = context.getOutfile() + ".class"; 
+								try{
+									jasmin.assembleToFile(outFile.getAbsolutePath(), classFile);
+									successfullyAssembled = true;
+								} catch(IOException e){
+									System.err.println(String.format("could not assemble %s: %s", outFile.getAbsolutePath(), e.getMessage()));
+								}
+								if(successfullyAssembled){
+									System.out.println("successfully wrote class file to " + classFile);
+									if(context.isRun()){
+										MainRunner runner = MainRunner.getInstance();
+										runner.addToClassPath(new File(classFile).getParentFile().getAbsolutePath());
+										
+										try {
+											System.out.println(String.format("running main %s...", context.getOutfileWithoutPath()));
+											runner.tryMain(context.getOutfileWithoutPath());
+										} catch (ExecutionException e1) {
+											System.err.println("Error during invocation of main function");
+											System.err.println("==========START STACKTRACE=========");
+											e1.printStackTrace();
+											System.err.println("==========STOP STACKTRACE==========");
+										} catch (ClassFunctionException e1) {
+											System.err.println("Could not execute main function: " + e1.getMessage());
+										}
+									}
+								}
+							}
+							
+						}
+					}
+				}
+			}
 		}
 		
 	}

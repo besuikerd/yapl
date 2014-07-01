@@ -2,6 +2,7 @@
 package yapl.syntax;
 
 	import yapl.typing.Type;
+	import yapl.context.IdEntry;
 
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
@@ -20,6 +21,13 @@ public interface YAPLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitExpression(@NotNull YAPLParser.ExpressionContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link YAPLParser#statementDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStatementDeclaration(@NotNull YAPLParser.StatementDeclarationContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link YAPLParser#opIdOrFunc}.
@@ -41,6 +49,13 @@ public interface YAPLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitPlusMinusExpr(@NotNull YAPLParser.PlusMinusExprContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link YAPLParser#statementExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStatementExpression(@NotNull YAPLParser.StatementExpressionContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link YAPLParser#opIfThenElse}.
@@ -111,13 +126,6 @@ public interface YAPLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitOpExprBlock(@NotNull YAPLParser.OpExprBlockContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link YAPLParser#statement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStatement(@NotNull YAPLParser.StatementContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link YAPLParser#opFalse}.

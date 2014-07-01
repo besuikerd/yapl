@@ -1,0 +1,37 @@
+import "jvm_op.stg"
+
+yapl(name, statements) ::= <<
+
+.class public <name>
+.super java/lang/Object
+
+.method public static main([Ljava/lang/String;)V
+	.limit stack 	512
+	.limit locals 	512
+
+	getstatic java/lang/System/out Ljava/io/PrintStream;
+
+	<statements; separator="\n">
+	
+	invokevirtual java/io/PrintStream/println(I)V
+
+	return
+.end method
+
+
+
+>>
+
+
+declareVar(name, type) ::= "var <name> : <type>"
+
+
+
+assign(type, index, expression) ::= <<
+<expression>
+<type>store		<index>
+>>
+
+number(num) ::= "ldc 			<num>"
+
+
