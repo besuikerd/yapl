@@ -2,6 +2,7 @@
 package yapl.syntax;
 
 	import yapl.typing.Type;
+	import yapl.context.IdEntry;
 
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;

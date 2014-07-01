@@ -2,6 +2,7 @@
 package yapl.syntax;
 
 	import yapl.typing.Type;
+	import yapl.context.IdEntry;
 
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
@@ -29,6 +30,14 @@ public class YAPLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Y
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitStatementDeclaration(@NotNull YAPLParser.StatementDeclarationContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitOpIdOrFunc(@NotNull YAPLParser.OpIdOrFuncContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -46,6 +55,14 @@ public class YAPLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Y
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitPlusMinusExpr(@NotNull YAPLParser.PlusMinusExprContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitStatementExpression(@NotNull YAPLParser.StatementExpressionContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -126,14 +143,6 @@ public class YAPLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Y
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitOpExprBlock(@NotNull YAPLParser.OpExprBlockContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitStatement(@NotNull YAPLParser.StatementContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}

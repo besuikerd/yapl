@@ -138,7 +138,7 @@ public class YAPLTypeVisitor extends YAPLBaseVisitor<Type>{
 	
 	@Override
 	public Type visitId(IdContext ctx) {
-		return ctx.ctx != null ? ctx.ctx.type : Type.ERROR;
+		return ctx.entry.getType() != null ? ctx.entry.getType() : Type.ERROR;
 	}
 	
 	@Override

@@ -1,22 +1,27 @@
 package yapl.context;
 
 import yapl.syntax.YAPLParser.DeclarationContext;
+import yapl.typing.Type;
 
 public class IdEntry {
 	private String spelling;
 	private DeclarationContext ctx;
+	
 	private int level;
 	private boolean used;
+	private Type type;
 
-	public IdEntry(String spelling, DeclarationContext ctx, int level){
+	public IdEntry(String spelling, DeclarationContext ctx, int level, Type type){
 		this.spelling = spelling;
 		this.ctx = ctx;
 		this.level = level;
+		this.type = type;
 		this.used = false;
+		
 	}
 	
-	public IdEntry(String spelling, DeclarationContext ctx){
-		this(spelling, ctx, -1);
+	public IdEntry(String spelling, DeclarationContext ctx, Type type){
+		this(spelling, ctx, -1, type);
 	}
 	
 	public int getLevel() {
@@ -37,6 +42,10 @@ public class IdEntry {
 	
 	public String getSpelling() {
 		return spelling;
+	}
+	
+	public Type getType() {
+		return type;
 	}
 	
 	public void setUsed(boolean used) {

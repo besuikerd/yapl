@@ -16,7 +16,7 @@ public enum ErrorType {
 	/**
 	 * an error that occurred during a semantic walk through the parse tree
 	 */
-	SEMANTIC
+	CODEGEN
 	;
 
 	

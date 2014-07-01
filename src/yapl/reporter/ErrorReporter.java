@@ -36,6 +36,10 @@ public class ErrorReporter {
 		return errors.size();
 	}
 	
+	public int getErrorCount(ErrorType type, Severity severity){
+		return (int) stream().filter((error) -> error.getType() == type && error.getSeverity().compareTo(severity) >= 0).count();
+	}
+	
 	/**
 	 * add an error to this ErrorReporter. If there are any {@link Consumer}s bound to this {@code ErrorReporter}, these will be triggered.
 	 * @param error
@@ -103,8 +107,8 @@ public class ErrorReporter {
 	 * @return
 	 * @see ErrorReporter#type(ErrorType)
 	 */
-	public ErrorReporterTypeDelegate semantic(){
-		return type(ErrorType.SEMANTIC);
+	public ErrorReporterTypeDelegate codegen(){
+		return type(ErrorType.CODEGEN);
 	}
 	
 	/**

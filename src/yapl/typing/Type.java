@@ -8,6 +8,7 @@ public class Type {
 	
 	public static final Type INT = new Type(TypeKind.INTEGER, "Integer");
 	public static final Type BOOLEAN = new Type(TypeKind.BOOLEAN, "Boolean");
+	public static final Type CHAR = new Type(TypeKind.CHAR, "Character");
 	public static final Type ERROR = new Type(TypeKind.ERROR, "");
 	public static final Type VOID = new Type(TypeKind.VOID, "");
 	
@@ -16,6 +17,7 @@ public class Type {
 	public static final Map<String, Type> TYPEMAP = new HashMap<String, Type>(){{
 		put(INT.getSpelling(), INT);
 		put(BOOLEAN.getSpelling(), BOOLEAN);
+		put(CHAR.getSpelling(), CHAR);
 	}};
 	
 	protected TypeKind kind;
