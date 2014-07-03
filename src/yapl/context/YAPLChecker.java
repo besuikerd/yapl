@@ -141,11 +141,13 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 	@Override
 	public Void visitMultDivModExpr(MultDivModExprContext ctx) {
 		super.visitMultDivModExpr(ctx);
-		if(ctx.op != null){ //and operation exists
-			Type left = ctx.primaryExpr().accept(typeVisitor);
-			Type right = ctx.multDivModExpr().accept(typeVisitor);
-			if(!left.matchesType(Type.INT)) reporter.context().errorBinaryOpType(ctx.primaryExpr(), ctx.op.getText(), Type.INT, left);
-			if(!right.matchesType(Type.INT)) reporter.context().errorBinaryOpType(ctx.multDivModExpr(), ctx.op.getText(), Type.INT, right);
+		for(int i = 1 ; i < ctx.primaryExpr().size() ; i++){
+			PrimaryExprContext ctxLeft = ctx.primaryExpr(i - 1);
+			PrimaryExprContext ctxRight = ctx.primaryExpr(i);
+			Type left = ctxLeft.accept(typeVisitor);
+			Type right = ctxLeft.accept(typeVisitor);
+			if(!left.matchesType(Type.INT)) reporter.context().errorBinaryOpType(ctxLeft, ctx.opMultDivMod(i - 1).getText(), Type.INT, left);
+			if(!right.matchesType(Type.INT)) reporter.context().errorBinaryOpType(ctxRight, ctx.opMultDivMod(i - 1).getText(), Type.INT, right);
 		}
 		return null;
 	}
@@ -153,22 +155,27 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 	@Override
 	public Void visitPlusMinusExpr(PlusMinusExprContext ctx) {
 		super.visitPlusMinusExpr(ctx);
-		if(ctx.op != null){ //and operation exists
-			Type left = ctx.multDivModExpr().accept(typeVisitor);
-			Type right = ctx.plusMinusExpr().accept(typeVisitor);
-			if(!left.matchesType(Type.INT)) reporter.context().errorBinaryOpType(ctx.multDivModExpr(), ctx.op.getText(), Type.INT, left);
-			if(!right.matchesType(Type.INT)) reporter.context().errorBinaryOpType(ctx.plusMinusExpr(), ctx.op.getText(), Type.INT, right);
-		}
+			for(int i = 1 ; i < ctx.multDivModExpr().size() ; i++){
+				MultDivModExprContext ctxLeft = ctx.multDivModExpr(i - 1);
+				MultDivModExprContext ctxRight = ctx.multDivModExpr(i);
+				Type left = ctxLeft.accept(typeVisitor);
+				Type right = ctxRight.accept(typeVisitor);
+				if(!left.matchesType(Type.INT)) reporter.context().errorBinaryOpType(ctxLeft, ctx.opPlusMinus(i).getText(), Type.INT, left);
+				if(!right.matchesType(Type.INT)) reporter.context().errorBinaryOpType(ctxRight, ctx.opPlusMinus(i).getText(), Type.INT, right);
+			}
+				
 		return null;
 	}
 	
 	@Override
 	public Void visitCompareExpr(CompareExprContext ctx) {
 		super.visitCompareExpr(ctx);
-		if(ctx.op != null){ //and operation exists
-			Type left = ctx.plusMinusExpr().accept(typeVisitor);
-			Type right = ctx.compareExpr().accept(typeVisitor);
-			if(!left.matchesType(right)) reporter.context().errorBinaryOpType(ctx.compareExpr(), ctx.op.getText(), left, right);
+		for(int i = 1 ; i < ctx.plusMinusExpr().size() ; i++){
+			PlusMinusExprContext ctxLeft = ctx.plusMinusExpr(i - 1);
+			PlusMinusExprContext ctxRight = ctx.plusMinusExpr(i);
+			Type left = ctxLeft.accept(typeVisitor);
+			Type right = ctxRight.accept(typeVisitor);
+			if(!left.matchesType(right)) reporter.context().errorBinaryOpType(ctx, ctx.opCompare(i).getText(), left, right);
 		}
 		return null;
 	}
@@ -176,11 +183,13 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 	@Override
 	public Void visitAndExpr(AndExprContext ctx) {
 		super.visitAndExpr(ctx);
-		if(ctx.op != null){ //and operation exists
-			Type left = ctx.compareExpr().accept(typeVisitor);
-			Type right = ctx.andExpr().accept(typeVisitor);
-			if(!left.matchesType(Type.BOOLEAN)) reporter.context().errorBinaryOpType(ctx.compareExpr(), ctx.op.getText(), Type.BOOLEAN, left);
-			if(!right.matchesType(Type.BOOLEAN)) reporter.context().errorBinaryOpType(ctx.andExpr(), ctx.op.getText(), Type.BOOLEAN, right);
+		for(int i = 1 ; i < ctx.compareExpr().size() ; i++){
+			CompareExprContext ctxLeft = ctx.compareExpr(i - 1);
+			CompareExprContext ctxRight = ctx.compareExpr(i);
+			Type left = ctxLeft.accept(typeVisitor);
+			Type right = ctxRight.accept(typeVisitor);
+			if(!left.matchesType(Type.BOOLEAN)) reporter.context().errorBinaryOpType(ctxLeft, ctx.getToken(YAPLParser.LAND, i), Type.BOOLEAN, left);
+			if(!right.matchesType(Type.BOOLEAN)) reporter.context().errorBinaryOpType(ctxRight, ctx.getToken(YAPLParser.LAND, i), Type.BOOLEAN, right);
 		}
 		return null;
 	}
@@ -188,11 +197,13 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 	@Override
 	public Void visitOrExpr(OrExprContext ctx) {
 		super.visitOrExpr(ctx);
-		if(ctx.op != null){ //and operation exists
-			Type left = ctx.andExpr().accept(typeVisitor);
-			Type right = ctx.orExpr().accept(typeVisitor);
-			if(!left.matchesType(Type.BOOLEAN)) reporter.context().errorBinaryOpType(ctx.andExpr(), ctx.op.getText(), Type.BOOLEAN, left);
-			if(!right.matchesType(Type.BOOLEAN)) reporter.context().errorBinaryOpType(ctx.orExpr(), ctx.op.getText(), Type.BOOLEAN, right);
+		for(int i = 1 ; i < ctx.andExpr().size() ; i++){
+			AndExprContext ctxLeft = ctx.andExpr(i - 1);
+			AndExprContext ctxRight = ctx.andExpr(i);
+			Type left = ctxLeft.accept(typeVisitor);
+			Type right = ctxRight.accept(typeVisitor);
+			if(!left.matchesType(Type.BOOLEAN)) reporter.context().errorBinaryOpType(ctxLeft, ctx.getToken(YAPLParser.LOR, i), Type.BOOLEAN, left);
+			if(!right.matchesType(Type.BOOLEAN)) reporter.context().errorBinaryOpType(ctxRight, ctx.getToken(YAPLParser.LOR, i), Type.BOOLEAN, right);
 		}
 		return null;
 	}
@@ -201,7 +212,6 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 	@Override
 	public Void visitOpIdOrFunc(OpIdOrFuncContext ctx) {
 		if(ctx.LPAREN() != null){
-			
 			//TODO typecheck function signature
 			//System.out.println(ctx.expression().stream().map((x) -> x.getText()).collect(Collectors.toList()));
 			ctx.expression().forEach((expr) -> expr.accept(this));

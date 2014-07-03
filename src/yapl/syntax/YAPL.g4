@@ -88,28 +88,35 @@ primaryExpr
 
 multDivModExpr
 :
-  primaryExpr (op=(MULT | DIV | MOD) multDivModExpr)?
+  primaryExpr (opMultDivMod primaryExpr)*
 ;
+
+opMultDivMod: MULT | DIV | MOD;
 
 plusMinusExpr
 :
-  multDivModExpr (op=(PLUS | MINUS) plusMinusExpr)?
+  multDivModExpr (opPlusMinus multDivModExpr)*
 ;
+
+opPlusMinus: PLUS | MINUS;
 
 compareExpr
 :
-  plusMinusExpr (op=(GT | GTE | LT | LTE | LEQ | LNEQ) compareExpr)?
+  plusMinusExpr (opCompare plusMinusExpr)*
 ;
+
+opCompare: GT | GTE | LT | LTE | LEQ | LNEQ;
 
 andExpr
 :
-  compareExpr (op=LAND andExpr)?
+  compareExpr (LAND compareExpr)*
 ;
 
 orExpr
 :
-  andExpr (op=LOR orExpr)?
+  andExpr (LOR andExpr)*
 ;
+
 
 id locals[IdEntry entry]
 :

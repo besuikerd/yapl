@@ -107,27 +107,27 @@ public class YAPLTypeVisitor extends YAPLBaseVisitor<Type>{
 	
 	@Override
 	public Type visitMultDivModExpr(MultDivModExprContext ctx) {
-		return ctx.op == null ? ctx.primaryExpr().accept(this) : Type.INT;
+		return ctx.primaryExpr().size() == 1 ? ctx.primaryExpr(0).accept(this) : Type.INT;
 	}
 	
 	@Override
 	public Type visitPlusMinusExpr(PlusMinusExprContext ctx) {
-		return ctx.op == null ? ctx.multDivModExpr().accept(this) : Type.INT;
+		return ctx.multDivModExpr().size() == 1 ? ctx.multDivModExpr(0).accept(this) : Type.INT;
 	}
 	
 	@Override
 	public Type visitCompareExpr(CompareExprContext ctx) {
-		return ctx.op == null ? ctx.plusMinusExpr().accept(this) : Type.BOOLEAN;
+		return ctx.plusMinusExpr().size() == 1 ? ctx.plusMinusExpr(0).accept(this) : Type.BOOLEAN;
 	}
 	
 	@Override
 	public Type visitAndExpr(AndExprContext ctx) {
-		return ctx.op == null ? ctx.compareExpr().accept(this) : Type.BOOLEAN;
+		return ctx.compareExpr().size() == 1 ? ctx.compareExpr(0).accept(this) : Type.BOOLEAN;
 	}
 	
 	@Override
 	public Type visitOrExpr(OrExprContext ctx) {
-		return ctx.op == null ? ctx.andExpr().accept(this) : Type.BOOLEAN;
+		return ctx.andExpr().size() == 1 ? ctx.andExpr(0).accept(this) : Type.BOOLEAN;
 	}
 	
 	

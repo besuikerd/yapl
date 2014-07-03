@@ -1,9 +1,1 @@
-var x : Integer;
-var y : Integer;
-const z = 5;
-x = 2;
-y = x + 1;
-z = (y = y * y - 1);
-x;
-y;
-z;
+false && false || true;
