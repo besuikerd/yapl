@@ -7,6 +7,7 @@ import org.stringtemplate.v4.STGroup;
 import yapl.syntax.YAPLBaseVisitor;
 import yapl.syntax.YAPLParser.AndExprContext;
 import yapl.syntax.YAPLParser.CompareExprContext;
+import yapl.syntax.YAPLParser.DeclConstContext;
 import yapl.syntax.YAPLParser.DeclVarContext;
 import yapl.syntax.YAPLParser.ExpressionContext;
 import yapl.syntax.YAPLParser.IdContext;
@@ -56,16 +57,24 @@ public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
 	
 	@Override
 	public ST visitStatementExpression(StatementExpressionContext ctx) {
-		return ctx.expression().accept(this);
+		ST loadSysOut = new ST("getstatic java/lang/System/out Ljava/io/PrintStream;\n");
+		ST printOut = new ST("invokevirtual java/io/PrintStream/println(I)V");
+		return STUtils.concat(loadSysOut, ctx.expression().accept(this), printOut);
 	}
 	
 	@Override
 	public ST visitDeclVar(DeclVarContext ctx) {
 		ST st =  CodeFunction.declareVariable.builder()
-		.property(CodeProperty.name, ctx.id().getText())
-		.property(CodeProperty.type, ctx.typeDenoter().getText())
+		.property(CodeProperty.constant, STPushConstantForType(ctx.entry.getType()))
+		.property(CodeProperty.type, getTypePrefix(ctx.entry.getType()))
+		.property(CodeProperty.offset, ctx.entry.getOffset())
 		.build(group);
 		return st;
+	}
+	
+	@Override
+	public ST visitDeclConst(DeclConstContext ctx) {
+		return null;
 	}
 	
 	@Override
@@ -74,9 +83,9 @@ public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
 		if(ctx.EQ() != null){
 			IdContext idCtx = ((OpIdOrFuncContext) ctx.orExpr().andExpr().compareExpr().plusMinusExpr().multDivModExpr().primaryExpr().operand()).id();
 			st = CodeFunction.assign.builder()
-			.property(CodeProperty.type, getTypePrefix(idCtx))
-			.property(CodeProperty.index, 0)
-			.property(CodeProperty.expression, st)
+			.property(CodeProperty.type, getTypePrefix(idCtx.entry.getType()))
+			.property(CodeProperty.offset, idCtx.entry.getOffset())
+			.property(CodeProperty.expression, ctx.expression().accept(this))
 			.build(group);
 		}
 		return st;
@@ -84,8 +93,19 @@ public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
 	
 	@Override
 	public ST visitPrimaryExpr(PrimaryExprContext ctx) {
-		//TODO negate invert etc
-		return ctx.operand().accept(this);
+		ST operand = ctx.operand().accept(this);
+		if(ctx.op != null){
+			CodeFunction func = null;
+			switch(ctx.op.getText()){
+			case "-": func = CodeFunction.negate; break;
+			case "!": func = CodeFunction.not; break;
+			}
+			if(func != null){
+				ST op = func.toST(group);
+				operand = STUtils.concat(operand, op);
+			}
+		}
+		return operand;
 	}
 	
 	@Override
@@ -190,6 +210,22 @@ public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
 	}
 	
 	@Override
+	public ST visitOpIdOrFunc(OpIdOrFuncContext ctx) {
+		
+		ST st = null;
+		if(ctx.LPAREN() == null){ //an id operand
+			IdContext idContext = ctx.id();
+			st = CodeFunction.opId.builder()
+			.property(CodeProperty.type, getTypePrefix(idContext.entry.getType()))
+			.property(CodeProperty.offset, idContext.entry.getOffset())
+			.build(group);
+		} else { //TODO funcion operand
+			
+		}
+		return st;
+	}
+	
+	@Override
 	public ST visitOpParenExpr(OpParenExprContext ctx) {
 		return ctx.expression().accept(this);
 	}
@@ -204,17 +240,34 @@ public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
 		return CodeFunction.opfalse.toST(group);
 	}
 		
-	private String getTypePrefix(IdContext ctx){
-		Type t = ctx.entry.getType();
+	private String getTypePrefix(Type t){
 		String type = "a";
 		if(t != null){
 			switch(t.getKind()){
-			case INTEGER: type = "i"; break;
-			case BOOLEAN: type = "ba"; break;
-			case CHAR:    type = "ca"; break;
-			default:      type = "a"; break;
+			case INTEGER: 
+			case BOOLEAN: 
+			case CHAR:
+				type = "i";
+				break;
+			default:      
+				type = "a";
+				break;
 			}
 		}
 		return type;
+	}
+	
+	private ST STPushConstantForType(Type t){
+		ST st = null;
+		if(t != null){
+			switch(t.getKind()){
+			case INTEGER:
+			case BOOLEAN:
+			case CHAR:
+				st = new ST("iconst_0");
+				break;
+			}
+		}
+		return st;
 	}
 }

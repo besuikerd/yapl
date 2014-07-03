@@ -15,6 +15,13 @@ eq(lto, lgoto) ::= "<compare(type=\"if_icmpeq\", lto=lto, lgoto=lgoto)>"
 neq(lto, lgoto) ::= "<compare(type=\"if_icmpne\", lto=lto, lgoto=lgoto)>"
 
 
+negate() ::= "ineg"
+not() ::= <<
+iconst_1
+ixor
+>>
+
+
 compare(type, lto, lgoto) ::= <<
 <type>			<lto>
 iconst_0
@@ -24,9 +31,6 @@ iconst_1
 <lgoto>:
 
 >>
-
-
-
 
 and(left, right, lto, lto2, lgoto) ::= <<
 <left>
@@ -61,3 +65,7 @@ goto			<lgoto>
 iconst_0
 <lgoto>:
 >>
+
+
+opId(type, offset) ::= "<type>load		<offset>"
+

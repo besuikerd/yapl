@@ -59,7 +59,7 @@ statement
   | expression SEMICOLON 										#statementExpression
 ;
 
-declaration
+declaration locals[IdEntry entry]
 : 
     VAR id COLON typeDenoter									#declVar
  |  CONST id EQ expression										#declConst
@@ -71,7 +71,7 @@ expression:
 
 operand
 :
-  id (LPAREN (expression (COMMA expression)*)? RPAREN)? 		#opIdOrFunc
+  id (LPAREN (expression (COMMA expression)*)? RPAREN)?	 		#opIdOrFunc
   | number					 									#opNumber
   | LPAREN expression RPAREN 									#opParenExpr
   | TRUE														#opTrue

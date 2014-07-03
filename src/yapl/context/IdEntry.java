@@ -6,10 +6,10 @@ import yapl.typing.Type;
 public class IdEntry {
 	private String spelling;
 	private DeclarationContext ctx;
-	
 	private int level;
 	private boolean used;
 	private Type type;
+	private int offset;
 
 	public IdEntry(String spelling, DeclarationContext ctx, int level, Type type){
 		this.spelling = spelling;
@@ -17,7 +17,6 @@ public class IdEntry {
 		this.level = level;
 		this.type = type;
 		this.used = false;
-		
 	}
 	
 	public IdEntry(String spelling, DeclarationContext ctx, Type type){
@@ -30,6 +29,14 @@ public class IdEntry {
 	
 	public void setLevel(int level) {
 		this.level = level;
+	}
+	
+	public void setOffset(int offset) {
+		this.offset = offset;
+	}
+	
+	public int getOffset() {
+		return offset;
 	}
 	
 	public DeclarationContext getDeclarationContext() {

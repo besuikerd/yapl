@@ -9,11 +9,7 @@ yapl(name, statements) ::= <<
 	.limit stack 	512
 	.limit locals 	512
 
-	getstatic java/lang/System/out Ljava/io/PrintStream;
-
 	<statements; separator="\n">
-	
-	invokevirtual java/io/PrintStream/println(I)V
 
 	return
 .end method
@@ -23,15 +19,19 @@ yapl(name, statements) ::= <<
 >>
 
 
-declareVar(name, type) ::= "var <name> : <type>"
-
-
-
-assign(type, index, expression) ::= <<
-<expression>
-<type>store		<index>
+declareVar(constant, type, offset) ::= <<
+<constant>
+<type>store <offset>
 >>
 
-number(num) ::= "ldc 			<num>"
+
+
+assign(type, offset, expression) ::= <<
+<expression>
+dup
+<type>store		<offset>
+>>
+
+number(num) ::= "ldc 		<num>"
 
 

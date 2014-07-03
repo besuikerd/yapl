@@ -8,7 +8,7 @@ public class SymbolTable<Entry extends IdEntry> {
     private Map<String, Stack<Entry>> declarations;
     private Stack<Set<String>> scopedDeclarations;
     private int currentLevel;
-
+    private int offset;
 
     /**
      * Constructor.
@@ -18,6 +18,7 @@ public class SymbolTable<Entry extends IdEntry> {
         this.declarations = new HashMap<String, Stack<Entry>>();
         this.scopedDeclarations = new Stack<Set<String>>();
         this.currentLevel = -1;
+        this.offset = 1;
     }
 
     /**
@@ -40,6 +41,7 @@ public class SymbolTable<Entry extends IdEntry> {
         Set<String> toRemove = scopedDeclarations.pop();
         Set<Entry> removed = toRemove.stream().map((decl) -> declarations.get(decl).pop()).collect(Collectors.toSet());
         currentLevel--;
+        offset -= toRemove.size();
         return removed;
     }
 
@@ -72,6 +74,7 @@ public class SymbolTable<Entry extends IdEntry> {
         }
         scopedDeclarations.peek().add(id);
         entry.setLevel(currentLevel());
+        entry.setOffset(offset++);
         stack.push(entry);
     }
 

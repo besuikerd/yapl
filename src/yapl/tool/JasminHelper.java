@@ -12,10 +12,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 public class JasminHelper {
-	public void assembleToFile(String in, String out) throws IOException {
+	public boolean assembleToFile(String in, String out) throws IOException {
 		ClassFile classFile = new ClassFile();
 		File inFile = new File(in);
 		File outFile = new File(out);
+		boolean success = false;
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inFile)));
 			try{
@@ -35,12 +36,11 @@ public class JasminHelper {
 					if (!outFile.getParentFile().exists()) {
 						outFile.getParentFile().mkdirs();
 					}
-
 					classFile.write(os);
 				} finally {
 					os.close();
 				}
-				System.out.println("Generated: " + outFile.getPath());
+				success = true;
 			}
 		} catch (jasError e) {
 			System.out.println("JAS Error: " + e.getMessage());
@@ -52,5 +52,6 @@ public class JasminHelper {
 		} catch (Exception e) {
 			System.out.println("Jasmin generated an error: " + e);
 		}
+		return success;
 	}
 }

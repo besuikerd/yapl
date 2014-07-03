@@ -60,7 +60,6 @@ public class Tool {
 			TokenStream stream = new CommonTokenStream(lexer);
 			ErrorReporter reporter = new ErrorReporter().withConsumer((x) -> System.err.println(x));
 			YAPLParser parser = new YAPLParser(stream);
-			
 			parser.removeErrorListeners();
 			parser.addErrorListener(new BaseErrorListener(){
 				public void syntaxError(org.antlr.v4.runtime.Recognizer<?,?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
@@ -111,8 +110,7 @@ public class Tool {
 								boolean successfullyAssembled = false;
 								String classFile = context.getOutfile() + ".class"; 
 								try{
-									jasmin.assembleToFile(outFile.getAbsolutePath(), classFile);
-									successfullyAssembled = true;
+									successfullyAssembled = jasmin.assembleToFile(outFile.getAbsolutePath(), classFile);;
 								} catch(IOException e){
 									System.err.println(String.format("could not assemble %s: %s", outFile.getAbsolutePath(), e.getMessage()));
 								}

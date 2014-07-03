@@ -197,6 +197,7 @@ public class YAPLParser extends Parser {
 	}
 
 	public static class DeclarationContext extends ParserRuleContext {
+		public IdEntry entry;
 		public DeclarationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -205,6 +206,7 @@ public class YAPLParser extends Parser {
 		public DeclarationContext() { }
 		public void copyFrom(DeclarationContext ctx) {
 			super.copyFrom(ctx);
+			this.entry = ctx.entry;
 		}
 	}
 	public static class DeclVarContext extends DeclarationContext {

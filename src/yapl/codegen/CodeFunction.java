@@ -14,14 +14,10 @@ public enum CodeFunction{
 	
 	,assign("assign")
 	
-	
-	
-	
-	
 	,number("number")
 	,optrue("optrue")
 	,opfalse("opfalse")
-	
+	,opId("opId")
 	
 	
 	,add("add")
@@ -37,6 +33,8 @@ public enum CodeFunction{
 	,lte("lte")
 	,eq("eq")
 	,neq("neq")
+	,negate("negate")
+	,not("not")
 	;
 	private String functionName;
 	private CodeFunction(String name){

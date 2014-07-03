@@ -53,7 +53,7 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 		} catch(SymbolTableException e){
 			reporter.context().error(ctx.id().start, e.getMessage());
 		}
-		
+		ctx.entry = entry;
 		return ctx.typeDenoter().accept(this);
 	}
 	
@@ -65,6 +65,7 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 		} catch(SymbolTableException e){
 			reporter.context().error(ctx.id().start, e.getMessage());
 		}
+		ctx.entry = entry;
 		return ctx.expression().accept(this);
 	}
 	
@@ -143,7 +144,7 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 		if(ctx.op != null){ //and operation exists
 			Type left = ctx.primaryExpr().accept(typeVisitor);
 			Type right = ctx.multDivModExpr().accept(typeVisitor);
-			if(!left.matchesType(Type.INT)) reporter.context().errorBinaryOpType(ctx.primaryExpr(), ctx.op.getText(), Type.INT, right);
+			if(!left.matchesType(Type.INT)) reporter.context().errorBinaryOpType(ctx.primaryExpr(), ctx.op.getText(), Type.INT, left);
 			if(!right.matchesType(Type.INT)) reporter.context().errorBinaryOpType(ctx.multDivModExpr(), ctx.op.getText(), Type.INT, right);
 		}
 		return null;
@@ -155,7 +156,7 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 		if(ctx.op != null){ //and operation exists
 			Type left = ctx.multDivModExpr().accept(typeVisitor);
 			Type right = ctx.plusMinusExpr().accept(typeVisitor);
-			if(!left.matchesType(Type.INT)) reporter.context().errorBinaryOpType(ctx.multDivModExpr(), ctx.op.getText(), Type.INT, right);
+			if(!left.matchesType(Type.INT)) reporter.context().errorBinaryOpType(ctx.multDivModExpr(), ctx.op.getText(), Type.INT, left);
 			if(!right.matchesType(Type.INT)) reporter.context().errorBinaryOpType(ctx.plusMinusExpr(), ctx.op.getText(), Type.INT, right);
 		}
 		return null;
@@ -178,7 +179,7 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 		if(ctx.op != null){ //and operation exists
 			Type left = ctx.compareExpr().accept(typeVisitor);
 			Type right = ctx.andExpr().accept(typeVisitor);
-			if(!left.matchesType(Type.BOOLEAN)) reporter.context().errorBinaryOpType(ctx.compareExpr(), ctx.op.getText(), Type.BOOLEAN, right);
+			if(!left.matchesType(Type.BOOLEAN)) reporter.context().errorBinaryOpType(ctx.compareExpr(), ctx.op.getText(), Type.BOOLEAN, left);
 			if(!right.matchesType(Type.BOOLEAN)) reporter.context().errorBinaryOpType(ctx.andExpr(), ctx.op.getText(), Type.BOOLEAN, right);
 		}
 		return null;
@@ -190,7 +191,7 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 		if(ctx.op != null){ //and operation exists
 			Type left = ctx.andExpr().accept(typeVisitor);
 			Type right = ctx.orExpr().accept(typeVisitor);
-			if(!left.matchesType(Type.BOOLEAN)) reporter.context().errorBinaryOpType(ctx.andExpr(), ctx.op.getText(), Type.BOOLEAN, right);
+			if(!left.matchesType(Type.BOOLEAN)) reporter.context().errorBinaryOpType(ctx.andExpr(), ctx.op.getText(), Type.BOOLEAN, left);
 			if(!right.matchesType(Type.BOOLEAN)) reporter.context().errorBinaryOpType(ctx.orExpr(), ctx.op.getText(), Type.BOOLEAN, right);
 		}
 		return null;
