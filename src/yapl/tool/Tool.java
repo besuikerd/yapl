@@ -134,12 +134,10 @@ public class Tool {
 									}
 								}
 							}
-							
 						}
 					}
 				}
 			}
 		}
-		
 	}
 }

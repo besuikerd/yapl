@@ -3,6 +3,10 @@ package yapl.context;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import yapl.context.ConstantExpression.ConstantType;
+import yapl.context.IdEntry.EntryType;
+import yapl.syntax.YAPLParser.DeclVarContext;
+
 public class SymbolTable<Entry extends IdEntry> {
 
     private Map<String, Stack<Entry>> declarations;
@@ -41,7 +45,7 @@ public class SymbolTable<Entry extends IdEntry> {
         Set<String> toRemove = scopedDeclarations.pop();
         Set<Entry> removed = toRemove.stream().map((decl) -> declarations.get(decl).pop()).collect(Collectors.toSet());
         currentLevel--;
-        offset -= toRemove.size();
+        offset -= removed.stream().filter((entry) -> entry.getEntryType() == EntryType.VARIABLE).collect(Collectors.toSet()).size();
         return removed;
     }
 
@@ -74,7 +78,10 @@ public class SymbolTable<Entry extends IdEntry> {
         }
         scopedDeclarations.peek().add(id);
         entry.setLevel(currentLevel());
-        entry.setOffset(offset++);
+        if(entry.getEntryType() == EntryType.VARIABLE || entry.getConstantExpression().getConstantType() == ConstantType.UNKNOWN_VALUE){
+        	entry.setOffset(offset++);
+        }
+    	
         stack.push(entry);
     }
 

@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 
+import yapl.context.ConstantExpression.ConstantType;
 import yapl.syntax.YAPLBaseVisitor;
 import yapl.syntax.YAPLLexer;
 import yapl.syntax.YAPLParser.AndExprContext;
@@ -46,6 +47,8 @@ public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
 
 	@Override
 	public ST visitYapl(YaplContext ctx) {
+		
+		
 		return CodeFunction.yapl.builder()
 		.property(CodeProperty.name, context.getOutfileWithoutPath())
 		.property(CodeProperty.statements, ctx.statement().stream().map((s) -> s.accept(this)).collect(Collectors.toList()))
@@ -76,7 +79,15 @@ public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
 	
 	@Override
 	public ST visitDeclConst(DeclConstContext ctx) {
-		return null;
+		ST st = null;
+		if(ctx.entry.getConstantExpression().getConstantType() == ConstantType.UNKNOWN_VALUE){
+			st = CodeFunction.declareVariable.builder()
+			.property(CodeProperty.constant, ctx.expression().accept(this))
+			.property(CodeProperty.type, getTypePrefix(ctx.entry.getType()))
+			.property(CodeProperty.offset, ctx.entry.getOffset())
+			.build(group);
+		}
+		return st;
 	}
 	
 	@Override
@@ -220,10 +231,33 @@ public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
 		ST st = null;
 		if(ctx.LPAREN() == null){ //an id operand
 			IdContext idContext = ctx.id();
-			st = CodeFunction.opId.builder()
-			.property(CodeProperty.type, getTypePrefix(idContext.entry.getType()))
-			.property(CodeProperty.offset, idContext.entry.getOffset())
-			.build(group);
+			
+			switch(idContext.entry.getEntryType()){
+			case CONSTANT:
+				switch(idContext.entry.getConstantExpression().getConstantType()){
+				case KNOWN_VALUE:
+					st = CodeFunction.number.builder()
+					.property(CodeProperty.num, idContext.entry.getConstantExpression().getValue())
+					.build(group);
+					break;
+					
+				case UNKNOWN_VALUE:
+					st = CodeFunction.opId.builder()
+					.property(CodeProperty.type, getTypePrefix(idContext.entry.getType()))
+					.property(CodeProperty.offset, idContext.entry.getOffset())
+					.build(group);
+					break;
+				}
+				break;
+			case VARIABLE:
+				st = CodeFunction.opId.builder()
+				.property(CodeProperty.type, getTypePrefix(idContext.entry.getType()))
+				.property(CodeProperty.offset, idContext.entry.getOffset())
+				.build(group);
+				break;
+			}
+			
+			
 		} else { //TODO funcion operand
 			
 		}

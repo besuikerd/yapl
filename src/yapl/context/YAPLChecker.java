@@ -1,5 +1,6 @@
 package yapl.context;
 
+import yapl.context.IdEntry.EntryType;
 import yapl.reporter.ErrorReporter;
 import yapl.syntax.YAPLBaseVisitor;
 import yapl.syntax.YAPLLexer;
@@ -26,28 +27,30 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 	protected SymbolTable<IdEntry> symbolTable;
 	protected ErrorReporter reporter;
 	protected YAPLTypeVisitor typeVisitor;
+	protected ConstantExpressionVisitor constantVisitor;
 	
 	public YAPLChecker(SymbolTable<IdEntry> symbolTable, YAPLTypeVisitor typeVisitor, ErrorReporter reporter) {
 		this.symbolTable = symbolTable;
 		this.reporter = reporter;
 		this.typeVisitor = typeVisitor;
+		this.constantVisitor = new ConstantExpressionVisitor();
 	}
 
 	@Override
 	public Void visitYapl(YaplContext ctx) {
 		symbolTable.openScope();
-		Void v = super.visitYapl(ctx);
+		super.visitYapl(ctx);
 		symbolTable.closeScope().forEach((entry) ->{
 			if(!entry.isUsed()){
 				reporter.context().warnUnusedVariable(entry);
 			}
 		});
-		return v;
+		return null;
 	}
 	
 	@Override
 	public Void visitDeclVar(DeclVarContext ctx) {
-		IdEntry entry = new IdEntry(ctx.id().getText(), ctx, ctx.typeDenoter().accept(typeVisitor));
+		IdEntry entry = new IdEntry(ctx.id().getText(), ctx, ctx.typeDenoter().accept(typeVisitor), EntryType.VARIABLE);
 		try {
 			symbolTable.enter(ctx.id().getText(), entry);
 		} catch(SymbolTableException e){
@@ -59,7 +62,7 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 	
 	@Override
 	public Void visitDeclConst(DeclConstContext ctx) {
-		IdEntry entry = new IdEntry(ctx.id().getText(), ctx, ctx.expression().accept(typeVisitor));
+		IdEntry entry = new IdEntry(ctx.id().getText(), ctx, ctx.expression().accept(typeVisitor), EntryType.CONSTANT, ctx.expression().accept(constantVisitor));
 		try{
 			symbolTable.enter(ctx.id().getText(), entry);
 		} catch(SymbolTableException e){
@@ -80,7 +83,7 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 				Type idType = ctx.orExpr().accept(typeVisitor);
 				Type exprType = ctx.expression().accept(typeVisitor);
 				if(!idType.matchesType(exprType)){
-					reporter.context().errorInvalidAssignmentType(ctx.expression(), idType, exprType);
+					reporter.context().errorInvalidAssignmentType(ctx.expression(), exprType, idType);
 				}
 			} else{
 				reporter.context().errorLHSNotIdentifier(ctx.orExpr());

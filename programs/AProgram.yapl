@@ -1,1 +1,9 @@
-false && false || true;
+var x : Integer;
+var y : Integer;
+
+x = 4;
+
+const a = (x + y) / 2;
+
+
+a;

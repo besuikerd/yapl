@@ -10,17 +10,26 @@ public class IdEntry {
 	private boolean used;
 	private Type type;
 	private int offset;
+	
+	private EntryType entryType;
+	private ConstantExpression constantExpression;
 
-	public IdEntry(String spelling, DeclarationContext ctx, int level, Type type){
+	public IdEntry(String spelling, DeclarationContext ctx, int level, Type type, EntryType entryType, ConstantExpression constExpression){
 		this.spelling = spelling;
 		this.ctx = ctx;
 		this.level = level;
 		this.type = type;
 		this.used = false;
+		this.entryType = entryType;
+		this.constantExpression = constExpression;
 	}
 	
-	public IdEntry(String spelling, DeclarationContext ctx, Type type){
-		this(spelling, ctx, -1, type);
+	public IdEntry(String spelling, DeclarationContext ctx, Type type, EntryType entryType, ConstantExpression constExpression){
+		this(spelling, ctx, -1, type, entryType, constExpression);
+	}
+	
+	public IdEntry(String spelling, DeclarationContext ctx, Type type, EntryType entryType){
+		this(spelling, ctx, type, entryType, null);
 	}
 	
 	public int getLevel() {
@@ -55,7 +64,20 @@ public class IdEntry {
 		return type;
 	}
 	
+	public EntryType getEntryType() {
+		return entryType;
+	}
+	
 	public void setUsed(boolean used) {
 		this.used = used;
+	}
+	
+	public ConstantExpression getConstantExpression() {
+		return constantExpression;
+	}
+	
+	public enum EntryType{
+		VARIABLE,
+		CONSTANT;
 	}
 }
