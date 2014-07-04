@@ -1,10 +1,12 @@
 package yapl.context;
 
 import yapl.context.ConstantExpression.ConstantType;
+import yapl.context.IdEntry.EntryType;
 import yapl.syntax.YAPLBaseVisitor;
 import yapl.syntax.YAPLParser.AndExprContext;
 import yapl.syntax.YAPLParser.CompareExprContext;
 import yapl.syntax.YAPLParser.ExpressionContext;
+import yapl.syntax.YAPLParser.IdContext;
 import yapl.syntax.YAPLParser.MultDivModExprContext;
 import yapl.syntax.YAPLParser.OpFalseContext;
 import yapl.syntax.YAPLParser.OpIdOrFuncContext;
@@ -138,7 +140,9 @@ public class ConstantExpressionVisitor extends YAPLBaseVisitor<ConstantExpressio
 			cons = new ConstantExpression(-1, ConstantType.UNKNOWN_VALUE);
 		} else{
 			//TODO functions
-			cons = new ConstantExpression(-1, ConstantType.UNKNOWN_VALUE);
+			IdContext idCtx = ctx.id();
+			System.out.println(idCtx.entry);
+			cons = idCtx.entry.getEntryType() == EntryType.CONSTANT ? idCtx.entry.getConstantExpression() : new ConstantExpression(-1, ConstantType.UNKNOWN_VALUE);
 		}
 		return cons;
 	}

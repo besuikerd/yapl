@@ -62,14 +62,16 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 	
 	@Override
 	public Void visitDeclConst(DeclConstContext ctx) {
-		IdEntry entry = new IdEntry(ctx.id().getText(), ctx, ctx.expression().accept(typeVisitor), EntryType.CONSTANT, ctx.expression().accept(constantVisitor));
+		ctx.expression().accept(this);
+		IdEntry entry = new IdEntry(ctx.id().getText(), ctx, ctx.expression().accept(typeVisitor), EntryType.CONSTANT);
+		entry.setConstantExpression(ctx.expression().accept(constantVisitor));
 		try{
 			symbolTable.enter(ctx.id().getText(), entry);
 		} catch(SymbolTableException e){
 			reporter.context().error(ctx.id().start, e.getMessage());
 		}
 		ctx.entry = entry;
-		return ctx.expression().accept(this);
+		return null;
 	}
 	
 	@Override

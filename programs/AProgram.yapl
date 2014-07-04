@@ -1,9 +1,6 @@
-var x : Integer;
-var y : Integer;
-
-x = 4;
-
-const a = (x + y) / 2;
-
-
+const a = 5;
+const b = a + 1;
+const c = a + b;
 a;
+b;
+c;

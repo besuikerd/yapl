@@ -14,22 +14,17 @@ public class IdEntry {
 	private EntryType entryType;
 	private ConstantExpression constantExpression;
 
-	public IdEntry(String spelling, DeclarationContext ctx, int level, Type type, EntryType entryType, ConstantExpression constExpression){
+	public IdEntry(String spelling, DeclarationContext ctx, int level, Type type, EntryType entryType){
 		this.spelling = spelling;
 		this.ctx = ctx;
 		this.level = level;
 		this.type = type;
 		this.used = false;
 		this.entryType = entryType;
-		this.constantExpression = constExpression;
-	}
-	
-	public IdEntry(String spelling, DeclarationContext ctx, Type type, EntryType entryType, ConstantExpression constExpression){
-		this(spelling, ctx, -1, type, entryType, constExpression);
 	}
 	
 	public IdEntry(String spelling, DeclarationContext ctx, Type type, EntryType entryType){
-		this(spelling, ctx, type, entryType, null);
+		this(spelling, ctx, -1, type, entryType);
 	}
 	
 	public int getLevel() {
@@ -74,6 +69,10 @@ public class IdEntry {
 	
 	public ConstantExpression getConstantExpression() {
 		return constantExpression;
+	}
+	
+	public void setConstantExpression(ConstantExpression constantExpression) {
+		this.constantExpression = constantExpression;
 	}
 	
 	public enum EntryType{
