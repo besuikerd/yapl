@@ -114,6 +114,13 @@ public interface YAPLVisitor<T> extends ParseTreeVisitor<T> {
 	T visitExpression(@NotNull YAPLParser.ExpressionContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link YAPLParser#opChar}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOpChar(@NotNull YAPLParser.OpCharContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link YAPLParser#statementDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

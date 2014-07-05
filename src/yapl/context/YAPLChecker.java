@@ -1,5 +1,7 @@
 package yapl.context;
 
+import java.util.stream.Collectors;
+
 import yapl.context.IdEntry.EntryType;
 import yapl.reporter.ErrorReporter;
 import yapl.syntax.YAPLBaseVisitor;
@@ -15,12 +17,12 @@ import yapl.syntax.YAPLParser.MultDivModExprContext;
 import yapl.syntax.YAPLParser.NumberContext;
 import yapl.syntax.YAPLParser.OpExprBlockContext;
 import yapl.syntax.YAPLParser.OpIdOrFuncContext;
-import yapl.syntax.YAPLParser.OpNumberContext;
 import yapl.syntax.YAPLParser.OrExprContext;
 import yapl.syntax.YAPLParser.PlusMinusExprContext;
 import yapl.syntax.YAPLParser.PrimaryExprContext;
 import yapl.syntax.YAPLParser.YaplContext;
 import yapl.typing.Type;
+import yapl.utils.Tuple2;
 
 public class YAPLChecker extends YAPLBaseVisitor<Void>{
 	
@@ -28,12 +30,14 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 	protected ErrorReporter reporter;
 	protected YAPLTypeVisitor typeVisitor;
 	protected ConstantExpressionVisitor constantVisitor;
+	protected IsIdentifierVisitor isIdentifierVisitor;
 	
 	public YAPLChecker(SymbolTable<IdEntry> symbolTable, YAPLTypeVisitor typeVisitor, ErrorReporter reporter) {
 		this.symbolTable = symbolTable;
 		this.reporter = reporter;
 		this.typeVisitor = typeVisitor;
 		this.constantVisitor = new ConstantExpressionVisitor();
+		this.isIdentifierVisitor = new IsIdentifierVisitor();
 	}
 
 	@Override
@@ -76,22 +80,22 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 	
 	@Override
 	public Void visitExpression(ExpressionContext ctx) {
-		Void v = super.visitExpression(ctx);
+		super.visitExpression(ctx);
+		Type orType = ctx.orExpr().accept(typeVisitor);
+		ctx.type = orType;
 		if(ctx.EQ() != null){ //an assign expression
-
-			//TODO maybe find another way to ensure it is an identifier
-			boolean isId = ctx.orExpr().start == ctx.orExpr().stop && ctx.orExpr().start.getType() == YAPLParser.IDENTIFIER;
+			boolean isId = ctx.orExpr().accept(isIdentifierVisitor);
 			if(isId){
-				Type idType = ctx.orExpr().accept(typeVisitor);
 				Type exprType = ctx.expression().accept(typeVisitor);
+				Type idType = orType;
 				if(!idType.matchesType(exprType)){
-					reporter.context().errorInvalidAssignmentType(ctx.expression(), exprType, idType);
+					reporter.context().errorInvalidAssignmentType(ctx.expression(), idType, exprType);
 				}
 			} else{
 				reporter.context().errorLHSNotIdentifier(ctx.orExpr());
 			}
 		}
-		return v;
+		return null;
 	}
 	
 	@Override
@@ -217,9 +221,19 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 	@Override
 	public Void visitOpIdOrFunc(OpIdOrFuncContext ctx) {
 		if(ctx.LPAREN() != null){
-			//TODO typecheck function signature
-			//System.out.println(ctx.expression().stream().map((x) -> x.getText()).collect(Collectors.toList()));
-			ctx.expression().forEach((expr) -> expr.accept(this));
+			ctx.expression().forEach((expression) -> expression.accept(this));
+			
+			switch(ctx.id().getText()){
+			case "read":
+				ctx.expression().forEach((expression) -> {
+					if(!expression.accept(isIdentifierVisitor)){
+						reporter.context().errorNotIdentifierExpression(expression);
+					}
+				});
+				break;
+			}
+			
+			
 			return null;
 		} else{
 			return ctx.id().accept(this);

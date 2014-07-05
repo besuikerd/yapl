@@ -9,9 +9,13 @@ public enum CodeProperty {
 	,index("index")
 	,expression("expression")
 	,constant("constant")
+	,function("function")
+	,expressions_types("expressions_types")
 	
 	,left("left")
 	,right("right")
+	
+	,tuples("tuples")
 	
 	,labelto("lto")
 	,labelto2("lto2")

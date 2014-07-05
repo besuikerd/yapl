@@ -8,6 +8,7 @@ import yapl.syntax.YAPLParser.ExpressionContext;
 import yapl.syntax.YAPLParser.IdContext;
 import yapl.syntax.YAPLParser.MultDivModExprContext;
 import yapl.syntax.YAPLParser.NumberContext;
+import yapl.syntax.YAPLParser.OpCharContext;
 import yapl.syntax.YAPLParser.OpExprBlockContext;
 import yapl.syntax.YAPLParser.OpFalseContext;
 import yapl.syntax.YAPLParser.OpIdOrFuncContext;
@@ -99,6 +100,11 @@ public class YAPLTypeVisitor extends YAPLBaseVisitor<Type>{
 		}
 		return type;
 	};
+	
+	@Override
+	public Type visitOpChar(OpCharContext ctx) {
+		return Type.CHAR;
+	}
 	
 	@Override
 	public Type visitPrimaryExpr(PrimaryExprContext ctx) {

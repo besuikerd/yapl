@@ -14,11 +14,18 @@ public enum CodeFunction{
 	
 	,assign("assign")
 	
-	,number("number")
+	,constant("constant")
 	,optrue("optrue")
 	,opfalse("opfalse")
 	,opId("opId")
+	,opExprBlock("opExprBlock")
 	
+	
+	,print("print")
+	,printMultiple("printMultiple")
+	
+	,read("read")
+	,readMultiple("readMultiple")
 	
 	,add("add")
 	,sub("sub")

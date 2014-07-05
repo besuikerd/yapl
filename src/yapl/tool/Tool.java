@@ -82,7 +82,7 @@ public class Tool {
 					
 					ST jvm = null;
 					try{
-						jvm = tree.accept(new YAPLJVMCodeGenerator(new STGroupFile("st/jvm.stg"), context));
+						jvm = tree.accept(new YAPLJVMCodeGenerator(new STGroupFile("st/jvm.stg", '$', '$'), context));
 					} catch(TemplateNotFoundException e){
 						reporter.codegen().error(0, 0, e.getMessage());
 					}

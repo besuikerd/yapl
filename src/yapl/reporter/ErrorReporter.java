@@ -12,6 +12,7 @@ import org.antlr.v4.runtime.Token;
 import org.omg.CORBA.RepositoryIdHelper;
 
 import yapl.context.IdEntry;
+import yapl.syntax.YAPLParser.ExpressionContext;
 import yapl.typing.Type;
 
 /**
@@ -219,8 +220,14 @@ public class ErrorReporter {
 			error(ctx, "Left hand side of assign expression must be an identifier");
 		}
 		
+		public void errorNotIdentifierExpression(ExpressionContext ctx){
+			error(ctx, "Expression '%s' is not an identifier", ctx.getText().substring(0, Math.min(ctx.getText().length(), 100)));
+		}
+		
 		public void errorInvalidAssignmentType(ParserRuleContext ctx, Type t1, Type t2){
 			error(ctx, "invalid assignment type, expected type: %s, got: %s", t1, t2);
 		}
+		
+		
 	}
 }

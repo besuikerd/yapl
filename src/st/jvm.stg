@@ -1,37 +1,39 @@
 import "jvm_op.stg"
+import "jvm_io.stg"
 
 yapl(name, statements) ::= <<
 
-.class public <name>
+.class public $name$
 .super java/lang/Object
 
 .method public static main([Ljava/lang/String;)V
 	.limit stack 	512
 	.limit locals 	512
 
-	<statements; separator="\n">
+	$statements; separator="\n"$
 
 	return
 .end method
 
-
-
+$readFunctions(name)$
 >>
 
+opExprBlock(statements, expression) ::= <<
+$statements; separator="\n"$
+$expression$
+>>
 
 declareVar(constant, type, offset) ::= <<
-<constant>
-<type>store <offset>
+$constant$
+$type$store $offset$
 >>
 
 
 
 assign(type, offset, expression) ::= <<
-<expression>
+$expression$
 dup
-<type>store		<offset>
+$type$store		$offset$
 >>
-
-number(num) ::= "ldc 		<num>"
 
 

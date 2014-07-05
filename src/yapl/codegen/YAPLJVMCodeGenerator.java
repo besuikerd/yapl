@@ -7,7 +7,6 @@ import org.stringtemplate.v4.STGroup;
 
 import yapl.context.ConstantExpression.ConstantType;
 import yapl.syntax.YAPLBaseVisitor;
-import yapl.syntax.YAPLLexer;
 import yapl.syntax.YAPLParser.AndExprContext;
 import yapl.syntax.YAPLParser.CompareExprContext;
 import yapl.syntax.YAPLParser.DeclConstContext;
@@ -15,6 +14,8 @@ import yapl.syntax.YAPLParser.DeclVarContext;
 import yapl.syntax.YAPLParser.ExpressionContext;
 import yapl.syntax.YAPLParser.IdContext;
 import yapl.syntax.YAPLParser.MultDivModExprContext;
+import yapl.syntax.YAPLParser.OpCharContext;
+import yapl.syntax.YAPLParser.OpExprBlockContext;
 import yapl.syntax.YAPLParser.OpFalseContext;
 import yapl.syntax.YAPLParser.OpIdOrFuncContext;
 import yapl.syntax.YAPLParser.OpNumberContext;
@@ -28,7 +29,10 @@ import yapl.syntax.YAPLParser.StatementExpressionContext;
 import yapl.syntax.YAPLParser.YaplContext;
 import yapl.tool.ToolContext;
 import yapl.typing.Type;
+import yapl.utils.CharUtils;
 import yapl.utils.STUtils;
+import yapl.utils.Tuple2;
+import yapl.utils.Tuple3;
 
 
 public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
@@ -62,9 +66,10 @@ public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
 	
 	@Override
 	public ST visitStatementExpression(StatementExpressionContext ctx) {
-		ST loadSysOut = new ST("getstatic java/lang/System/out Ljava/io/PrintStream;\n");
-		ST printOut = new ST("invokevirtual java/io/PrintStream/println(I)V");
-		return STUtils.concat(loadSysOut, ctx.expression().accept(this), printOut);
+//		ST loadSysOut = new ST("getstatic java/lang/System/out Ljava/io/PrintStream;\n");
+//		ST printOut = new ST("invokevirtual java/io/PrintStream/println(I)V");
+//		return STUtils.concat(loadSysOut, ctx.expression().accept(this), printOut);
+		return ctx.expression().accept(this);
 	}
 	
 	@Override
@@ -220,24 +225,22 @@ public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
 	
 	@Override
 	public ST visitOpNumber(OpNumberContext ctx) {
-		return CodeFunction.number.builder()
-		.property(CodeProperty.num, ctx.number().getText())
+		return CodeFunction.constant.builder()
+		.property(CodeProperty.constant, ctx.number().getText())
 		.build(group);
 	}
 	
 	@Override
 	public ST visitOpIdOrFunc(OpIdOrFuncContext ctx) {
-		
+		IdContext idContext = ctx.id();
 		ST st = null;
 		if(ctx.LPAREN() == null){ //an id operand
-			IdContext idContext = ctx.id();
-			
 			switch(idContext.entry.getEntryType()){
 			case CONSTANT:
 				switch(idContext.entry.getConstantExpression().getConstantType()){
 				case KNOWN_VALUE:
-					st = CodeFunction.number.builder()
-					.property(CodeProperty.num, idContext.entry.getConstantExpression().getValue())
+					st = CodeFunction.constant.builder()
+					.property(CodeProperty.constant, idContext.entry.getConstantExpression().getValue())
 					.build(group);
 					break;
 					
@@ -258,8 +261,45 @@ public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
 			}
 			
 			
-		} else { //TODO funcion operand
+		} else {
+			switch(idContext.getText()){
+			case "read":				
+				if(ctx.expression().size() == 1){
+					ExpressionContext exprCtx = ctx.expression(0);
+					idContext = ((OpIdOrFuncContext) exprCtx.orExpr().andExpr(0).compareExpr(0).plusMinusExpr(0).multDivModExpr(0).primaryExpr(0).operand()).id();
+					st = CodeFunction.read.builder()
+					.property(CodeProperty.name, context.getOutfileWithoutPath())
+					.property(CodeProperty.offset, idContext.entry.getOffset())
+					.property(CodeProperty.function, getFunctionForType(exprCtx.type))
+					.property(CodeProperty.type, getJVMType(exprCtx.type))
+					.build(group);
+				} else {
+					List<Tuple3<String, String, Integer>> tuples = ctx.expression().stream().map((expr) -> {
+						IdContext idCtx = ((OpIdOrFuncContext) expr.orExpr().andExpr(0).compareExpr(0).plusMinusExpr(0).multDivModExpr(0).primaryExpr(0).operand()).id();
+						return new Tuple3<String, String, Integer>(getFunctionForType(expr.type), getJVMType(expr.type), idCtx.entry.getOffset());
+					}).collect(Collectors.toList()); 
+					st = CodeFunction.readMultiple.builder()
+					.property(CodeProperty.name, context.getOutfileWithoutPath())
+					.property(CodeProperty.tuples, tuples)
+					.build(group);
+				}
+				
+				
+				break;
+			case "print":
+				if(ctx.expression().size() == 1){
+					st = CodeFunction.print.builder()
+					.property(CodeProperty.expression, ctx.expression(0).accept(this))
+					.property(CodeProperty.type, getJVMType(ctx.expression(0).type))
+					.build(group);
+				} else if(ctx.expression().size() > 1){
+					st = CodeFunction.printMultiple.builder()
+					.property(CodeProperty.expressions_types, ctx.expression().stream().map((expr) -> new Tuple2<ST, String>(expr.accept(this), getJVMType(expr.type))).collect(Collectors.toList()))
+					.build(group);
+				}
+				break;
 			
+			}
 		}
 		return st;
 	}
@@ -278,6 +318,22 @@ public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
 	public ST visitOpFalse(OpFalseContext ctx) {
 		return CodeFunction.opfalse.toST(group);
 	}
+	
+	@Override
+	public ST visitOpChar(OpCharContext ctx) {
+		
+		return CodeFunction.constant.builder()
+		.property(CodeProperty.constant, (int) CharUtils.string2Char(ctx.CHARLITERAL().getText()))
+		.build(group);
+	}
+	
+	@Override
+	public ST visitOpExprBlock(OpExprBlockContext ctx) {
+		return CodeFunction.opExprBlock.builder()
+		.property(CodeProperty.statements, ctx.statement().stream().map((statement) -> statement.accept(this)).collect(Collectors.toList()))
+		.property(CodeProperty.expression, ctx.expression().accept(this))
+		.build(group);
+	}
 		
 	private String getTypePrefix(Type t){
 		String type = "a";
@@ -291,6 +347,30 @@ public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
 			default:      
 				type = "a";
 				break;
+			}
+		}
+		return type;
+	}
+	
+	private String getFunctionForType(Type t){
+		String type = "Int";
+		if(t != null){
+			switch(t.getKind()){
+			case INTEGER: type = "Integer"; break;
+			case CHAR: type = "Char"; break;
+			case BOOLEAN: type = "Boolean"; break;
+			}
+		}
+		return type;
+	}
+	
+	private String getJVMType(Type t){
+		String type = "I";
+		if(t != null){
+			switch(t.getKind()){
+			case INTEGER: type = "I"; break;
+			case CHAR: type = "C"; break;
+			case BOOLEAN: type = "Z"; break;
 			}
 		}
 		return type;

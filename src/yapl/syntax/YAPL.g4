@@ -32,6 +32,7 @@ MINUS     : '-';
 MULT      : '*';
 DIV       : '/';
 MOD       : '%';
+APOSTROFE : '\'';
 
 //keywords
 VAR       : 'var';
@@ -65,7 +66,8 @@ declaration locals[IdEntry entry]
  |  CONST id EQ expression										#declConst
 ;
 
-expression:
+expression locals[Type type]
+:
 	orExpr (EQ expression)?
 ;
 
@@ -73,6 +75,7 @@ operand
 :
   id (LPAREN (expression (COMMA expression)*)? RPAREN)?	 		#opIdOrFunc
   | number					 									#opNumber
+  | CHARLITERAL													#opChar
   | LPAREN expression RPAREN 									#opParenExpr
   | TRUE														#opTrue
   | FALSE														#opFalse
@@ -141,11 +144,16 @@ NUMBER:
   DIGIT+
 ;
 
+
 COMMENT : ('//').*? '\n' -> skip;
 
 WS : (' ' | '\t' | '\f' | '\r' | '\n')+ -> skip;
 
+CHARLITERAL: '\'' SINGLECHAR '\'';
+
+fragment SINGLECHAR :   ~['\\];
+
 fragment LOWER  :   ('a'..'z') ;
 fragment UPPER  :   ('A'..'Z') ;
-fragment LETTER :   LOWER | UPPER ;
+fragment LETTER :   LOWER | UPPER;
 fragment DIGIT  :   ('0'..'9') ;

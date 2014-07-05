@@ -1,19 +1,20 @@
-add(type) ::= "<type>add"
-sub(type) ::= "<type>sub"
-mult(type) ::= "<type>mul"
-div(type) ::= "<type>div"
-mod(type) ::= "<type>rem"
+add(type) ::= "$type$add"
+sub(type) ::= "$type$sub"
+mult(type) ::= "$type$mul"
+div(type) ::= "$type$div"
+mod(type) ::= "$type$rem"
 
 optrue() ::= "iconst_1"
 opfalse() ::= "iconst_0"
 
-gt(lto, lgoto) ::= "<compare(type=\"if_icmpgt\", lto=lto, lgoto=lgoto)>"
-gte(lto, lgoto) ::= "<compare(type=\"if_icmpge\", lto=lto, lgoto=lgoto)>"
-lt(lto, lgoto) ::= "<compare(type=\"if_icmplt\", lto=lto, lgoto=lgoto)>"
-lte(lto, lgoto) ::= "<compare(type=\"if_icmple\", lto=lto, lgoto=lgoto)>"
-eq(lto, lgoto) ::= "<compare(type=\"if_icmpeq\", lto=lto, lgoto=lgoto)>"
-neq(lto, lgoto) ::= "<compare(type=\"if_icmpne\", lto=lto, lgoto=lgoto)>"
+gt(lto, lgoto) ::= "$compare(type=\"if_icmpgt\", lto=lto, lgoto=lgoto)$"
+gte(lto, lgoto) ::= "$compare(type=\"if_icmpge\", lto=lto, lgoto=lgoto)$"
+lt(lto, lgoto) ::= "$compare(type=\"if_icmplt\", lto=lto, lgoto=lgoto)$"
+lte(lto, lgoto) ::= "$compare(type=\"if_icmple\", lto=lto, lgoto=lgoto)$"
+eq(lto, lgoto) ::= "$compare(type=\"if_icmpeq\", lto=lto, lgoto=lgoto)$"
+neq(lto, lgoto) ::= "$compare(type=\"if_icmpne\", lto=lto, lgoto=lgoto)$"
 
+constant(constant) ::= "ldc 		$constant$"
 
 negate() ::= "ineg"
 not() ::= <<
@@ -23,49 +24,49 @@ ixor
 
 
 compare(type, lto, lgoto) ::= <<
-<type>			<lto>
+$type$			$lto$
 iconst_0
-goto			<lgoto>
-<lto>:
+goto			$lgoto$
+$lto$:
 iconst_1
-<lgoto>:
+$lgoto$:
 
 >>
 
 and(left, right, lto, lto2, lgoto) ::= <<
-<left>
+$left$
 iconst_1
-if_icmpeq 		<lto>
+if_icmpeq 		$lto$
 iconst_0
-goto			<lgoto>
-<lto>:
-<right>
+goto			$lgoto$
+$lto$:
+$right$
 iconst_1
-if_icmpeq		<lto2>
+if_icmpeq		$lto2$
 iconst_0
-goto			<lgoto>
-<lto2>:
+goto			$lgoto$
+$lto2$:
 iconst_1
-<lgoto>:
+$lgoto$:
 >>
 
 or(left, right, lto, lto2, lgoto) ::= <<
-<left>
+$left$
 iconst_1
-if_icmpne		<lto>
+if_icmpne		$lto$
 iconst_1
-goto			<lgoto>
-<lto>:
-<right>
+goto			$lgoto$
+$lto$:
+$right$
 iconst_1
-if_icmpne		<lto2>
+if_icmpne		$lto2$
 iconst_1
-goto			<lgoto>
-<lto2>:
+goto			$lgoto$
+$lto2$:
 iconst_0
-<lgoto>:
+$lgoto$:
 >>
 
 
-opId(type, offset) ::= "<type>load		<offset>"
+opId(type, offset) ::= "$type$load		$offset$"
 

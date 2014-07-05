@@ -8,6 +8,7 @@ import yapl.syntax.YAPLParser.CompareExprContext;
 import yapl.syntax.YAPLParser.ExpressionContext;
 import yapl.syntax.YAPLParser.IdContext;
 import yapl.syntax.YAPLParser.MultDivModExprContext;
+import yapl.syntax.YAPLParser.OpCharContext;
 import yapl.syntax.YAPLParser.OpFalseContext;
 import yapl.syntax.YAPLParser.OpIdOrFuncContext;
 import yapl.syntax.YAPLParser.OpNumberContext;
@@ -16,6 +17,7 @@ import yapl.syntax.YAPLParser.OpTrueContext;
 import yapl.syntax.YAPLParser.OrExprContext;
 import yapl.syntax.YAPLParser.PlusMinusExprContext;
 import yapl.syntax.YAPLParser.PrimaryExprContext;
+import yapl.utils.CharUtils;
 
 public class ConstantExpressionVisitor extends YAPLBaseVisitor<ConstantExpression>{
 	@Override
@@ -41,6 +43,11 @@ public class ConstantExpressionVisitor extends YAPLBaseVisitor<ConstantExpressio
 	@Override
 	public ConstantExpression visitOpTrue(OpTrueContext ctx) {
 		return new ConstantExpression(1, ConstantType.KNOWN_VALUE);
+	}
+	
+	@Override
+	public ConstantExpression visitOpChar(OpCharContext ctx) {
+		return new ConstantExpression(CharUtils.string2Char(ctx.CHARLITERAL().getText()), ConstantType.KNOWN_VALUE);
 	}
 	
 	

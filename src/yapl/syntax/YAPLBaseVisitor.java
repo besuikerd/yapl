@@ -134,6 +134,14 @@ public class YAPLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Y
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitOpChar(@NotNull YAPLParser.OpCharContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitStatementDeclaration(@NotNull YAPLParser.StatementDeclarationContext ctx) { return visitChildren(ctx); }
 
 	/**
