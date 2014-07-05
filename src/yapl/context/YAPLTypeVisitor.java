@@ -51,7 +51,6 @@ public class YAPLTypeVisitor extends YAPLBaseVisitor<Type>{
 				switch(f){
 				case PRINT:
 				case READ:
-					System.out.println(ctx.expression().get(0).accept(this));
 					return ctx.expression().size() == 1 ? ctx.expression().get(0).accept(this) : Type.VOID;
 				}
 			} else{

@@ -51,8 +51,6 @@ public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
 
 	@Override
 	public ST visitYapl(YaplContext ctx) {
-		
-		
 		return CodeFunction.yapl.builder()
 		.property(CodeProperty.name, context.getOutfileWithoutPath())
 		.property(CodeProperty.statements, ctx.statement().stream().map((s) -> s.accept(this)).collect(Collectors.toList()))

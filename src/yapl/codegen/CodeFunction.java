@@ -20,6 +20,7 @@ public enum CodeFunction{
 	,opId("opId")
 	,opExprBlock("opExprBlock")
 	
+	,pop("pop")
 	
 	,print("print")
 	,printMultiple("printMultiple")

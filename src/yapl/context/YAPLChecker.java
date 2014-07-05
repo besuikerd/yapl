@@ -225,12 +225,27 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 			
 			switch(ctx.id().getText()){
 			case "read":
+				if(ctx.expression().isEmpty()){
+					reporter.context().errorNoFunctionArguments(ctx);
+				}
 				ctx.expression().forEach((expression) -> {
 					if(!expression.accept(isIdentifierVisitor)){
 						reporter.context().errorNotIdentifierExpression(expression);
 					}
+					if(expression.type.matchesType(Type.VOID) || expression.type.matchesType(Type.ERROR)){
+						reporter.context().errorInvalidFunctionArgumentType(expression);
+					}
 				});
 				break;
+			case "print":
+				if(ctx.expression().isEmpty()){
+					reporter.context().errorNoFunctionArguments(ctx);
+				}
+				ctx.expression().forEach((expression) -> {
+					if(expression.type.matchesType(Type.VOID) || expression.type.matchesType(Type.ERROR)){
+						reporter.context().errorInvalidFunctionArgumentType(expression);
+					}
+				});
 			}
 			
 			

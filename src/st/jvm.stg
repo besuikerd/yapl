@@ -36,4 +36,7 @@ dup
 $type$store		$offset$
 >>
 
+pop() ::= <<
+pop
+>>
 

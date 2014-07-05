@@ -105,18 +105,7 @@ LABEL0x14:
    aload_0               
    ldc                   "true"
    invokevirtual         java/lang/String/equals(Ljava/lang/Object;)Z
-   ifne                  LABEL0x19
-   aload_0               
-   ldc                   "false"
-   invokevirtual         java/lang/String/equals(Ljava/lang/Object;)Z
-   ifeq                  LABEL0x1d
-LABEL0x19:
-   iconst_1              
-   goto                  LABEL0x1e
-LABEL0x1d:
-   iconst_0              
-LABEL0x1e:
    ireturn               
-.end method              
+.end method                        
               
 >>

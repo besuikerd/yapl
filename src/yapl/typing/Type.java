@@ -37,7 +37,7 @@ public class Type {
 	}
 	
 	public boolean matchesType(Type other){
-		return other.getKind().equals(TypeKind.ERROR) || getKind().equals(other.getKind());
+		return getKind().equals(TypeKind.ERROR) || getKind().equals(other.getKind());
 	}
 	
 	@Override

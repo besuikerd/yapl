@@ -1,4 +1,2 @@
 var x : Integer;
-var y : Integer;
-x = read(y);
-print(x, y);
+print(read(x) + x);

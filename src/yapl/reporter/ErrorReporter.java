@@ -13,6 +13,7 @@ import org.omg.CORBA.RepositoryIdHelper;
 
 import yapl.context.IdEntry;
 import yapl.syntax.YAPLParser.ExpressionContext;
+import yapl.syntax.YAPLParser.OpIdOrFuncContext;
 import yapl.typing.Type;
 
 /**
@@ -228,6 +229,12 @@ public class ErrorReporter {
 			error(ctx, "invalid assignment type, expected type: %s, got: %s", t1, t2);
 		}
 		
+		public void errorNoFunctionArguments(OpIdOrFuncContext ctx){
+			error(ctx.id().stop, "expecting at least a single argument in function '%s'", ctx.id().getText());
+		}
 		
+		public void errorInvalidFunctionArgumentType(ExpressionContext ctx){
+			error(ctx, "function argument cannot be of type %s", ctx.type);
+		}
 	}
 }

@@ -11,6 +11,7 @@ public enum CodeProperty {
 	,constant("constant")
 	,function("function")
 	,expressions_types("expressions_types")
+	,popmaybe("popmaybe")
 	
 	,left("left")
 	,right("right")
