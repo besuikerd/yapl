@@ -23,6 +23,28 @@ $statements; separator="\n"$
 $expression$
 >>
 
+opIfThenElse(conditional, exprTrue, exprFalse, lto, lgoto) ::= <<
+$conditional$
+iconst_1
+if_icmpne		$lto$
+$exprTrue$
+goto			$lgoto$
+$lto$:
+$exprFalse$
+$lgoto$:
+>>
+
+opWhile(conditional, body, lto, lgoto, popmaybe) ::= <<
+goto		$lto$
+$lgoto$:
+$body$
+$popmaybe$
+$lto$:
+iconst_1
+$conditional$
+if_icmpeq	$lgoto$
+>>
+
 declareVar(constant, type, offset) ::= <<
 $constant$
 $type$store $offset$

@@ -39,7 +39,7 @@ public class YAPLTypeVisitor extends YAPLBaseVisitor<Type>{
 	
 	@Override
 	public Type visitOpExprBlock(OpExprBlockContext ctx) {
-		return ctx.expression().accept(this);
+		return ctx.expression() != null ? ctx.expression().accept(this) : Type.VOID;
 	}
 
 	@Override

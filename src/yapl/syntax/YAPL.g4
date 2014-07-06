@@ -79,9 +79,9 @@ operand
   | LPAREN expression RPAREN 									#opParenExpr
   | TRUE														#opTrue
   | FALSE														#opFalse
-  | IF expression THEN expression ELSE expression END	 		#opIfThenElse
-  | LCURLY statement* RETURN expression SEMICOLON RCURLY		#opExprBlock
-  | WHILE expression DO (expression SEMICOLON)* END				#opWhile
+  | IF expression THEN expression (ELSE expression)?? 	 		#opIfThenElse
+  | LCURLY statement* (RETURN expression SEMICOLON)? RCURLY		#opExprBlock
+  | WHILE expression DO expression								#opWhile
 ;
 
 primaryExpr

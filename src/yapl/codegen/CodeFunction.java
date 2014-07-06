@@ -19,6 +19,8 @@ public enum CodeFunction{
 	,opfalse("opfalse")
 	,opId("opId")
 	,opExprBlock("opExprBlock")
+	,opIfThenElse("opIfThenElse")
+	,opWhile("opWhile")
 	
 	,pop("pop")
 	

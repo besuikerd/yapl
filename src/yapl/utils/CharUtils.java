@@ -3,7 +3,6 @@ package yapl.utils;
 public class CharUtils {
 	public static char string2Char(String s){
 		s = s.replaceAll("^'|'$", "");
-		System.out.println(s);
 		char c = '\0';
 		if(s.length() == 1){
 			c = s.charAt(0);

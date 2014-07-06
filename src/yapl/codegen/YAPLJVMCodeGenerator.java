@@ -18,9 +18,11 @@ import yapl.syntax.YAPLParser.OpCharContext;
 import yapl.syntax.YAPLParser.OpExprBlockContext;
 import yapl.syntax.YAPLParser.OpFalseContext;
 import yapl.syntax.YAPLParser.OpIdOrFuncContext;
+import yapl.syntax.YAPLParser.OpIfThenElseContext;
 import yapl.syntax.YAPLParser.OpNumberContext;
 import yapl.syntax.YAPLParser.OpParenExprContext;
 import yapl.syntax.YAPLParser.OpTrueContext;
+import yapl.syntax.YAPLParser.OpWhileContext;
 import yapl.syntax.YAPLParser.OrExprContext;
 import yapl.syntax.YAPLParser.PlusMinusExprContext;
 import yapl.syntax.YAPLParser.PrimaryExprContext;
@@ -67,7 +69,11 @@ public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
 //		ST loadSysOut = new ST("getstatic java/lang/System/out Ljava/io/PrintStream;\n");
 //		ST printOut = new ST("invokevirtual java/io/PrintStream/println(I)V");
 //		return STUtils.concat(loadSysOut, ctx.expression().accept(this), printOut);
-		return ctx.expression().accept(this);
+		ST st = ctx.expression().accept(this);
+		if(!ctx.expression().type.matchesType(Type.VOID)){
+			st = STUtils.concat(st, CodeFunction.pop.toST(group));
+		}
+		return st;
 	}
 	
 	@Override
@@ -327,10 +333,42 @@ public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
 	
 	@Override
 	public ST visitOpExprBlock(OpExprBlockContext ctx) {
-		return CodeFunction.opExprBlock.builder()
-		.property(CodeProperty.statements, ctx.statement().stream().map((statement) -> statement.accept(this)).collect(Collectors.toList()))
-		.property(CodeProperty.expression, ctx.expression().accept(this))
-		.build(group);
+		CodeFunction.Builder builder =  CodeFunction.opExprBlock.builder()
+		.property(CodeProperty.statements, ctx.statement().stream().map((statement) -> statement.accept(this)).collect(Collectors.toList()));
+		if(ctx.expression() != null){
+			ctx.expression().accept(this);
+		}
+		return builder.build(group);
+	}
+	
+	@Override
+	public ST visitOpIfThenElse(OpIfThenElseContext ctx) {
+		CodeFunction.Builder builder =  CodeFunction.opIfThenElse.builder()
+		.property(CodeProperty.conditional, ctx.expression(0).accept(this))
+		.property(CodeProperty.exprTrue, ctx.expression(1).accept(this))
+		.property(CodeProperty.labelgoto, labelGen.generate())
+		;
+		if(ctx.expression().size() == 3){
+			builder = builder
+			.property(CodeProperty.exprFalse, ctx.expression(2).accept(this))
+			.property(CodeProperty.labelto, labelGen.generate());
+		}
+		return builder.build(group);
+	}
+	
+	@Override
+	public ST visitOpWhile(OpWhileContext ctx) {
+		CodeFunction.Builder builder = CodeFunction.opWhile.builder()
+		.property(CodeProperty.conditional, ctx.expression(0).accept(this))
+		.property(CodeProperty.body, ctx.expression(1).accept(this))
+		.property(CodeProperty.labelto, labelGen.generate())
+		.property(CodeProperty.labelgoto, labelGen.generate());
+		
+		if(!ctx.expression(1).type.matchesType(Type.VOID)){
+			builder = builder
+			.property(CodeProperty.popmaybe, "pop");
+		}
+		return builder.build(group);
 	}
 		
 	private String getTypePrefix(Type t){

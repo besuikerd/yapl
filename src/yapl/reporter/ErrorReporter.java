@@ -10,10 +10,12 @@ import java.util.stream.Stream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.omg.CORBA.RepositoryIdHelper;
+import org.stringtemplate.v4.compiler.STParser.ifstat_return;
 
 import yapl.context.IdEntry;
 import yapl.syntax.YAPLParser.ExpressionContext;
 import yapl.syntax.YAPLParser.OpIdOrFuncContext;
+import yapl.syntax.YAPLParser.OpIfThenElseContext;
 import yapl.typing.Type;
 
 /**
@@ -235,6 +237,14 @@ public class ErrorReporter {
 		
 		public void errorInvalidFunctionArgumentType(ExpressionContext ctx){
 			error(ctx, "function argument cannot be of type %s", ctx.type);
+		}
+		
+		public void errorIfElseType(OpIfThenElseContext ctx, Type typeTrue, Type typeFalse){
+			error(ctx.expression(1), "expression type of true expression (%s) does not match false expression (%s)", typeTrue, typeFalse);
+		}
+		
+		public void errorUnexpectedType(ParserRuleContext ctx, Type expected, Type got){
+			error(ctx, "expected type: %s, got: %s", expected, got);
 		}
 	}
 }

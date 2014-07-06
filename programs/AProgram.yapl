@@ -1,2 +1,7 @@
-var x : Integer;
-print(read(x) + x);
+var i : Integer; read(i);
+
+if i > 4 then {
+	print(1);
+} else {
+	print(2);
+};

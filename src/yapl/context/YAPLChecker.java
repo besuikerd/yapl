@@ -17,6 +17,8 @@ import yapl.syntax.YAPLParser.MultDivModExprContext;
 import yapl.syntax.YAPLParser.NumberContext;
 import yapl.syntax.YAPLParser.OpExprBlockContext;
 import yapl.syntax.YAPLParser.OpIdOrFuncContext;
+import yapl.syntax.YAPLParser.OpIfThenElseContext;
+import yapl.syntax.YAPLParser.OpWhileContext;
 import yapl.syntax.YAPLParser.OrExprContext;
 import yapl.syntax.YAPLParser.PlusMinusExprContext;
 import yapl.syntax.YAPLParser.PrimaryExprContext;
@@ -102,7 +104,9 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 	public Void visitOpExprBlock(OpExprBlockContext ctx) {
 		symbolTable.openScope();
 		ctx.statement().forEach((statement) -> statement.accept(this));
-		ctx.expression().accept(this);
+		if(ctx.expression() != null){
+			ctx.expression().accept(this);
+		}
 		symbolTable.closeScope().forEach((entry) ->{
 			if(!entry.isUsed()){
 				reporter.context().warnUnusedVariable(entry);
@@ -111,6 +115,32 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 		return null;
 	}
 	
+	@Override
+	public Void visitOpIfThenElse(OpIfThenElseContext ctx) {
+		ctx.expression().forEach((expression) -> expression.accept(this));
+		Type typeConditional = ctx.expression(0).accept(typeVisitor);
+		if(!typeConditional.matchesType(Type.BOOLEAN)){
+			reporter.context().errorUnexpectedType(ctx, Type.BOOLEAN, typeConditional);
+		}
+		if(ctx.expression().size() == 3){
+			Type typeTrue = ctx.expression(1).accept(typeVisitor);
+			Type typeFalse = ctx.expression(2).accept(typeVisitor);
+			if(!typeTrue.matchesType(typeFalse)){
+				reporter.context().errorIfElseType(ctx, typeTrue, typeFalse);
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public Void visitOpWhile(OpWhileContext ctx) {
+		ctx.expression().forEach((expression) -> expression.accept(this));
+		Type typeConditional = ctx.expression(0).accept(typeVisitor);
+		if(!typeConditional.matchesType(Type.BOOLEAN)){
+			reporter.context().errorUnexpectedType(ctx, Type.BOOLEAN, typeConditional);
+		}
+		return null;
+	}
 
 	@Override
 	public Void visitNumber(NumberContext ctx) {

@@ -12,6 +12,12 @@ public enum CodeProperty {
 	,function("function")
 	,expressions_types("expressions_types")
 	,popmaybe("popmaybe")
+	,body("body")
+	
+	,conditional("conditional")
+	,exprTrue("exprTrue")
+	,exprFalse("exprFalse")
+	
 	
 	,left("left")
 	,right("right")
