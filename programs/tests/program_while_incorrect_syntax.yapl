@@ -1,0 +1,26 @@
+{
+	var x, y : Integer;
+
+	x = 0;
+
+	whle (x < 1) {
+		x = 1; y = 4;
+	};
+
+	var b : Integer;
+
+	while (x < 1) {
+        x = 1; y = 4;
+    }
+
+    while (x < 1)
+        x = 1; y = 4;
+
+
+	while (b >> 0) {
+	    var y : Integer;
+	    y = 3;
+        print(b, y);
+        return b = b -1;
+	};
+};

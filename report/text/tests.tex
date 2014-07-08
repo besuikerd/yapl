@@ -17,26 +17,49 @@ The basic expression language test tests the following features:
 	Compound expressions are sequences of expressions and declarations. 
 \end{itemize}
 \subsection{Correct programs}
-The test program for the basic expressions language is called \emph{program_correct_bel.yapl}. When executed with the input \emph{0 1 1 false c} \\the output should be \emph{0 1 false true 1 false true a true 3 true b}
+The test program for the basic expressions language is called \emph{program_bel_correct.yapl}. When executed with the input \emph{0 1 1 false c} \\the output should be \emph{0 1 false true 1 false true a true 3 true b}
 \subsection{Incorrect syntax}
-Bla bla bla
+Spelling and wrong construction errors.
+The test program for the basic expressions language is called \emph{program_bel_incorrect_syntax.yapl}. When executed it should give 7 syntax errors.
 \subsection{Incorrect context}
-bla bla bla
+There are a few context errors we can detect. We can detect the following errors:
+\begin{itemize}
+\item Incorrect assignments
+\item Type errors
+\item Missing declarations
+\item A compound expression without a result
+\item Operations on operands of type void
+\end{itemize}
+The test program for the basic expressions language is called \emph{program_bel_incorrect_context.yapl}. When executed it should give 7 syntax errors.
 \section{Conditional statement}
 The test will check if input is read. After this is will read some more input and decide if it was true or false. We also need to check the scope rules that apply to conditional statements and the use of conditional statements as an operand.
 \subsection{Correct programs}
 The test program for the basic expressions language is called \emph{program_correct_conditional.yapl}. When executed with the input \emph{false false} \\the output should be \emph{n o}\\
 When executed with the input \emph{false true} \\the output should be \emph{y e s}
 \subsection{Incorrect syntax}
-Bla bla bla
+Spelling and wrong construction errors.
+The test program for the conditional syntax error checking is called  \emph{program_conditional_incorrect_syntax.yapl}. When executed it should give 7 syntax errors.
 \subsection{Incorrect context}
-bla bla bla
+There are a few context errors we can detect. We can detect the following errors:
+\begin{itemize}
+\item Missing declaration
+\item Type errors
+\item Invalid assignments
+\item Wrong expression type
+\end{itemize}
+The test program for the basic expressions language is called \emph{program_conditional_incorrect_context.yapl}. When executed it should give 7 context errors.
 \section{While statement}
 With the while expression we have to check the scope rules. However, the while expression does return a void and needs some attention. 
 \subsection{Correct programs}
-The test program for the basic expressions language is called \emph{program_correct_while.yapl}. When executed with the input \emph{3 3} \\the output should be \emph{3 3 2 3 1 3}\\
+The test program for the basic expressions language is called \emph{program_while_correct.yapl}. When executed with the input \emph{3 3} \\the output should be \emph{3 3 2 3 1 3}\\
 When executed with the input \emph{2 3} \\the output should be \emph{2 3 1 3}
 \subsection{Incorrect syntax}
-Bla bla bla
+Spelling and wrong construction errors.
+The test program for the conditional syntax error checking is called  \emph{program_while_incorrect_syntax.yapl}. When executed it should give 5 syntax errors.
 \subsection{Incorrect context}
-bla bla bla
+There are a few context errors we can detect. We can detect the following errors:
+\begin{itemize}
+\item Missing declaration
+\item Wrong expression type
+\end{itemize}
+The test program for the basic expressions language is called \emph{program_conditional_incorrect_context.yapl}. When executed it should give 3 context errors.
