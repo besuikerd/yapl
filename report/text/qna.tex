@@ -1,5 +1,8 @@
 \paragraph{•}
 During the development of this language we ran into some problems. This problems were not always trivial and we will describe here the problem and the solution. Hopefully this can help you to understand certain decisions and help you when you develop your own language or extend our language.
-\section{ANTRL4 and ll(1)}
+\section{ANTRL4 and LL(1)}
 In ANTLR3 it was very simple to check if your language was ll(1), in the options you set k to 1. If the language would need to have a look-ahead of more then 1 ANTLR3 would give an error. ANTLR4 however does not have this option anymore. \\
-A solution could be to check if the function $adaptivePredict$ exists in the java source. Another option is to copy paste the ANTLR4 grammar into ANTLR3 and set the option $k=1$. The ANTLR4 grammar is almost equal to ANTLR3 except for some minor things like the options and trimming the whitespace.
+A solution could be to check if the function $adaptivePredict$ exists in the java source. Another option is to copy paste the ANTLR4 grammar into ANTLR3 and set the option $k=1$. The ANTLR4 grammar is almost equal to ANTLR3 except for some minor things like the options and trimming the whitespace. For this reason we included the ANTLR3 specification of our language. It can be found in Appendix \ref{app:antlr3}.
+
+\section{Optional return statement for compound expression}
+The while statement is of type void. Because usually the body of a while expression contains a compound expression, we have chosen to force this type of expression for the body of a while statement. This gives the added benefit that the while statement does not need a closing token to keep it LL(1) since the curly braces of a compound expression already captures this. Because the last expression of a compound expression should be a expression, this could give some problems with certain statements unable to be executed. Therefore we chose to lift this limitation and instead have a return type of Void for a compound expression if the last statement is not an expression.

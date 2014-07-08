@@ -1,18 +1,24 @@
-\paragraph{•}
 YAPL is a simple imperative programming language. The language is quite practical for smaller programs, but has also something to offer for the more skilled programmer.
-\paragraph{•}
+
+
 YAPL is the abbreviation for Yet Another Programming Language.
-\paragraph{•}
 The syntax of YAPL is based on Scala and Java, there are also other programming language that have constructions like YAPL, but these constructions are either in Scala or Java.
-\paragraph{•}
 YAPL has the following programming constructions.
 
+The language grammar is defined in an ANTLR4 grammar. The language is LL(1). For extra proof that the language is LL(1), an ANTLR3 specification of the language is included with the LL(1) limit in Appendix \ref{app:antlr3}. 
+
+
+
 \begin{itemize}
-\item declaration: We can declare either variables or constants.
+\item declaration: Variables and constants can be declared
 \begin{itemize}
 \item constants: defined with a default value that does not change
 \item variables: declaration of variable name with its type
 \end{itemize}
-\item assignment: this is an expression which assigns a value to a variable
-\item expressions: examples of expressions are if then else, while
+\item assignment: an expression which assigns a value to a variable and returns the result
+\item compound expressions: expressions that open a local scope in which multiple declarations and expressions can be defined. A compound expression returns the last expression in the compound block.
+\item conditional expression: based on a condition, either a true expression or false expression is evaluated.
+\item while expression: as long as a predicate is true, an expression is evaluated.
+\item binary expressions: expressions that operate a binary function on two expressions.
+\item i/o functions: functions to read and write to standard in and out.
 \end{itemize}
