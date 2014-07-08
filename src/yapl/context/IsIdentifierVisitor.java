@@ -26,27 +26,27 @@ public class IsIdentifierVisitor extends YAPLBaseVisitor<Boolean>{
 	
 	@Override
 	public Boolean visitOrExpr(OrExprContext ctx) {
-		return ctx.andExpr(0).accept(this);
+		return ctx.andExpr().size() == 1 && ctx.andExpr(0).accept(this);
 	}
 	
 	@Override
 	public Boolean visitAndExpr(AndExprContext ctx) {
-		return ctx.compareExpr(0).accept(this);
+		return ctx.compareExpr().size() == 1  && ctx.compareExpr(0).accept(this);
 	}
 	
 	@Override
 	public Boolean visitCompareExpr(CompareExprContext ctx) {
-		return ctx.plusMinusExpr(0).accept(this);
+		return ctx.plusMinusExpr().size() == 1 && ctx.plusMinusExpr(0).accept(this);
 	}
 	
 	@Override
 	public Boolean visitPlusMinusExpr(PlusMinusExprContext ctx) {
-		return ctx.multDivModExpr(0).accept(this);
+		return ctx.multDivModExpr().size() == 1 && ctx.multDivModExpr(0).accept(this);
 	}
 	
 	@Override
 	public Boolean visitMultDivModExpr(MultDivModExprContext ctx) {
-		return ctx.primaryExpr(0).accept(this);
+		return ctx.primaryExpr().size() == 1 && ctx.primaryExpr(0).accept(this);
 	}
 	
 	@Override

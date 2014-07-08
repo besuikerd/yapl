@@ -6,11 +6,13 @@ import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 
 import yapl.context.ConstantExpression.ConstantType;
+import yapl.context.IdEntry;
 import yapl.syntax.YAPLBaseVisitor;
 import yapl.syntax.YAPLParser.AndExprContext;
 import yapl.syntax.YAPLParser.CompareExprContext;
 import yapl.syntax.YAPLParser.DeclConstContext;
 import yapl.syntax.YAPLParser.DeclVarContext;
+import yapl.syntax.YAPLParser.ExprBlockContext;
 import yapl.syntax.YAPLParser.ExpressionContext;
 import yapl.syntax.YAPLParser.IdContext;
 import yapl.syntax.YAPLParser.MultDivModExprContext;
@@ -66,9 +68,6 @@ public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
 	
 	@Override
 	public ST visitStatementExpression(StatementExpressionContext ctx) {
-//		ST loadSysOut = new ST("getstatic java/lang/System/out Ljava/io/PrintStream;\n");
-//		ST printOut = new ST("invokevirtual java/io/PrintStream/println(I)V");
-//		return STUtils.concat(loadSysOut, ctx.expression().accept(this), printOut);
 		ST st = ctx.expression().accept(this);
 		if(!ctx.expression().type.matchesType(Type.VOID)){
 			st = STUtils.concat(st, CodeFunction.pop.toST(group));
@@ -78,23 +77,37 @@ public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
 	
 	@Override
 	public ST visitDeclVar(DeclVarContext ctx) {
-		ST st =  CodeFunction.declareVariable.builder()
-		.property(CodeProperty.constant, STPushConstantForType(ctx.entry.getType()))
-		.property(CodeProperty.type, getTypePrefix(ctx.entry.getType()))
-		.property(CodeProperty.offset, ctx.entry.getOffset())
-		.build(group);
+		ST st = new ST("");
+		for(IdEntry entry : ctx.entries) {
+			st = STUtils.concat(st, 
+				CodeFunction.declareVariable.builder()
+				.property(CodeProperty.constant, STPushConstantForType(entry.getType()))
+				.property(CodeProperty.type, getTypePrefix(entry.getType()))
+				.property(CodeProperty.offset, entry.getOffset())
+				.build(group)
+			);
+		}
 		return st;
 	}
 	
 	@Override
 	public ST visitDeclConst(DeclConstContext ctx) {
 		ST st = null;
-		if(ctx.entry.getConstantExpression().getConstantType() == ConstantType.UNKNOWN_VALUE){
-			st = CodeFunction.declareVariable.builder()
-			.property(CodeProperty.constant, ctx.expression().accept(this))
-			.property(CodeProperty.type, getTypePrefix(ctx.entry.getType()))
-			.property(CodeProperty.offset, ctx.entry.getOffset())
-			.build(group);
+		if(ctx.id(0).entry.getConstantExpression().getConstantType() == ConstantType.UNKNOWN_VALUE){
+			st = ctx.expression().accept(this);
+			String typePrefix = getTypePrefix(ctx.expression().type);
+			for(int i = 0 ; i < ctx.entries.size() ; i++){
+				if(i < ctx.entries.size() - 1){
+					st = STUtils.concat(st, CodeFunction.dup.toST(group));
+				}
+				IdEntry entry = ctx.entries.get(i);
+				st = STUtils.concat(st, 
+					CodeFunction.store.builder()
+					.property(CodeProperty.type, typePrefix)	
+					.property(CodeProperty.offset, entry.getOffset())
+					.build(group)
+				);
+			}
 		}
 		return st;
 	}
@@ -181,7 +194,6 @@ public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
 				case "<=": func = CodeFunction.lte; break;
 				case "==": func = CodeFunction.eq; break;
 				case "!=": func = CodeFunction.neq; break;
-				
 				}
 				ST op = func.builder()
 				.property(CodeProperty.labelto, labelGen.generate())
@@ -333,38 +345,52 @@ public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
 	
 	@Override
 	public ST visitOpExprBlock(OpExprBlockContext ctx) {
+		return ctx.exprBlock().accept(this);
+	}
+	
+	@Override
+	public ST visitExprBlock(ExprBlockContext ctx) {
 		CodeFunction.Builder builder =  CodeFunction.opExprBlock.builder()
 		.property(CodeProperty.statements, ctx.statement().stream().map((statement) -> statement.accept(this)).collect(Collectors.toList()));
 		if(ctx.expression() != null){
-			ctx.expression().accept(this);
+			builder = builder.property(CodeProperty.expression, ctx.expression().accept(this));
 		}
 		return builder.build(group);
 	}
 	
 	@Override
 	public ST visitOpIfThenElse(OpIfThenElseContext ctx) {
-		CodeFunction.Builder builder =  CodeFunction.opIfThenElse.builder()
-		.property(CodeProperty.conditional, ctx.expression(0).accept(this))
-		.property(CodeProperty.exprTrue, ctx.expression(1).accept(this))
-		.property(CodeProperty.labelgoto, labelGen.generate())
-		;
+		ST st = null;
 		if(ctx.expression().size() == 3){
-			builder = builder
+			st = CodeFunction.opIfThenElse.builder()
+			.property(CodeProperty.conditional, ctx.expression(0).accept(this))
+			.property(CodeProperty.exprTrue, ctx.expression(1).accept(this))
 			.property(CodeProperty.exprFalse, ctx.expression(2).accept(this))
+			.property(CodeProperty.labelgoto, labelGen.generate())
+			.property(CodeProperty.labelto, labelGen.generate())
+			.build(group);
+		} else {
+			CodeFunction.Builder builder = CodeFunction.opIfThen.builder()
+			.property(CodeProperty.conditional, ctx.expression(0).accept(this))
+			.property(CodeProperty.exprTrue, ctx.expression(1).accept(this))
 			.property(CodeProperty.labelto, labelGen.generate());
+			if(ctx.expression(1).type != Type.VOID){
+				builder = builder.property(CodeProperty.popmaybe, "pop");
+			}
+			st = builder.build(group);
 		}
-		return builder.build(group);
+		return st;
 	}
 	
 	@Override
 	public ST visitOpWhile(OpWhileContext ctx) {
 		CodeFunction.Builder builder = CodeFunction.opWhile.builder()
-		.property(CodeProperty.conditional, ctx.expression(0).accept(this))
-		.property(CodeProperty.body, ctx.expression(1).accept(this))
+		.property(CodeProperty.conditional, ctx.expression().accept(this))
+		.property(CodeProperty.body, ctx.exprBlock().accept(this))
 		.property(CodeProperty.labelto, labelGen.generate())
 		.property(CodeProperty.labelgoto, labelGen.generate());
 		
-		if(!ctx.expression(1).type.matchesType(Type.VOID)){
+		if(ctx.exprBlock().expression() != null && !ctx.exprBlock().expression().type.matchesType(Type.VOID)){
 			builder = builder
 			.property(CodeProperty.popmaybe, "pop");
 		}

@@ -1,0 +1,38 @@
+{
+	var ivar : Integer;
+	ivar = {
+		var ivar1, ivar2 : Integer;
+		read(ivar1, ivar2);
+		print(ivar1, ivar2);
+		const iconst1 = 1;
+		const iconst2 = 2;
+		ivar2 = +16 + 2 * -8;
+		print(
+			ivar1 < ivar2 && iconst1 <= iconst2, 
+			iconst1 * iconst2 > ivar2 - ivar1
+		);
+		ivar1 < read(ivar2) && iconst1 <= iconst2;
+		return ivar2 = print(ivar2) + 1;
+	} + 1;
+	
+	var bvar : Boolean;
+	bvar = {
+		var bvar : Boolean;
+		read(bvar);
+		print(bvar);
+		bvar = 12 / 5 * 5 + 12 % 5 == 12 && 6 >= 6;
+		const bconst = true;
+		return print(!false && bvar == bconst || true != false);
+	} && true;
+	
+	var cvar : Character;
+	cvar = {
+		var cvar1, cvar2 : Character;
+		read(cvar1);
+		const cconst = 'c';
+		cvar2 = 'z';
+		print('a', cvar1 == cconst && (cvar2 != 'b' || !true));
+		return 'b';
+	};
+	print(ivar, bvar, cvar);
+};

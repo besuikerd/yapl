@@ -23,6 +23,15 @@ $statements; separator="\n"$
 $expression$
 >>
 
+opIfThen(conditional, exprTrue, lto, popmaybe) ::= <<
+$conditional$
+iconst_1
+if_icmpne $lto$
+$exprTrue$
+$popmaybe$
+$lto$:
+>>
+
 opIfThenElse(conditional, exprTrue, exprFalse, lto, lgoto) ::= <<
 $conditional$
 iconst_1
@@ -55,10 +64,18 @@ $type$store $offset$
 assign(type, offset, expression) ::= <<
 $expression$
 dup
+$store(type, offset)$
+>>
+
+store(type, offset) ::= <<
 $type$store		$offset$
 >>
 
 pop() ::= <<
 pop
+>>
+
+dup() ::= <<
+dup
 >>
 

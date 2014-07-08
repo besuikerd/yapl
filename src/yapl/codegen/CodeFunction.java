@@ -19,11 +19,13 @@ public enum CodeFunction{
 	,opfalse("opfalse")
 	,opId("opId")
 	,opExprBlock("opExprBlock")
+	,opIfThen("opIfThen")
 	,opIfThenElse("opIfThenElse")
 	,opWhile("opWhile")
 	
 	,pop("pop")
-	
+	,dup("dup")
+	,store("store")
 	,print("print")
 	,printMultiple("printMultiple")
 	
