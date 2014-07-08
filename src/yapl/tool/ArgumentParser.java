@@ -2,8 +2,24 @@ package yapl.tool;
 
 import java.util.Arrays;
 
+/**
+ * Parser for input arguments. All possible arguments are in the enum
+ * {@link ToolArgument}. Most arguments modify the {@link ToolContext} the 
+ * {@link Tool} is in and that context is used at runtime to make certain
+ * decisions
+ * @author Nicker
+ *
+ */
 public class ArgumentParser {
+	
+	/**
+	 * current argument count
+	 */
 	private int current;
+	
+	/**
+	 * arguments given to be parsed
+	 */
 	private String[] args;
 	
 	public ArgumentParser(String[] args) {
@@ -12,6 +28,12 @@ public class ArgumentParser {
 		current = 0;
 	}
 	
+	/**
+	 * Attempts to parse the arguments to modify the given {@link ToolContext}
+	 * @param ctx ToolContext to modify
+	 * @return modified {@link ToolContext}
+	 * @throws ArgumentParseException
+	 */
 	public ToolContext parse(ToolContext ctx) throws ArgumentParseException{
 		ToolContext result = ctx;
 		boolean finished = false;
@@ -47,6 +69,10 @@ public class ArgumentParser {
 		return result;
 	}
 	
+	/**
+	 * Remainder of arguments after parsing all arguments it could
+	 * @return reaminder of arguments
+	 */
 	public String[] remainder(){
 		String[] remainder = new String[args.length - current];
 		System.arraycopy(args, current, remainder, 0, remainder.length);

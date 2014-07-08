@@ -1,5 +1,10 @@
 package yapl.tool;
 
+/**
+ * Exception that is thrown whenever parsing program arguments failed
+ * @author Nicker
+ *
+ */
 public class ArgumentParseException extends Exception {
 
 	private static final long serialVersionUID = 7180359887098088866L;

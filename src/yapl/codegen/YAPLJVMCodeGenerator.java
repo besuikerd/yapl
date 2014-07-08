@@ -31,6 +31,7 @@ import yapl.syntax.YAPLParser.PrimaryExprContext;
 import yapl.syntax.YAPLParser.StatementDeclarationContext;
 import yapl.syntax.YAPLParser.StatementExpressionContext;
 import yapl.syntax.YAPLParser.YaplContext;
+import yapl.tool.Tool;
 import yapl.tool.ToolContext;
 import yapl.typing.Type;
 import yapl.utils.CharUtils;
@@ -38,15 +39,40 @@ import yapl.utils.STUtils;
 import yapl.utils.Tuple2;
 import yapl.utils.Tuple3;
 
-
+/**
+ * CodeGenerator for YAPL that generates JVM assembly for the Jasmin assembler
+ * (http://jasmin.sourceforge.net)
+ * @author Nicker
+ *
+ */
 public class YAPLJVMCodeGenerator extends YAPLBaseVisitor<ST>{
 	
+	/**
+	 * StringTemplate group where codefunctions are saved in
+	 */
 	private STGroup group;
+	
+	/**
+	 * Context the compiler {@link Tool} was run from
+	 */
 	private ToolContext context;
+	
+	/**
+	 * generator for labels for assembly instructions
+	 */
 	private LabelGenerator labelGen;
 	
+	/**
+	 * label prefix for the label generator
+	 */
 	private static final String LABEL_PREFIX = "LBL";
 	
+	/**
+	 * Constructs a new CodeGenerator with the given context and StringTemplate
+	 * group
+	 * @param group StringTemplate group where codefunctions are located in
+	 * @param context ToolContext the compiler was run from
+	 */
 	public YAPLJVMCodeGenerator(STGroup group, ToolContext context) {
 		this.group = group;
 		this.context = context;

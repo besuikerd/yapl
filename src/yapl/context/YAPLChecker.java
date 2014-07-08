@@ -27,14 +27,47 @@ import yapl.syntax.YAPLParser.PrimaryExprContext;
 import yapl.syntax.YAPLParser.YaplContext;
 import yapl.typing.Type;
 
+/**
+ * The context checker of YAPL that checks the contextual constraints of the
+ * language.
+ * @author Nicker
+ *
+ */
 public class YAPLChecker extends YAPLBaseVisitor<Void>{
 	
+	/**
+	 * SymbolTable to store id declarations in 
+	 */
 	protected SymbolTable<IdEntry> symbolTable;
+	
+	/**
+	 * reporter to report contextual errors to
+	 */
 	protected ErrorReporter reporter;
+	
+	/**
+	 * Visitor class that can determine the type of an expression
+	 */
 	protected YAPLTypeVisitor typeVisitor;
+	
+	/**
+	 * Visitor class that can determine the {@link ConstantExpression} value of
+	 * an expression
+	 */
 	protected ConstantExpressionVisitor constantVisitor;
+	
+	/**
+	 * Visitor class that can check if an expression is an Identifier
+	 * (variable or constant) expression
+	 */
 	protected IsIdentifierVisitor isIdentifierVisitor;
 	
+	/**
+	 * Constructs a new YAPL Context checker
+	 * @param symbolTable SymbolTable to store declarations in
+	 * @param typeVisitor visitor to visit types with
+	 * @param reporter ErrorReporter to report errors to
+	 */
 	public YAPLChecker(SymbolTable<IdEntry> symbolTable, YAPLTypeVisitor typeVisitor, ErrorReporter reporter) {
 		this.symbolTable = symbolTable;
 		this.reporter = reporter;

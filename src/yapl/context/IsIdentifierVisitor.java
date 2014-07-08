@@ -18,6 +18,12 @@ import yapl.syntax.YAPLParser.OrExprContext;
 import yapl.syntax.YAPLParser.PlusMinusExprContext;
 import yapl.syntax.YAPLParser.PrimaryExprContext;
 
+/**
+ * Visitor class that determines wheter an expression is an Identifier (variable
+ * or constant) or not
+ * @author Nicker
+ *
+ */
 public class IsIdentifierVisitor extends YAPLBaseVisitor<Boolean>{
 	@Override
 	public Boolean visitExpression(ExpressionContext ctx) {
