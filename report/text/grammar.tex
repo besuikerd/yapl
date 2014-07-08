@@ -13,10 +13,10 @@ This is a trivial program and does nothing interesting.
 \section{Terminal symbols}
 The terminal symbols of YAPL include:\\\\
 \begin{tabular}{lllllllll}
-var	&	const	&	return	&	if	&	then	&	else	&	while	&	do	&	end \\
-;	&	: 		& 	= 		& 	\{ 	& 	\} 		& 	( 		& 	) 		& 	@ 	& 	, 	\\ 
-| 	& 	\		&	\& 		& 	== 	& 	!= 		& 	! 		& 	 		& 	=	& 	 	\\
-=	&	+ 		& 	- 		& 	* 	& 	/ 		& 	\% 	\\
+var		&	const	&	return	&	if	&	then	&	else	&	while	&	do		&	end 	\\
+;		&	: 		& 	= 		& 	\{ 	& 	\} 		& 	( 		& 	) 		& 	@ 		& 	, 		\\ 
+| 		& 	\		&	\& 		& 	== 	& 	!= 		& 	! 		& 	> 		& 	$>=$	& 	$<$ 	\\
+$<=$	&	+ 		& 	- 		& 	* 	& 	/ 		& 	\% 	\\
 \end{tabular}
 
 \section{Nonterminal symbols}
@@ -24,7 +24,7 @@ The nonterminal symbols of YAPL include:\\\\
 \begin{tabular}{llll}
 yapl	 (start symbol)		&	statement		&					&		\\
 declaration					&					&					&		\\
-expression					&	exprconstruct	&	orExpr			&	andExpr	\\
+expression					&	orExpr			&	andExpr			&		\\
 compareExpr					&	plusMinusExpr	&	multDivModExpr	&	primaryExpr	\\
 typeDenoter					&					&					&		\\
 operand						&	id				&					&		\\
@@ -34,26 +34,27 @@ letter						&	digit			&					&		\\
 \section{Production Rules}
 \def \rulespace {0.2cm}
 \begin{tabular}{lcp{8cm}r}
-yapl				&	::=		&	statement*														&	(1.1)	\\[\rulespace]
-statement			&	::= 	&	\Bold{(}declaration $\mid$ expression\Bold{) ;} 							&	(1.2)	\\[\rulespace]
+yapl				&	::=		&	statement*																&	(1.1)	\\[\rulespace]
+statement			&	::= 	&	\Bold{(}declaration $\mid$ expression\Bold{) ;} 						&	(1.2)	\\[\rulespace]
 declaration			&	::= 	&	\Bold{var} id \Bold{:} typeDenoter										&	(1.3a)	\\
 					&	$\mid$	&	\Bold{const} id \Bold{=} expression										&	(1.3b)	\\[\rulespace]
-expression			&	::= 	&	exprconstruct (\Bold{=} expression)?									&	(1.4)	\\[\rulespace]
-exprconstruct		&	::= 	&	orExpr															&	(1.5a)	\\
-					&	$\mid$	&	\Bold{\{} statement* \Bold{return} expression \Bold{\}}						&	(1.5b)	\\[\rulespace]
-orExpr				&	::=		&	andExpr (\Bold{\mid\mid} andExpr)*									&	(1.6)	\\[\rulespace]
-andExpr				&	::= 	&	compareExpr (\Bold{\&\&} compareExpr)*								&	(1.7)	\\[\rulespace]
-compareExpr			&	::= 	&	plusMinusExpr ((\Bold{>} $\mid$ \Bold{>=} $\mid$ \Bold{<} $\mid$ 
-									\Bold{<=} $\mid$ \Bold{==} $\mid$ \Bold{!=}) plusMinusExpr)*					&	(1.8)	\\[\rulespace]
-plusMinusExpr		&	::= 	&	multDivModExpr ((\Bold{+} $\mid$ \Bold{-}) multDivModExpr)*				&	(1.9)	\\[\rulespace]
-multDivModExpr		&	::= 	&	primaryExpr ((\Bold{*} $\mid$ \Bold{/} $\mid$ \Bold{\%}) primaryExpr)*			&	(1.10)	\\[\rulespace]
-primaryExpr			&	::= 	&	(\Bold{+} $\mid$ \Bold{-} $\mid$ \Bold{!})? operand							&	(1.11)	\\[\rulespace]
-operand				&	::= 	&	id (\Bold{(} expression (\Bold{,} expression)*\Bold{)}?							&	(1.12a)	\\
-					&	$\mid$	&	number															&	(1.12b)	\\
-					&	$\mid$	&	\Bold{(} expression \Bold{)}												&	(1.13)	\\[\rulespace]
-typeDenoter			&	::= 	&	id																&	(1.14)	\\[\rulespace]
-include				&	::= 	&	letter (letter $\mid$ digit)*									&	(1.15)	\\[\rulespace]
-letter				&	::= 	&	[\Bold{a}-\Bold{z}] 														&	(1.16a)	\\
-					&	$\mid$	&	[\Bold{A}-\Bold{Z}]														&	(1.16b)	\\[\rulespace]
-digit				&	::= 	&	[\Bold{0}-\Bold{9}]														&	(1.17)	\\[\rulespace]
+expression			&	::= 	&	orExpr (\Bold{=} expression)?											&	(1.4)	\\[\rulespace]
+orExpr				&	::=		&	andExpr (\Bold{\mid\mid} andExpr)*										&	(1.5)	\\[\rulespace]
+andExpr				&	::= 	&	compareExpr (\Bold{\&\&} compareExpr)*									&	(1.6)	\\[\rulespace]
+opCompare			&	::=		&	\Bold{>} $\mid$ \Bold{>=} $\mid$ \Bold{<} $\mid$ 						&	(1.7)	\\[\rulespace]
+									\Bold{<=} $\mid$ \Bold{==} $\mid$ \Bold{!=}
+compareExpr			&	::= 	&	plusMinusExpr (opCompare plusMinusExpr)*								&	(1.8)	\\[\rulespace]
+opPlusMinus			&	::=		&	\Bold{+} $\mid$ \Bold{-}												&	(1.9)	\\[\rulespace]
+plusMinusExpr		&	::= 	&	multDivModExpr (opPlusMinus multDivModExpr)*							&	(1.9)	\\[\rulespace]
+opMultDivMod		&	::=		&	\Bold{*} $\mid$ \Bold{/} $\mid$ \Bold{\%}								&	(1.10)	\\[\rulespace]
+multDivModExpr		&	::= 	&	primaryExpr (() primaryExpr)*											&	(1.11)	\\[\rulespace]
+primaryExpr			&	::= 	&	(\Bold{+} $\mid$ \Bold{-} $\mid$ \Bold{!})? operand						&	(1.12)	\\[\rulespace]
+operand				&	::= 	&	id (\Bold{(} expression (\Bold{,} expression)*\Bold{)}?					&	(1.13a)	\\
+					&	$\mid$	&	number																	&	(1.13b)	\\
+					&	$\mid$	&	\Bold{(} expression \Bold{)}											&	(1.14)	\\[\rulespace]
+typeDenoter			&	::= 	&	id																		&	(1.15)	\\[\rulespace]
+include				&	::= 	&	letter (letter $\mid$ digit)*											&	(1.16)	\\[\rulespace]
+letter				&	::= 	&	[\Bold{a}-\Bold{z}] 													&	(1.17a)	\\
+					&	$\mid$	&	[\Bold{A}-\Bold{Z}]														&	(1.18b)	\\[\rulespace]
+digit				&	::= 	&	[\Bold{0}-\Bold{9}]														&	(1.19)	\\[\rulespace]
 \end{tabular}
