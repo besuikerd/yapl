@@ -1,0 +1,21 @@
+{
+	var x, y : Integer;
+
+	x = 0;
+
+	while (x < 1) {
+		x = 1; y = 4;
+	};
+
+	var b : Integer;
+
+	read(b);
+	read(y);
+
+	while(b > 0) {
+	    var y : Integer;
+	    y = 3;
+        print(b, y);
+        return b = b -1;
+	};
+};

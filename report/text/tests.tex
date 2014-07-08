@@ -1,0 +1,42 @@
+To test the compiler there are 9 different testing programs. The different programs test programs together can test all the features of YAPL.\\
+There are tests for correct and incorrect code. There are 3 tests for correct code, 3 tests for syntax errors and 3 tests to detect context errors.\\
+Each test has a specific input and an expected output for the given input. If the expected output matches the given output then the test succeeded and the program is considered correct.
+
+\section{Basic expression language}
+The basic expression language test tests the following features:
+\begin{itemize}
+\item Declarations \\
+	Every variable that you want to use must first be declared with one of the types Int, Boolean, or Char.
+\item Operators and operands \\
+	To test, compare or combine variables we need operators and operands. We test all the operators and operands.
+\item Assignments \\
+	Assignments can either be simple assignments or multiple assignments. 
+\item Read and print \\
+	A read statements can read one or more values. The print statement can also print one or more values, but it can also first evaluate expressions and then print the result.
+\item Compound expressions \\
+	Compound expressions are sequences of expressions and declarations. 
+\end{itemize}
+\subsection{Correct programs}
+The test program for the basic expressions language is called \emph{program_correct_bel.yapl}. When executed with the input \emph{0 1 1 false c} \\the output should be \emph{0 1 false true 1 false true a true 3 true b}
+\subsection{Incorrect syntax}
+Bla bla bla
+\subsection{Incorrect context}
+bla bla bla
+\section{Conditional statement}
+The test will check if input is read. After this is will read some more input and decide if it was true or false. We also need to check the scope rules that apply to conditional statements and the use of conditional statements as an operand.
+\subsection{Correct programs}
+The test program for the basic expressions language is called \emph{program_correct_conditional.yapl}. When executed with the input \emph{false false} \\the output should be \emph{n o}\\
+When executed with the input \emph{false true} \\the output should be \emph{y e s}
+\subsection{Incorrect syntax}
+Bla bla bla
+\subsection{Incorrect context}
+bla bla bla
+\section{While statement}
+With the while expression we have to check the scope rules. However, the while expression does return a void and needs some attention. 
+\subsection{Correct programs}
+The test program for the basic expressions language is called \emph{program_correct_while.yapl}. When executed with the input \emph{3 3} \\the output should be \emph{3 3 2 3 1 3}\\
+When executed with the input \emph{2 3} \\the output should be \emph{2 3 1 3}
+\subsection{Incorrect syntax}
+Bla bla bla
+\subsection{Incorrect context}
+bla bla bla

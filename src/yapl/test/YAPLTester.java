@@ -101,7 +101,6 @@ public class YAPLTester {
 	
 	public static void main(String[] args) throws IOException {
 		YAPLTester tester = new YAPLTester("..\\..\\..\\eclipse-vb\\Yapl\\out");
-		tester.addFile(new TestFile("syntax_correct.test"));
 		tester.run();
 	}
 }
