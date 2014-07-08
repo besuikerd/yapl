@@ -22,13 +22,13 @@ $<=$	&	+ 		& 	- 		& 	* 	& 	/ 		& 	\% 	\\
 \section{Nonterminal symbols}
 The nonterminal symbols of YAPL include:\\\\
 \begin{tabular}{llll}
-yapl	 (start symbol)		&	statement		&					&		\\
-declaration					&					&					&		\\
-expression					&	orExpr			&	andExpr			&		\\
+yapl	 (start symbol)		&	statement		&					&				\\
+declaration					&					&					&				\\
+expression					&	orExpr			&	andExpr			&				\\
 compareExpr					&	plusMinusExpr	&	multDivModExpr	&	primaryExpr	\\
-typeDenoter					&					&					&		\\
-operand						&	id				&					&		\\
-letter						&	digit			&					&		\\
+typeDenoter					&					&					&				\\
+operand						&	id				&					&				\\
+letter						&	digit			&					&				\\
 \end{tabular}
 
 \section{Production Rules}
@@ -41,20 +41,27 @@ declaration			&	::= 	&	\Bold{var} id \Bold{:} typeDenoter										&	(1.3a)	\\
 expression			&	::= 	&	orExpr (\Bold{=} expression)?											&	(1.4)	\\[\rulespace]
 orExpr				&	::=		&	andExpr (\Bold{\mid\mid} andExpr)*										&	(1.5)	\\[\rulespace]
 andExpr				&	::= 	&	compareExpr (\Bold{\&\&} compareExpr)*									&	(1.6)	\\[\rulespace]
-opCompare			&	::=		&	\Bold{>} $\mid$ \Bold{>=} $\mid$ \Bold{<} $\mid$ 						&	(1.7)	\\[\rulespace]
-									\Bold{<=} $\mid$ \Bold{==} $\mid$ \Bold{!=}
+opCompare			&	::=		&	\Bold{>} $\mid$ \Bold{>=} $\mid$ \Bold{<} $\mid$ 						
+									\Bold{<=} $\mid$ \Bold{==} $\mid$ \Bold{!=}								&	(1.7)	\\[\rulespace]
 compareExpr			&	::= 	&	plusMinusExpr (opCompare plusMinusExpr)*								&	(1.8)	\\[\rulespace]
 opPlusMinus			&	::=		&	\Bold{+} $\mid$ \Bold{-}												&	(1.9)	\\[\rulespace]
 plusMinusExpr		&	::= 	&	multDivModExpr (opPlusMinus multDivModExpr)*							&	(1.9)	\\[\rulespace]
 opMultDivMod		&	::=		&	\Bold{*} $\mid$ \Bold{/} $\mid$ \Bold{\%}								&	(1.10)	\\[\rulespace]
-multDivModExpr		&	::= 	&	primaryExpr (() primaryExpr)*											&	(1.11)	\\[\rulespace]
+multDivModExpr		&	::= 	&	primaryExpr (opMultDivMod primaryExpr)*									&	(1.11)	\\[\rulespace]
 primaryExpr			&	::= 	&	(\Bold{+} $\mid$ \Bold{-} $\mid$ \Bold{!})? operand						&	(1.12)	\\[\rulespace]
-operand				&	::= 	&	id (\Bold{(} expression (\Bold{,} expression)*\Bold{)}?					&	(1.13a)	\\
-					&	$\mid$	&	number																	&	(1.13b)	\\
-					&	$\mid$	&	\Bold{(} expression \Bold{)}											&	(1.14)	\\[\rulespace]
-typeDenoter			&	::= 	&	id																		&	(1.15)	\\[\rulespace]
-include				&	::= 	&	letter (letter $\mid$ digit)*											&	(1.16)	\\[\rulespace]
-letter				&	::= 	&	[\Bold{a}-\Bold{z}] 													&	(1.17a)	\\
-					&	$\mid$	&	[\Bold{A}-\Bold{Z}]														&	(1.18b)	\\[\rulespace]
-digit				&	::= 	&	[\Bold{0}-\Bold{9}]														&	(1.19)	\\[\rulespace]
+operand				&	::= 	&	id (\Bold{(} expression (\Bold{,} expression)*)?\Bold{)})?							&	(1.13a)	\\[\rulespace]
+					&	$\mid$	&	number																				&	(1.13b)	\\[\rulespace]
+					&	$\mid$	&	(letter $\mid$ digit)*																&	(1.13c)	\\[\rulespace]
+					&	$\mid$	&	\Bold{(} expression \Bold{)}														&	(1.13d)	\\[\rulespace]
+					&	$\mid$	&	\Bold{true}																			&	(1.13e)	\\[\rulespace]
+					&	$\mid$	&	\Bold{false}																		&	(1.13f)	\\[\rulespace]
+					&	$\mid$	&	\Bold{if} expression \Bold{then} expression (\Bold{else} expression)? \Bold{end} 	&	(1.13g)	\\[\rulespace]
+					&	$\mid$	&	exprBlock																			&	(1.13h)	\\[\rulespace]
+					&	$\mid$	&	\Bold{while} expression exprBlock													&	(1.13i)	\\[\rulespace]
+exprBlock			&	::= 	&	\Bold{\{} statement* (\Bold{return} expression \Bold{;})? \Bold{\}}					&	(1.13j)	\\[\rulespace]
+typeDenoter			&	::= 	&	id																		&	(1.14)	\\[\rulespace]
+id 					&	::= 	&	letter (letter $\mid$ digit)*											&	(1.15)	\\[\rulespace]
+letter				&	::= 	&	[\Bold{a}-\Bold{z}] 													&	(1.16a)	\\
+					&	$\mid$	&	[\Bold{A}-\Bold{Z}]														&	(1.16b)	\\[\rulespace]
+digit				&	::= 	&	[\Bold{0}-\Bold{9}]														&	(1.17)	\\[\rulespace]
 \end{tabular}
