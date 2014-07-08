@@ -30,9 +30,9 @@ The checklist for our project code:
     - Inleiding. Korte beschrijving van de eindopdracht.
     - Beknopte beschrijving van de programmeertaal
     - Problemen en oplossingen
-    - Syntax
+    - ~~Syntax~~
     - Context-beperkingen
-    - Semantiek van de taal
+    - ~~Semantiek van de taal~~
     - Vertaalregels voor de taal
     - Beschrijving van Java-programmatuur
     - Testplan en -resultaten
