@@ -42,7 +42,7 @@ goto			$lgoto$
 $lto$:
 $right$
 iconst_1
-if_icmpeq		$lto2$
+if_icmpeq		$lto2$	
 iconst_0
 goto			$lgoto$
 $lto2$:

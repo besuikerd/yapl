@@ -1,0 +1,29 @@
+
+\section{Statement}
+\begin{itemize}
+\item A declaration statement \texttt{D} is elaborated.
+\item A expression statement \texttt{E} is evaluated and the result is discarded.
+\end{itemize}
+
+\section{Declaration}
+\begin{itemize}
+\item A declaration \texttt{I : T} is elaborated by binding a new variable \texttt{I} to type \texttt{T}. The initial value of \texttt{I} is the zero value of type \texttt{T}.
+\item A declaration \texttt{I = E} is elaborated by binding expression \texttt{E} to \texttt{I}. If the expression is known at compile time, an occurrence of \texttt{I} will be substituted with the result of \texttt{E}. If the 
+result of \texttt{E} is not known at compile time, \texttt{E} is evaluated and bound to \texttt{I}.
+\end{itemize}
+
+\section{Expression}
+\begin{itemize}
+\item A number literal \texttt{N} yields the integer value of \texttt{N}.
+\item A character literal \texttt{C} yields the character value of \texttt{C}.
+\item A boolean literal \texttt{B} yields the boolean value of \texttt{B}
+\item A parentheses expression \texttt{(E)} evaluates \texttt{E}.
+\item A conditional \texttt{if B then $E_1$ else $E_2$} is evaluated by evaluating \texttt{B}. If this expression yields true, then \texttt{$E_1$} is evaluated. If \texttt{B} yields false, \texttt{$E_2$} is evaluated. If the types of \texttt{$E_1$} and \texttt{$E_2$} do not match, the evaluated expression is discarded.
+\item A conditional \texttt{if B then $E_1$} is evaluated by evaluating \texttt{B}. If this expression yields true, then \texttt{$E_1$} is evaluated and the result is discarded. 
+\item an expression block \texttt{SL E} is evaluated by executing all statements \texttt{SL} and if \texttt{E} is given, \texttt{E} is evaluated.
+\item a while expression \texttt{while B do EB} is evaluated by evaluating \texttt{B}. if this yields true, \texttt{EB} is evaluated. Whenever \texttt{EB} yields a result, this result is discarded. This is repeated until \texttt{B} yields false.
+\item An assignment \texttt{I = E} is evaluated by evaluating \texttt{E} and binding it to \texttt{E}. The result of the assignment is \texttt{E}.
+\item A unary expression \texttt{O E} is evaluated by evaluating \texttt{E} and applying \texttt{O(E)}.
+\item A binary expression \texttt{$E_1$ O $E_2$} is evaluated by applying \texttt{O($E_1, E_2$)} 
+\item A variable expression \texttt{V} yields the value identified by \texttt{V}.
+\end{itemize}
