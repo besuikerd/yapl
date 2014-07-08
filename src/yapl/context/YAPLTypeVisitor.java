@@ -4,6 +4,7 @@ import yapl.reporter.ErrorReporter;
 import yapl.syntax.YAPLBaseVisitor;
 import yapl.syntax.YAPLParser.AndExprContext;
 import yapl.syntax.YAPLParser.CompareExprContext;
+import yapl.syntax.YAPLParser.ExprBlockContext;
 import yapl.syntax.YAPLParser.ExpressionContext;
 import yapl.syntax.YAPLParser.IdContext;
 import yapl.syntax.YAPLParser.MultDivModExprContext;
@@ -39,6 +40,11 @@ public class YAPLTypeVisitor extends YAPLBaseVisitor<Type>{
 	
 	@Override
 	public Type visitOpExprBlock(OpExprBlockContext ctx) {
+		return ctx.exprBlock().accept(this);
+	}
+	
+	@Override
+	public Type visitExprBlock(ExprBlockContext ctx) {
 		return ctx.expression() != null ? ctx.expression().accept(this) : Type.VOID;
 	}
 

@@ -1,6 +1,7 @@
 package yapl.context;
 
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 import yapl.context.IdEntry.EntryType;
 import yapl.reporter.ErrorReporter;
@@ -11,6 +12,7 @@ import yapl.syntax.YAPLParser.AndExprContext;
 import yapl.syntax.YAPLParser.CompareExprContext;
 import yapl.syntax.YAPLParser.DeclConstContext;
 import yapl.syntax.YAPLParser.DeclVarContext;
+import yapl.syntax.YAPLParser.ExprBlockContext;
 import yapl.syntax.YAPLParser.ExpressionContext;
 import yapl.syntax.YAPLParser.IdContext;
 import yapl.syntax.YAPLParser.MultDivModExprContext;
@@ -24,7 +26,6 @@ import yapl.syntax.YAPLParser.PlusMinusExprContext;
 import yapl.syntax.YAPLParser.PrimaryExprContext;
 import yapl.syntax.YAPLParser.YaplContext;
 import yapl.typing.Type;
-import yapl.utils.Tuple2;
 
 public class YAPLChecker extends YAPLBaseVisitor<Void>{
 	
@@ -56,27 +57,36 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 	
 	@Override
 	public Void visitDeclVar(DeclVarContext ctx) {
-		IdEntry entry = new IdEntry(ctx.id().getText(), ctx, ctx.typeDenoter().accept(typeVisitor), EntryType.VARIABLE);
-		try {
-			symbolTable.enter(ctx.id().getText(), entry);
-		} catch(SymbolTableException e){
-			reporter.context().error(ctx.id().start, e.getMessage());
+		List<IdEntry> entries = new ArrayList<IdEntry>();
+		for(IdContext id : ctx.id()){
+			IdEntry entry = new IdEntry(id.getText(), ctx, ctx.typeDenoter().accept(typeVisitor), EntryType.VARIABLE);
+			try {
+				symbolTable.enter(id.getText(), entry);
+			} catch(SymbolTableException e){
+				reporter.context().error(id.start, e.getMessage());
+			}
+			entries.add(entry);
+			id.entry = entry;
 		}
-		ctx.entry = entry;
-		return ctx.typeDenoter().accept(this);
+		ctx.entries = entries;
+		return null;
 	}
 	
 	@Override
 	public Void visitDeclConst(DeclConstContext ctx) {
+		List<IdEntry> entries = new ArrayList<IdEntry>();
 		ctx.expression().accept(this);
-		IdEntry entry = new IdEntry(ctx.id().getText(), ctx, ctx.expression().accept(typeVisitor), EntryType.CONSTANT);
-		entry.setConstantExpression(ctx.expression().accept(constantVisitor));
-		try{
-			symbolTable.enter(ctx.id().getText(), entry);
-		} catch(SymbolTableException e){
-			reporter.context().error(ctx.id().start, e.getMessage());
+		for(IdContext id : ctx.id()){
+			IdEntry entry = new IdEntry(id.getText(), ctx, ctx.expression().accept(typeVisitor), EntryType.CONSTANT);
+			entry.setConstantExpression(ctx.expression().accept(constantVisitor));
+			try{
+				symbolTable.enter(id.getText(), entry);
+			} catch(SymbolTableException e){
+				reporter.context().error(id.start, e.getMessage());
+			}
+			id.entry = entry;
 		}
-		ctx.entry = entry;
+		ctx.entries = entries;
 		return null;
 	}
 	
@@ -102,6 +112,11 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 	
 	@Override
 	public Void visitOpExprBlock(OpExprBlockContext ctx) {
+		return ctx.exprBlock().accept(this);
+	}
+	
+	@Override
+	public Void visitExprBlock(ExprBlockContext ctx) {
 		symbolTable.openScope();
 		ctx.statement().forEach((statement) -> statement.accept(this));
 		if(ctx.expression() != null){
@@ -134,8 +149,9 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 	
 	@Override
 	public Void visitOpWhile(OpWhileContext ctx) {
-		ctx.expression().forEach((expression) -> expression.accept(this));
-		Type typeConditional = ctx.expression(0).accept(typeVisitor);
+		ctx.expression().accept(this);
+		ctx.exprBlock().accept(this);
+		Type typeConditional = ctx.expression().accept(typeVisitor);
 		if(!typeConditional.matchesType(Type.BOOLEAN)){
 			reporter.context().errorUnexpectedType(ctx, Type.BOOLEAN, typeConditional);
 		}
@@ -199,8 +215,8 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 				MultDivModExprContext ctxRight = ctx.multDivModExpr(i);
 				Type left = ctxLeft.accept(typeVisitor);
 				Type right = ctxRight.accept(typeVisitor);
-				if(!left.matchesType(Type.INT)) reporter.context().errorBinaryOpType(ctxLeft, ctx.opPlusMinus(i).getText(), Type.INT, left);
-				if(!right.matchesType(Type.INT)) reporter.context().errorBinaryOpType(ctxRight, ctx.opPlusMinus(i).getText(), Type.INT, right);
+				if(!left.matchesType(Type.INT)) reporter.context().errorBinaryOpType(ctxLeft, ctx.opPlusMinus(i - 1).getText(), Type.INT, left);
+				if(!right.matchesType(Type.INT)) reporter.context().errorBinaryOpType(ctxRight, ctx.opPlusMinus(i - 1).getText(), Type.INT, right);
 			}
 				
 		return null;
@@ -214,7 +230,7 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 			PlusMinusExprContext ctxRight = ctx.plusMinusExpr(i);
 			Type left = ctxLeft.accept(typeVisitor);
 			Type right = ctxRight.accept(typeVisitor);
-			if(!left.matchesType(right)) reporter.context().errorBinaryOpType(ctx, ctx.opCompare(i).getText(), left, right);
+			if(!left.matchesType(right)) reporter.context().errorBinaryOpType(ctxRight, ctx.opCompare(i - 1).getText(), left, right);
 		}
 		return null;
 	}

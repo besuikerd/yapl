@@ -1,0 +1,17 @@
+{
+	var x, y : Integer;
+	
+	if x == 0 then {
+		x = 4; y = 5;
+	} end;
+
+	var b : Boolean;
+
+	x = if read(b) then 1 else 2;
+	
+	if x == 2 then {
+		var b : Boolean;
+		read (b);
+		if b then print('y', 'e', 's') else print('n', 'o'); end;
+	} end;
+};

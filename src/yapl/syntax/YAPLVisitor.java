@@ -3,6 +3,7 @@ package yapl.syntax;
 
 	import yapl.typing.Type;
 	import yapl.context.IdEntry;
+	import java.util.List;
 
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
@@ -189,6 +190,13 @@ public interface YAPLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitYapl(@NotNull YAPLParser.YaplContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link YAPLParser#exprBlock}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExprBlock(@NotNull YAPLParser.ExprBlockContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link YAPLParser#opWhile}.

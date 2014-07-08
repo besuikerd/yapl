@@ -1,0 +1,61 @@
+var x, y : Integer;
+const z = 1;
+z = 10;
+
+//incorrect LHS
+12 = 10;
+
+//incorrect LHS
+x + y = 10;
+
+//cannot negate a character
+-'a';
+
+//cannot make a boolean positive
++true;
+
+//inverting a character variable
+var c : Character;
+!c;
+
+var b : Boolean;
+b + 10 * c % 2;
+
+//correct since characters can also be compared
+'a' < c;
+
+//Character == Boolean
+'a' == b;
+
+// Boolean != Integer
+b != 10;
+
+// Integer + Boolean
+x + y == c;
+
+// Character = Integer
+c = x + y;
+
+//Boolean = 10
+b = 10;
+
+//missing declarations
+p;
+q;
+var q : Boolean;
+
+//correct since compound expression have an optional result value
+{2 + 3 / 4; print(2,3);};
+//incorrect since compound expression without a return has type void;
+x = {2 + 3;};
+//correct assignment with return type
+x = {return 2 + 3;};
+
+//Void + 10
+read(x, y) + 10;
+
+//Character == Void
+c == print(x, y);
+
+//Adding Void to 10
+10 + {var u, v : Integer; read(u, v); return write(u,v);};

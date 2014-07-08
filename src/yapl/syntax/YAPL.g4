@@ -7,6 +7,7 @@ options {
 @header{
 	import yapl.typing.Type;
 	import yapl.context.IdEntry;
+	import java.util.List;
 }
 
 SEMICOLON : ';';
@@ -60,10 +61,10 @@ statement
   | expression SEMICOLON 										#statementExpression
 ;
 
-declaration locals[IdEntry entry]
+declaration locals[List<IdEntry> entries]
 : 
-    VAR id COLON typeDenoter									#declVar
- |  CONST id EQ expression										#declConst
+    VAR id (COMMA id)* COLON typeDenoter						#declVar
+ |  CONST id (COMMA id)* EQ expression							#declConst
 ;
 
 expression locals[Type type]
@@ -79,9 +80,13 @@ operand
   | LPAREN expression RPAREN 									#opParenExpr
   | TRUE														#opTrue
   | FALSE														#opFalse
-  | IF expression THEN expression (ELSE expression)?? 	 		#opIfThenElse
-  | LCURLY statement* (RETURN expression SEMICOLON)? RCURLY		#opExprBlock
-  | WHILE expression DO expression								#opWhile
+  | IF expression THEN expression (ELSE expression)? END 		#opIfThenElse
+  | exprBlock													#opExprBlock
+  | WHILE expression exprBlock									#opWhile
+;
+
+exprBlock:
+	LCURLY statement* (RETURN expression SEMICOLON)? RCURLY
 ;
 
 primaryExpr
@@ -137,7 +142,7 @@ typeDenoter:
 ;
 
 IDENTIFIER: 
-  LETTER LETTER*
+  LETTER (LETTER|NUMBER)*
 ;
 
 NUMBER:

@@ -3,6 +3,7 @@ package yapl.syntax;
 
 	import yapl.typing.Type;
 	import yapl.context.IdEntry;
+	import java.util.List;
 
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
@@ -215,6 +216,14 @@ public class YAPLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Y
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitYapl(@NotNull YAPLParser.YaplContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitExprBlock(@NotNull YAPLParser.ExprBlockContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
