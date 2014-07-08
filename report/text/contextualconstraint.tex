@@ -1,0 +1,38 @@
+\section{Statement}
+\begin{itemize}
+\item When closing a scope the context checker checks if every declared variable is used in the scope. If a variable is unused the checker will give a warning. 
+\end{itemize}
+
+\section{Declaration}
+\begin{itemize}
+
+\item In \texttt{var ID : TYPE} ID cannot be declared twice on the same scope level. 
+
+\item In \texttt{const ID = E} ID cannot be declared twice on the same scope level. 
+
+\item Before a variable can be used it must first be declared.
+
+
+\end{itemize}
+
+\section{Expression}
+\begin{itemize}
+
+\item In \texttt{OE (= E)?}, if = exists then expression E must be of the same type as the expression OE and OE must be an identifier.
+
+\item In \texttt{if E then EI (else EE)?} E must be of type Boolean. If there is an else clause EI and EE must be of the same type.
+
+\item In \texttt{while E EB} E must be of type Boolean.
+
+\item In \texttt{$E_1$ (O $E_2$)*}, if O is of type + $\mid$ - $\mid$ / $\mid$ * $\mid$ \% then E1 and E2 must be of type Int. 
+
+\item In \texttt{OP O}, O must be of type Boolean if OP is !. If OP is + $\mid$ - then O must be of type Int. 
+
+\item In \texttt{$E_1$ O $E_2$}, if O is of type > $\mid$ >= $\mid$ < $\mid$ <= $\mid$ == $\mid$ != then $E_1$ and $E_2$ must both be of the same type. 
+
+\item In \texttt{$E_1$ AND $E_2$} and \texttt{$E_1$ OR $E_2$} $E_1$ and $E_2$ must both be of type Boolean. 
+
+\item In \texttt{F($E_1$, $E_2$, $E_N$)}, if F must be \texttt{read} or \texttt{write}. The number of arguments of both these functions must be 1 or more. The type of the arguments may not be Void or Error.
+
+\end{itemize}
+
