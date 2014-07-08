@@ -1,5 +1,13 @@
 package yapl.utils;
 
+/**
+ * class that represents a 3-tuple
+ * @author Nicker
+ *
+ * @param <A>
+ * @param <B>
+ * @param <C>
+ */
 public class Tuple3<A,B,C> {
 	public final A _1;
 	public final B _2;

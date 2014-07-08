@@ -24,7 +24,11 @@ import yapl.syntax.YAPLParser.PrimaryExprContext;
 import yapl.syntax.YAPLParser.TypeDenoterContext;
 import yapl.typing.PredefFunction;
 import yapl.typing.Type;
-
+/**
+ * Visitor class that can determine the {@link Type} of an expression
+ * @author Nicker
+ *
+ */
 public class YAPLTypeVisitor extends YAPLBaseVisitor<Type>{
 	
 	private ErrorReporter reporter;

@@ -1,5 +1,11 @@
 package yapl.context;
 
+/**
+ * Exception that is thrown whenever a {@link SymbolTable} entry is entered but
+ * is already defined at the current scope level
+ * @author Nicker
+ *
+ */
 public class DuplicateIdDefinitionException extends SymbolTableException{
 	
 	private static final long serialVersionUID = -4075567480997896713L;

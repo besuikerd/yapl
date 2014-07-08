@@ -6,7 +6,11 @@ import java.util.stream.Collectors;
 
 import org.antlr.v4.runtime.misc.Pair;
 
-
+/**
+ * enum that defines all different predefined functions
+ * @author Nicker
+ *
+ */
 public enum PredefFunction {
 	PRINT("print"),
 	READ("read");

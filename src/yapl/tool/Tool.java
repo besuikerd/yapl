@@ -25,7 +25,30 @@ import yapl.reporter.Severity;
 import yapl.syntax.YAPLLexer;
 import yapl.syntax.YAPLParser;
 
-
+/**
+ * Main class for the compiler that calls all the components of the compiler:
+ * Syntax checking
+ * Context checking
+ * Code Generation 
+ * Assembling
+ * Executing
+ * 
+ * The main function takes input arguments this is the usage:
+ * 
+ * [optionals] input_file
+ * 
+ * input_file is the yapl file to compile
+ * 
+ * where [optionals] is any or multiple of the following:
+ * -o outfile 	-> output file to write the jvm bytecode to
+ * -d dotfile	-> generate dotfile (not implemented yet)
+ * -a 			-> assmeble the program
+ * -r	 		-> run the program after assembling
+ * -t			-> prints a textual representation of the AST
+ * 
+ * @author Nicker
+ *
+ */
 public class Tool {
 	public static void main(String[] args) {
 		ToolContext ctx = new ToolContext();
@@ -45,12 +68,20 @@ public class Tool {
 		}
 	}
 	
+	/**
+	 * context this tool is run in
+	 */
 	private ToolContext context;
 
 	public Tool(ToolContext context) {
 		this.context = context;
 	}
 	
+	/**
+	 * run the tool
+	 * @param args
+	 * @throws IOException
+	 */
 	public void run(String[] args) throws IOException{
 		if(args.length == 0){
 			System.err.println("expected input file argument");
