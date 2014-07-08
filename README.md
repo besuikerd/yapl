@@ -31,7 +31,7 @@ The checklist for our project code:
     - Beknopte beschrijving van de programmeertaal
     - Problemen en oplossingen
     - ~~Syntax~~
-    - Context-beperkingen
+    - ~~Context-beperkingen~~
     - ~~Semantiek van de taal~~
     - Vertaalregels voor de taal
     - Beschrijving van Java-programmatuur
