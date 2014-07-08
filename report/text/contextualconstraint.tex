@@ -6,12 +6,11 @@
 \section{Declaration}
 \begin{itemize}
 
-\item In \texttt{var ID : TYPE} ID cannot be declared twice on the same scope level. 
+\item In \texttt{var I : T}, I cannot be declared twice on the same scope level. 
 
-\item In \texttt{const ID = E} ID cannot be declared twice on the same scope level. 
+\item In \texttt{const I = E}, I cannot be declared twice on the same scope level. 
 
 \item Before a variable can be used it must first be declared.
-
 
 \end{itemize}
 
@@ -20,9 +19,9 @@
 
 \item In \texttt{OE (= E)?}, if = exists then expression E must be of the same type as the expression OE and OE must be an identifier.
 
-\item In \texttt{if E then EI (else EE)?} E must be of type Boolean. If there is an else clause EI and EE must be of the same type.
+\item In \texttt{if E then EI (else EE)?}, E must be of type Boolean. If there is an else clause EI and EE must be of the same type.
 
-\item In \texttt{while E EB} E must be of type Boolean.
+\item In \texttt{while E EB}, E must be of type Boolean.
 
 \item In \texttt{$E_1$ (O $E_2$)*}, if O is of type + $\mid$ - $\mid$ / $\mid$ * $\mid$ \% then E1 and E2 must be of type Int. 
 
