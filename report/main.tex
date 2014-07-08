@@ -3,6 +3,7 @@
 \usepackage[english]{babel}
 \usepackage{appendix}
 \usepackage{syntax}
+\usepackage{color}
 \usepackage{listings}
 \usepackage{amsmath}
 \usepackage{bm}
@@ -24,6 +25,8 @@
     Leijdsweg 15
 }
 \date{\today}
+
+\input{macros/lstmacros.tex}
 
 \begin{document}
 \maketitle
@@ -48,7 +51,9 @@
 \input{text/contextualconstraint.tex}
 
 \chapter{Semantics}
+\input{text/semantics.tex}
 \chapter{Translation rules}
+\input{text/translationrules.tex}
 \chapter{Code description}
 \chapter{Testing}
 \chapter{Conclusion}

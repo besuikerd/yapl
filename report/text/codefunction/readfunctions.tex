@@ -1,0 +1,26 @@
+private static int readInt(){
+	try{
+		return Integer.parseInt(readLine());
+	} catch(NumberFormatException e){
+		return 0;
+	}
+}
+
+private static String readLine(){
+	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+	try{
+		return reader.readLine();
+	} catch(IOException e){
+		return "";
+	}
+}
+
+private static char readChar(){
+	String s = readLine();
+	return s.length() > 0 ? s.charAt(0) : '\0';
+}
+
+private static boolean readBoolean(){
+	String s = readLine().toLowerCase();
+	return s.equals("true");
+}

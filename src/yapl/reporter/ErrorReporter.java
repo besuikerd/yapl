@@ -246,5 +246,9 @@ public class ErrorReporter {
 		public void errorUnexpectedType(ParserRuleContext ctx, Type expected, Type got){
 			error(ctx, "expected type: %s, got: %s", expected, got);
 		}
+		
+		public void errorUnknownFunction(OpIdOrFuncContext ctx){
+			error(ctx.id(), "unknown function: %s", ctx.id().getText());
+		}
 	}
 }

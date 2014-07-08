@@ -1,8 +1,4 @@
 package yapl.codegen;
-
-
-
-
 public class LabelGenerator {
 	private int offset;
 	private StringBuilder builder;

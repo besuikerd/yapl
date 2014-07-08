@@ -292,6 +292,9 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 						reporter.context().errorInvalidFunctionArgumentType(expression);
 					}
 				});
+				break;
+		    default:
+		    	reporter.context().errorUnknownFunction(ctx);
 			}
 			
 			
