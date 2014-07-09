@@ -25,15 +25,15 @@ grammeerde of standaard Java-klassen betreft
     - de uitvoer gegenereerd door de compiler (d.w.z. de gegeneerde foutmeldingen)
 
 The checklist for our project code:
-+ ~~Titelblad
++ ~~Titelblad~~
 + Inhoud
-    - ~~Inleiding. Korte beschrijving van de eindopdracht.
-    - ~~Beknopte beschrijving van de programmeertaal
-    - ~~Problemen en oplossingen
+    - ~~Inleiding. Korte beschrijving van de eindopdracht.~~
+    - ~~Beknopte beschrijving van de programmeertaal~~
+    - ~~Problemen en oplossingen~~
     - ~~Syntax~~
     - ~~Context-beperkingen~~
     - ~~Semantiek van de taal~~
-    - ~~Vertaalregels voor de taal
-    - ~~Beschrijving van Java-programmatuur
-    - ~~Testplan en -resultaten
+    - ~~Vertaalregels voor de taal~~
+    - ~~Beschrijving van Java-programmatuur~~
+    - ~~Testplan en -resultaten~~
     - Conclusies
