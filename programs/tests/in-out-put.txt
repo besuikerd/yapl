@@ -1,0 +1,2 @@
+In:     3 6 36 true y a p l p true 6 42
+Out:    3 6 false true 36 true true g r e a t a true true 38 true ! y e s 6 3 5 3 4 3 3 3 2 3 1 3

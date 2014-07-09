@@ -1,22 +1,78 @@
-var x, y, z : Integer;
-var b : Boolean;
-var c : Character;
+{
+	var ivar : Integer;
+	ivar = {
+		var ivar1, ivar2 : Integer;
+		read(ivar1, ivar2);
+		print(ivar1, ivar2);
+		const iconst1 = 1;
+		const iconst2 = 2;
+		ivar2 = +16 + 2 * -8;
+		print(
+			ivar1 < ivar2 && iconst1 <= iconst2, 
+			iconst1 * iconst2 > ivar2 - ivar1
+		);
+		ivar1 < read(ivar2) && iconst1 <= iconst2;
+		return ivar2 = print(ivar2) + 1;
+	} + 1;
+	
+	var bvar : Boolean;
+	bvar = {
+		var bvar : Boolean;
+		read(bvar);
+		print(bvar);
+		bvar = 12 / 5 * 5 + 12 % 5 == 12 && 6 >= 6;
+		const bconst = true;
+		return print(!false && bvar == bconst || true != false);
+	} && true;
+	
+	var cvar : Character;
+	cvar = {
+		var cvar, y, a, p ,l : Character;
+		read(y, a, p ,l);
+		const cconst1 = 'y';
+		const cconst2 = 'a';
+		const cconst3 = 'p';
+		const cconst4 = 'l';
+		cvar = 'z';
+		print('g','r','e','a','t');
+		print('a', y == cconst1 && a == cconst2 && p == cconst3 && l == cconst4,  (cvar != 'b' || !true));
+		return '!';
+	};
 
-z = (if read(b) then 1 else 2 end);
+	print(ivar, bvar, cvar);
 
-var i : Integer;
-i = 0;
+	//Conditonals
+	var x, y : Integer;
 
-while i > z {
-    if(i==0) {
-        print('x');
-        read(x);
-    } else {
-        print('y');
-        read(y);
-    }
-    i = i + 1;
+    	if x == 0 then {
+    		x = 4; y = 5;
+    	} end;
+
+    	var b : Boolean;
+
+    	x = if read(b) then 1 else 2 end;
+
+    	if x == 2 then {
+    		var b : Boolean;
+    		read (b);
+    		if b then print('y', 'e', 's') else print('n', 'o') end;
+    	} end;
+
+    //While
+    x = 0;
+
+    while (x < 1) {
+        x = 1; y = 4;
+    };
+
+
+    read(x);
+    read(y);
+
+    while(x > 0) {
+        var y : Integer;
+        y = 3;
+        print(x, y);
+        return x = x -1;
+    };
 };
-
-print(x>y, x, y);
-
