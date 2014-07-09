@@ -35,7 +35,8 @@
 		const cconst4 = 'l';
 		cvar = 'z';
 		print('g','r','e','a','t');
-		print('a', y == cconst1 && a == cconst2 && p == cconst3 && l == cconst4,  (cvar != 'b' || !true));
+		print('a', y == cconst1 && a == cconst2 && p == cconst3
+		    && l == cconst4,  (cvar != 'b' || !true));
 		return '!';
 	};
 
