@@ -7,11 +7,11 @@
 
 	var b : Boolean;
 
-	x = if read(b) then 1 else 2;
+	x = if read(b) then 1 else 2 end;
 	
 	if x == 2 then {
 		var b : Boolean;
 		read (b);
-		if b then print('y', 'e', 's') else print('n', 'o'); end;
+		if b then print('y', 'e', 's') else print('n', 'o') end;
 	} end;
 };

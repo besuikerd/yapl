@@ -119,7 +119,7 @@ public class Tool {
 					}
 					if(jvm != null){
 						boolean assemblyWrittenSuccessfully = false;
-						File outFile = new File(context.getOutfile() + ".j");
+						File outFile = new File(context.getOutfile() + ".j").getAbsoluteFile();
 						try{
 							ErrorBuffer errorBuffer = new ErrorBuffer();
 							if(!outFile.getParentFile().exists()){
@@ -149,7 +149,7 @@ public class Tool {
 									System.out.println("successfully wrote class file to " + classFile);
 									if(context.isRun()){
 										MainRunner runner = MainRunner.getInstance();
-										runner.addToClassPath(new File(classFile).getParentFile().getAbsolutePath());
+										runner.addToClassPath(new File(classFile).getAbsoluteFile().getParentFile().getAbsolutePath());
 										
 										try {
 											System.out.println(String.format("running main %s...", context.getOutfileWithoutPath()));

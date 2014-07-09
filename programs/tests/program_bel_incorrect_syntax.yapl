@@ -1,0 +1,24 @@
+{
+    var ivar1, ivar2 : Integer;
+
+    //Spelling error in const
+    cont iconst1 = 1;
+
+    //Incorrect assignment
+    const iconst2 := 2;
+
+    //Error in expression
+    ivar2 = +*16 + 2 * -8;
+
+    //Wrong use of function print
+    print
+        ivar1 < ivar2 && iconst1 <= iconst2,
+        iconst1 * iconst2 > ivar2 - ivar1
+    ;
+
+    //Input < is not recognized
+    ivar1 << read(ivar2) && iconst1 <= iconst2;
+
+    //Return is wrong spelled
+    retun ivar2 = print(ivar2) + 1;
+};

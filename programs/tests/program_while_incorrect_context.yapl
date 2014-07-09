@@ -1,0 +1,19 @@
+{
+	var x : Integer;
+
+	x = 0;
+
+	while (y < 1) {
+		x = 1; y = 4;
+	};
+
+
+	var b : Integer;
+
+	while(b) {
+	    var y : Integer;
+	    y = 3;
+        print(b, y);
+        return b = b - 1;
+	};
+};

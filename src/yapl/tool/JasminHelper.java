@@ -46,7 +46,7 @@ public class JasminHelper {
 			} else {
 				OutputStream os = new FileOutputStream(out);
 				try {
-					outFile = new File(out);
+					outFile = new File(out).getAbsoluteFile();
 					if (!outFile.getParentFile().exists()) {
 						outFile.getParentFile().mkdirs();
 					}
@@ -64,6 +64,7 @@ public class JasminHelper {
 						+ " errors");
 			}
 		} catch (Exception e) {
+            e.printStackTrace();
 			System.out.println("Jasmin generated an error: " + e);
 		}
 		return success;

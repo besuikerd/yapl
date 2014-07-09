@@ -49,9 +49,17 @@ public class SymbolTable<Entry extends IdEntry> {
      */
     public Set<Entry> closeScope() {
         Set<String> toRemove = scopedDeclarations.pop();
-        Set<Entry> removed = toRemove.stream().map((decl) -> declarations.get(decl).pop()).collect(Collectors.toSet());
+        Set<Entry> removed = toRemove.stream().map((decl) -> {
+            Stack<Entry> stack = declarations.get(decl);
+            Entry entry = stack.pop();
+            if(stack.isEmpty()){
+                declarations.remove(decl);
+            }
+            return entry;
+        }).collect(Collectors.toSet());
         currentLevel--;
         offset -= removed.stream().filter((entry) -> entry.getEntryType() == EntryType.VARIABLE).collect(Collectors.toSet()).size();
+
         return removed;
     }
 
