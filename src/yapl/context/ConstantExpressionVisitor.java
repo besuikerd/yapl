@@ -19,6 +19,13 @@ import yapl.syntax.YAPLParser.PlusMinusExprContext;
 import yapl.syntax.YAPLParser.PrimaryExprContext;
 import yapl.utils.CharUtils;
 
+/**
+ * Visitor class that can visit Expressions to verify if the expression can be
+ * calculated at compile so it does not need to store a constant variable in
+ * memory but it can directly emit the constant as a literal.
+ * @author Nicker
+ *
+ */
 public class ConstantExpressionVisitor extends YAPLBaseVisitor<ConstantExpression>{
 	@Override
 	public ConstantExpression visitExpression(ExpressionContext ctx) {

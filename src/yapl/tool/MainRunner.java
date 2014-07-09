@@ -9,11 +9,27 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class that can load class files dynamically and execute static functions on
+ * the fly. This class uses java reflection to achieve this and should only be
+ * used to simplify the debugging of the YAPL compiler.
+ * @author Nicker
+ *
+ */
 public class MainRunner {
+	/**
+	 * singleton instance of the {@link MainRunner}
+	 */
 	private static MainRunner instance;
 	
+	/**
+	 * classloader for the MainRunner
+	 */
 	private URLClassLoader loader;
 	
+	/**
+	 * Classes already loaded by the classloader
+	 */
 	private Map<String, Class<?>> loadedClasses;
 
 	/**

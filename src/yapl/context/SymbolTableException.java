@@ -1,7 +1,7 @@
 package yapl.context;
 
 /**
- * Created by langstra on 30-4-14.
+ * Exception that is thrown in a {@link SymbolTable} when entering entries
  */
 public abstract class SymbolTableException extends Exception {
     /** {@link #serialVersionUID} is required for Serializable */

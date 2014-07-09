@@ -3,7 +3,20 @@ package yapl.tool;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 
+/**
+ * Exception that is thrown while executing a static function by the 
+ * {@link MainRunner}. This function wraps the exception that was thrown by the
+ * executing static function
+ * @author Nicker
+ *
+ */
 public class ExecutionException extends Exception{
+	
+	private static final long serialVersionUID = -4744639846604048371L;
+	
+	/**
+	 * Underlying exception that was thrown
+	 */
 	private Throwable throwable;
 
 	public ExecutionException(Throwable throwable) {

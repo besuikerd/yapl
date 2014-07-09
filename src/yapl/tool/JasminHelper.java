@@ -11,7 +11,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
+/**
+ * Helper class for the Jasmin assembler that allows saving assembled files to
+ * a given location
+ * @author Nicker
+ *
+ */
 public class JasminHelper {
+	
+	/**
+	 * attempts to assemble a jvm assembly file and write it to a file
+	 * @param in input jvm assembly file
+	 * @param out ouput file to write the jvm bytecode to
+	 * @return whether assembly succeeded or not
+	 * @throws IOException whenever an IO exception occurs while reading/writing
+	 */
 	public boolean assembleToFile(String in, String out) throws IOException {
 		ClassFile classFile = new ClassFile();
 		File inFile = new File(in);

@@ -7,6 +7,12 @@ import yapl.context.ConstantExpression.ConstantType;
 import yapl.context.IdEntry.EntryType;
 import yapl.syntax.YAPLParser.DeclVarContext;
 
+/**
+ * Symbol table used to declare and use variables in different scope levels.
+ * @author Nicker
+ *
+ * @param <Entry> entry type of the symbol table entries
+ */
 public class SymbolTable<Entry extends IdEntry> {
 
     private Map<String, Stack<Entry>> declarations;

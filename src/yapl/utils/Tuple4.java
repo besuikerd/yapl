@@ -1,5 +1,14 @@
 package yapl.utils;
 
+/**
+ * class that represents a 4-tuple
+ * @author Nicker
+ *
+ * @param <A>
+ * @param <B>
+ * @param <C>
+ * @param <D>
+ */
 public class Tuple4<A,B,C,D> {
 	public final A _1;
 	public final B _2;

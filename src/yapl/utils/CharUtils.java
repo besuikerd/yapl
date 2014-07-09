@@ -1,6 +1,16 @@
 package yapl.utils;
 
+/**
+ * 
+ * @author Nicker
+ * Utility class that contain helper functions regarding chars
+ */
 public class CharUtils {
+	/**
+	 * converts a string to a character
+	 * @param s
+	 * @return
+	 */
 	public static char string2Char(String s){
 		s = s.replaceAll("^'|'$", "");
 		char c = '\0';
