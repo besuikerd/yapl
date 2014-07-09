@@ -132,7 +132,7 @@ id locals[IdEntry entry]
 ;
 
 
-number locals[int value = 0]
+number
 :
   NUMBER
 ;

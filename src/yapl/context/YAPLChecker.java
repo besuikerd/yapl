@@ -193,7 +193,6 @@ public class YAPLChecker extends YAPLBaseVisitor<Void>{
 
 	@Override
 	public Void visitNumber(NumberContext ctx) {
-		ctx.value = Integer.parseInt(ctx.getText());
 		return super.visitNumber(ctx);
 	}
 	
