@@ -1,0 +1,7 @@
+ERROR(SYNTAX)   [5:9]| extraneous input 'iconst1' expecting {';', '=', '||', '&&', '==', '!=', '>', '>=', '<', '<=', '+', '-', '*', '/', '%'}
+ERROR(SYNTAX)   [8:18]| extraneous input ':' expecting {'=', ','}
+ERROR(SYNTAX)   [11:13]| no viable alternative at input '*'
+ERROR(SYNTAX)   [15:8]| extraneous input 'ivar1' expecting {';', '=', '||', '&&', '==', '!=', '>', '>=', '<', '<=', '+', '-', '*', '/', '%'}
+ERROR(SYNTAX)   [15:43]| mismatched input ',' expecting {';', '=', '||', '&&', '==', '!=', '>', '>=', '<', '<=', '+', '-', '*', '/', '%'}
+ERROR(SYNTAX)   [20:11]| no viable alternative at input '<'
+ERROR(SYNTAX)   [23:10]| extraneous input 'ivar2' expecting {';', '=', '||', '&&', '==', '!=', '>', '>=', '<', '<=', '+', '-', '*', '/', '%'}

@@ -1,0 +1,5 @@
+ERROR(SYNTAX)   [6:14]| mismatched input '{' expecting {';', '=', '||', '&&', '==', '!=', '>', '>=', '<', '<=', '+', '-', '*', '/', '%'}
+ERROR(SYNTAX)   [16:4]| mismatched input 'while' expecting {';', '=', '||', '&&', '==', '!=', '>', '>=', '<', '<=', '+', '-', '*', '/', '%'}
+ERROR(SYNTAX)   [17:8]| extraneous input 'x' expecting {'=', '{', '||', '&&', '==', '!=', '>', '>=', '<', '<=', '+', '-', '*', '/', '%'}
+ERROR(SYNTAX)   [17:13]| mismatched input ';' expecting {'=', '{', '||', '&&', '==', '!=', '>', '>=', '<', '<=', '+', '-', '*', '/', '%'}
+ERROR(SYNTAX)   [20:11]| no viable alternative at input '>'

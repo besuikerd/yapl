@@ -1,0 +1,4 @@
+Syntactic analysis successful
+ERROR(CONTEXT)  [6:8]| unknown variable: y
+ERROR(CONTEXT)  [7:9]| unknown variable: y
+ERROR(CONTEXT)  [13:1]| expected type: BOOLEAN, got: INTEGER

@@ -1,0 +1,31 @@
+Syntactic analysis successful
+ERROR(CONTEXT)  [4:1]| cannot apply (!), expected type: BOOLEAN, got: CHAR
+ERROR(CONTEXT)  [7:9]| cannot apply (%), expected type: INTEGER, got: CHAR
+ERROR(CONTEXT)  [7:13]| cannot apply (%), expected type: INTEGER, got: CHAR
+ERROR(CONTEXT)  [7:0]| cannot apply (+), expected type: INTEGER, got: BOOLEAN
+ERROR(CONTEXT)  [13:7]| cannot apply (==), expected type: CHAR, got: BOOLEAN
+ERROR(CONTEXT)  [16:5]| cannot apply (!=), expected type: BOOLEAN, got: INTEGER
+ERROR(CONTEXT)  [19:0]| unknown variable: x
+ERROR(CONTEXT)  [19:4]| unknown variable: y
+ERROR(CONTEXT)  [19:9]| cannot apply (==), expected type: INTEGER, got: CHAR
+ERROR(CONTEXT)  [22:4]| unknown variable: x
+ERROR(CONTEXT)  [22:8]| unknown variable: y
+ERROR(CONTEXT)  [22:4]| invalid assignment type, expected type: CHAR, got: INTEGER
+ERROR(CONTEXT)  [25:4]| invalid assignment type, expected type: BOOLEAN, got: INTEGER
+ERROR(CONTEXT)  [28:0]| unknown variable: p
+ERROR(CONTEXT)  [29:0]| unknown variable: q
+ERROR(CONTEXT)  [35:0]| unknown variable: x
+ERROR(CONTEXT)  [37:0]| unknown variable: x
+ERROR(CONTEXT)  [40:5]| unknown variable: x
+ERROR(CONTEXT)  [40:8]| unknown variable: y
+ERROR(CONTEXT)  [40:5]| function argument cannot be of type ERROR
+ERROR(CONTEXT)  [40:8]| function argument cannot be of type ERROR
+ERROR(CONTEXT)  [40:0]| cannot apply (+), expected type: INTEGER, got: VOID
+ERROR(CONTEXT)  [43:11]| unknown variable: x
+ERROR(CONTEXT)  [43:14]| unknown variable: y
+ERROR(CONTEXT)  [43:11]| function argument cannot be of type ERROR
+ERROR(CONTEXT)  [43:14]| function argument cannot be of type ERROR
+ERROR(CONTEXT)  [43:5]| cannot apply (==), expected type: CHAR, got: VOID
+ERROR(CONTEXT)  [46:45]| unknown function: write
+ERROR(CONTEXT)  [46:5]| cannot apply (+), expected type: INTEGER, got: VOID
+WARNING(CONTEXT)[30:0]| variable q is not used

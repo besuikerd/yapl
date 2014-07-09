@@ -1,0 +1,6 @@
+Syntactic analysis successful
+ERROR(CONTEXT)  [5:4]| unknown variable: x
+ERROR(CONTEXT)  [14:21]| expression type of true expression (INTEGER) does not match false expression (CHAR)
+ERROR(CONTEXT)  [14:5]| invalid assignment type, expected type: INTEGER, got: VOID
+ERROR(CONTEXT)  [17:9]| cannot apply (==), expected type: INTEGER, got: CHAR
+ERROR(CONTEXT)  [22:12]| expression type of true expression (VOID) does not match false expression (INTEGER)
