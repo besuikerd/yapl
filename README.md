@@ -20,13 +20,13 @@ grammeerde of standaard Java-klassen betreft~~
     - ~~het correcte programma zelf~~
     - ~~de gegeneerde TAM -code~~
     - ~~enkele testruns (invoer en uitvoer)~~
-+ :Incorrecte test
++ ~~:Incorrecte test~~
     - ~~het foutieve programma zelf~~
     - ~~de uitvoer gegenereerd door de compiler (d.w.z. de gegeneerde foutmeldingen)~~
 
 The checklist for our project code:
 + ~~Titelblad~~
-+ Inhoud
++ ~~Inhoud~~
     - ~~Inleiding. Korte beschrijving van de eindopdracht.~~
     - ~~Beknopte beschrijving van de programmeertaal~~
     - ~~Problemen en oplossingen~~
@@ -36,4 +36,4 @@ The checklist for our project code:
     - ~~Vertaalregels voor de taal~~
     - ~~Beschrijving van Java-programmatuur~~
     - ~~Testplan en -resultaten~~
-    - Conclusies
+    - ~~Conclusies~~
