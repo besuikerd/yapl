@@ -1,7 +1,7 @@
-\paragraph{•}
 During the development of this language we ran into some problems. This problems were not always trivial and we will describe here the problem and the solution. Hopefully this can help you to understand certain decisions and help you when you develop your own language or extend our language.
 \section{ANTRL4 and LL(1)}
-In ANTLR3 it was very simple to check if your language was ll(1), in the options you set k to 1. If the language would need to have a look-ahead of more then 1 ANTLR3 would give an error. ANTLR4 however does not have this option anymore. \\
+In ANTLR3 it was very simple to check if your language was ll(1), in the options you set k to 1. If the language would need to have a look-ahead of more then one, ANTLR3 would give an error. ANTLR4 however does not have this option anymore.
+
 A solution could be to check if the function $adaptivePredict$ exists in the java source. Another option is to copy paste the ANTLR4 grammar into ANTLR3 and set the option $k=1$. The ANTLR4 grammar is almost equal to ANTLR3 except for some minor things like the options and trimming the whitespace. For this reason we included the ANTLR3 specification of our language. It can be found in Appendix \ref{app:antlr3}.
 
 \section{Optional return statement for compound expression}
@@ -9,3 +9,6 @@ The while statement is of type void. Because usually the body of a while express
 
 \section{Greedy Else}
 A rule \texttt{'if' expression 'then' expression ('else' expression)?} can have ambiguity whenever this rule can be an expression since the second expression could also creative an if statement and then it is uncertain if the else part belongs to the first or the second if expression. To solve this, the parser could be greedy in that it always matches an if statement as close as possible. This was quite easy to do in ANTLR3, but we were not able to reproducing this behaviour in ANTLR4. For this reason we added the 'end' token at the end of a conditional statement to make sure the grammar is LL(1).
+
+\section{StringTemplate}
+For code generation we use the StringTemplate templating engine provided by ANTLR. This templating engine easily integrates with the ANTLR visitor classes. The problem is that StringTemplate is a bit too static. It does not allow you to execute functions within the code templates. From a point of view this behaviour is wanted because you do not want to mix logic with templating. In some corner cases function calls are quite useful in templating. In our code generator we created a \texttt{LabelGenerator} class that generates fresh labels for jump instructions. Because we cannot call functions within the templates, we have to pregenerate the labels and give them to the template. This reduces the flexibility of the templating engine. If we would want to port our codegenerator to another machine, for example TAM, we would have trouble because TAM might need more or less jump instruction and thus more or less labels.

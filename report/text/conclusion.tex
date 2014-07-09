@@ -1,0 +1,6 @@
+This project was a good way to learn how to build your own programming language. This knowledge can be used in the future not only for programming language, but also for interpreting other types of languages.
+
+The language is LL(1) and was written in an ANTLR4 grammar. Because ANTLR4 does not encourage you to write your language strictly LL(1), it would be nice to express a language that is not strictly LL(1). ANTLR4 has an efficient algorithm to minimize the complexity of parsing and the complexity is "$O(n^4)$ in theory but consitently performs linearly on grammars used in practice".\footnote{http://www.antlr.org/papers/allstar-techreport.pdf}
+
+The language does have a few minor optimizations, for instance the precalculation of known constants. After assembly the assembly code could be further optimized. The language is an expression language and pretty often the expressions duplicate a result on the stack that is directly popped afterwards. These instructions could be removed by traversing all assembly instruction that were generated and remove these useless instructions.
+
