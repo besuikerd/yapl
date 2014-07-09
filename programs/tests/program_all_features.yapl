@@ -1,0 +1,22 @@
+var x, y, z : Integer;
+var b : Boolean;
+var c : Character;
+
+z = (if read(b) then 1 else 2 end);
+
+var i : Integer;
+i = 0;
+
+while i > z {
+    if(i==0) {
+        print('x');
+        read(x);
+    } else {
+        print('y');
+        read(y);
+    }
+    i = i + 1;
+};
+
+print(x>y, x, y);
+

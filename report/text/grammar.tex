@@ -37,7 +37,7 @@ letter						&	digit			&					&				\\
 \def \rulespace {0.2cm}
 \begin{tabular}{lcp{8cm}r}
 yapl				&	::=		&	statement*																&	(1.1)	\\[\rulespace]
-statement			&	::= 	&	\Bold{(}declaration $\mid$ expression\Bold{) ;} 						&	(1.2)	\\[\rulespace]
+statement			&	::= 	&	(declaration $\mid$ expression) \Bold{;} 						&	(1.2)	\\[\rulespace]
 declaration			&	::= 	&	\Bold{var} id \Bold{:} typeDenoter										&	(1.3a)	\\
 					&	$\mid$	&	\Bold{const} id \Bold{=} expression										&	(1.3b)	\\[\rulespace]
 expression			&	::= 	&	orExpr (\Bold{=} expression)?											&	(1.4)	\\[\rulespace]
