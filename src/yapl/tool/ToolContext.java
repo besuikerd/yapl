@@ -39,6 +39,11 @@ public class ToolContext {
 	String outfile = "main";
 
 	/**
+	 * directory StringTemplate files are located at
+	 */
+	String stDirectory = "st";
+	
+	/**
 	 * getter for generate dot option
 	 * @return
 	 */
@@ -141,6 +146,14 @@ public class ToolContext {
 	 */
 	public void setAssemble(boolean assemble) {
 		this.assemble = assemble;
+	}
+	
+	public String getStDirectory() {
+		return stDirectory;
+	}
+	
+	public void setStDirectory(String stDirectory) {
+		this.stDirectory = stDirectory;
 	}
 
 	@Override

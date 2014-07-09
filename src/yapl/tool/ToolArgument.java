@@ -16,6 +16,7 @@ public enum ToolArgument{
 	,outfile("o", (args, ctx) -> ctx.setOutfile(args[0]), "outfile")
 	,textual("t", (args, ctx) -> ctx.setTextual(true))
 	,assemble("a", (args, ctx) -> ctx.setAssemble(true))
+	,stDirectory("st", (args, ctx) -> ctx.setStDirectory(args[0]), "stDirectory")
 	,run("r", (args, ctx) -> {ctx.setAssemble(true); ctx.setRun(true);})
 	;
 	

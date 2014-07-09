@@ -110,12 +110,17 @@ public class Tool {
 				tree.accept(new YAPLChecker(new SymbolTable<IdEntry>(), new YAPLTypeVisitor(reporter), reporter));
 				if(reporter.getErrorCount(ErrorType.CONTEXT, Severity.ERROR) == 0){ //no contextual errors
 					System.out.println("Contextual analysis successful");
-					
 					ST jvm = null;
-					try{
-						jvm = tree.accept(new YAPLJVMCodeGenerator(new STGroupFile("st/jvm.stg", '$', '$'), context));
-					} catch(TemplateNotFoundException e){
-						reporter.codegen().error(0, 0, e.getMessage());
+					File stFile = new File(context.getStDirectory(), "jvm.stg").getAbsoluteFile();
+					if(!stFile.getParentFile().exists()){
+						reporter.codegen().error(0, 0, "unable to locate StringTemplate files at %s, please specify it with the -%s argument", stFile.getAbsolutePath(), ToolArgument.stDirectory.getName());
+					} else{
+						try{
+							STGroupFile group = new STGroupFile(stFile.getAbsolutePath(), '$', '$');
+							jvm = tree.accept(new YAPLJVMCodeGenerator(group, context));
+						} catch(TemplateNotFoundException e){
+							reporter.codegen().error(0, 0, e.getMessage());
+						}
 					}
 					if(jvm != null){
 						boolean assemblyWrittenSuccessfully = false;
