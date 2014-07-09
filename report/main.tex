@@ -8,6 +8,7 @@
 \usepackage{amsmath}
 \usepackage[parfill]{parskip}
 \usepackage{bm}
+\usepackage{lscape}
 
 \newcommand{\Bold}[1]{$\pmb{\bm{#1}}$}
 
@@ -63,11 +64,14 @@
 
 
 \begin{appendices}
+\begin{landscape}
 \chapter{ANTLR4 grammar}
 \label{app:antlr4}
+
 \lstinputlisting{text/grammar/YAPL.g4}
 \chapter{ANTLR3 grammar}
 \label{app:antlr3}
+\end{landscape}
 \lstset{mathescape=false}
 \lstinputlisting{text/grammar/YAPL.g}
 
