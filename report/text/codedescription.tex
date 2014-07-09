@@ -1,0 +1,57 @@
+\section{Tool}
+The Tool class is the main class that is used by the compiler. The main function takes input arguments. This is the usage of the tool:
+\begin{quote}
+[optionals] input_file
+\end{quote} 
+
+\noindent
+where [optionals] is any or multiple of the following: \\
+\begin{tabular}{lcl}
+-o outfile 	&$\rightarrow$& output file to write the jvm bytecode to \\
+-d dotfile	&$\rightarrow$& generate dotfile (not implemented yet) \\
+-a 			&$\rightarrow$& assmeble the program \\
+-r	 		&$\rightarrow$& run the program after assembling \\
+-t			&$\rightarrow$& prints a textual representation of the AST \\
+\end{tabular} 
+
+\section{Visitors}
+Because ANTLR4 is used, visitors can be used to traverse the AST. This visitor pattern can be used for more than only context checking and code generation. In our implementation we defined some more visitors that each implement their own functionality. This is a great way to achieve seperation of concerns.\footnote{(http://en.wikipedia.org/wiki/Separation_of_concerns)} The following visitors are implemented and are used during the context checking phase:
+
+\begin{itemize}
+\item \texttt{YAPLTypeVisitor} visits an expression and retrieves the Type of the expression that is being visited. The return type is \texttt{yapl.typing.Type}.
+\item \texttt{IsIdentifierVisitor} visits an expression and checks if the visited expression is an identifier expression. This visitor is used to guarantee that the left-hand side of an assignment is an identifier. The return type is \texttt{Boolean}
+\item \texttt{ConstantExpressionVisitor} visits an expression and tries to reduce the expression to a constant expression. At compile time, an expression can either be fully known or needs runtime information to be fully known. This visitor returns a \texttt{yapl.context.ConstantExpression} that defines the constant expression type.
+\end{itemize}
+
+\section{Typing}
+YAPL uses \texttt{yapl.typing.Type} to define a type for an expression. A type has a kind and a spelling. The typing is applied during the contextual analysis and this typing information is used by the code generator to generate appropriate code for the different types.
+
+\section{Error Reporting}
+YAPL uses the \texttt{ErrorReporter} class to keep track of all the errors and warnings that are generated during compilation. ErrorReporter can be decorated with several Consumers. A consumer is simply a function that is executed if an error is reporter to the ErrorReporter. By default, Tool has an ErrorReporter with a Consumer that prints the error to standard error.
+
+ErrorReporter has delegate classes that give an easier overview of all possible errors that can be thrown. whenever a context error should be called, a call to \texttt{reporter.context()} retrieves a \texttt{ErrorReporterContextTypeDelegate} that contains methods for more specialized errors that can only be thrown during the context phase. This method localizes all different error types to a single delegate class instead of scattering different error messages around in several visitor classes.
+
+\section{Other classes}
+
+\noindent\texttt{SymbolTable}\\
+SymbolTable is used by the context checker to check the declarations and variable expressions. It supports multiple levels of scoping and variable names can be reused whenever a new scope level is opened.\\
+
+\noindent\texttt{LabelGenerator}\\
+LabelGenerator is used by the code generator to generate unique labels that are used by different goto and jump operations\\
+
+\noindent\texttt{JasminHelper}\\
+This class is used to enable the Jasmin assembler to assemble the files to a different path. The standard Jasmin tool does not allow this.\\
+
+\noindent\texttt{MainRunner}\\
+Mainrunner allows generated classes to be executed within the compiler. This class is more of a convenience class to make debugging easier and integrate all steps of compilation, including actually running the file. This class does make use of reflection, so it is not suitable to use in a production environment.
+
+
+
+\section{AST node data}
+Several AST nodes store extra information during different compilation steps to allow compilation to run more efficient. The following AST nodes contain extra information:
+
+\begin{itemize}
+\item \texttt{expression} contains the \texttt{Type} of the expression. The type is determined during the contextual analysis phase and is used in the code generator to generate code depending on the underlying type of the expression.
+\item \texttt{declaration} contains a \texttt{List} of \texttt{IdEntry}. This list stores all the links of declarations to the IdEntries that where created while building up the SymbolTable in the contextual analysis phase. IdEntry contains the information needed to generate code for that declaration.
+\item \texttt{id} contains the \texttt{IdEntry} that was created while the \texttt{SymbolTable} was built during the contextual analysis phase. This information is used during codegeneration to determine what type of variable is and where to load the value from.
+\end{itemize}

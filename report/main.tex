@@ -6,6 +6,7 @@
 \usepackage{color}
 \usepackage{listings}
 \usepackage{amsmath}
+\usepackage[parfill]{parskip}
 \usepackage{bm}
 
 \newcommand{\Bold}[1]{$\pmb{\bm{#1}}$}
@@ -55,7 +56,11 @@
 \chapter{Translation rules}
 \input{text/translationrules.tex}
 \chapter{Code description}
+<<<<<<< HEAD
 
+=======
+\input{text/codedescription.tex}
+>>>>>>> nick
 \chapter{Testing}
 \input{text/tests.tex}
 
@@ -63,7 +68,11 @@
 
 
 \begin{appendices}
-\chapter{jemoeder}
+\chapter{ANTLR4 grammar}
+\chapter{ANTLR3 grammar}
+\label{app:antlr3}
+\input{text/grammar/YAPL.g}
+
 \end{appendices}
 
 \end{document}

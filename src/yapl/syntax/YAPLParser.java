@@ -1217,7 +1217,6 @@ public class YAPLParser extends Parser {
 	}
 
 	public static class NumberContext extends ParserRuleContext {
-		public int value = 0;
 		public TerminalNode NUMBER() { return getToken(YAPLParser.NUMBER, 0); }
 		public NumberContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
